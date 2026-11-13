@@ -1,0 +1,38 @@
+{
+  "transport": "http",
+  "scope": "Original Codex call to a real repository-file tool; no provider credentials or cloud delegation.",
+  "codex_exit": 0,
+  "proxy_shutdown": {
+    "exit_code": 17,
+    "elapsed_seconds": 0.05415149999316782
+  },
+  "collector_shutdown": {
+    "exit_code": 17,
+    "elapsed_seconds": 0.17371550004463643
+  },
+  "tool_result": {
+    "bytes_read": 1454,
+    "path": "README.md",
+    "read_limit_bytes": 262144,
+    "server_peak_inflight": 1,
+    "sha256": "8247b7c5de1e74854aac1a08aa5894444d1d33b4045c70d5cc3367ad0e25c3f3"
+  },
+  "native_tool_result": {
+    "event.name": "codex.tool_result",
+    "tool_result_seq": "1",
+    "tool_name": "repository_file",
+    "tool_namespace": "mcp__stackguard_file",
+    "call_id": "exec-d5fafd9f-ff2b-4f6f-aa63-b121716f816b",
+    "duration_ms": "82",
+    "success": "true",
+    "mcp_server": "stackguard_file",
+    "mcp_server_origin": "http://127.0.0.1:18765",
+    "event.timestamp": "2026-11-13T18:42:48.119Z",
+    "conversation.id": "01a1d638-0a7b-7b13-b317-c457ece23fac",
+    "app.version": "0.166.0",
+    "originator": "Codex_Desktop"
+  },
+  "proxy_records": 2,
+  "proxy_manifest_present": true,
+  "correlation": "Native conversation/call IDs and proxy session/request IDs are separate; no cross-source parent link is inferred from this one-call run."
+}

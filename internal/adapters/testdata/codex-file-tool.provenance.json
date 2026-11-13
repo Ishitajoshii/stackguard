@@ -1,0 +1,7 @@
+{
+  "source": "captures/codex-file-stdio-20261114/native/native-otlp.jsonl",
+  "source_sha256": "e4e0bc20906310ef69ed2dbef5f75c5c0344f07899ba6751925515a383aabcc4",
+  "source_jsonl_line": 4,
+  "selection": "One original codex.tool_result record for stackguard_file; metadata-only collector, no rewritten identifiers or timestamps.",
+  "kind": "real Codex CLI 0.166.0 capture"
+}
