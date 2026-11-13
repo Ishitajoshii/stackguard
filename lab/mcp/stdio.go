@@ -23,6 +23,9 @@ func (s Server) Stdio(parent context.Context, in io.Reader, out io.Writer) (resu
 		if c, ok := in.(io.Closer); ok {
 			c.Close()
 		}
+		if c, ok := out.(io.Closer); ok {
+			c.Close()
+		}
 	}
 	stopClose := context.AfterFunc(ctx, closeInput)
 	defer func() {
@@ -107,10 +110,10 @@ func (s Server) Stdio(parent context.Context, in io.Reader, out io.Writer) (resu
 			if err != nil {
 				response = &Response{JSONRPC: "2.0", ID: request.ID, Error: map[string]any{"code": -32600, "message": "invalid tool request"}}
 			}
-			send(response)
 			mu.Lock()
 			delete(active, id)
 			mu.Unlock()
+			send(response)
 		}()
 	}
 	if reader.Err() != nil {

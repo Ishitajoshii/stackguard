@@ -86,6 +86,9 @@ func Stdio(ctx context.Context, o StdioOptions) error {
 	out.Close()
 	if first != nil {
 		cancel()
+		if output, ok := o.Output.(io.Closer); ok {
+			output.Close()
+		}
 	}
 	if !inputRead {
 		<-inputDone
@@ -93,7 +96,18 @@ func Stdio(ctx context.Context, o StdioOptions) error {
 	if !outputRead {
 		<-outputDone
 	}
-	waitErr := cmd.Wait()
+	waitDone := make(chan error, 1)
+	go func() { waitDone <- cmd.Wait() }()
+	var waitErr error
+	select {
+	case waitErr = <-waitDone:
+	case <-time.After(500 * time.Millisecond):
+		cancel()
+		waitErr = <-waitDone
+		if first == nil {
+			first = errors.New("upstream kept running after closing protocol output")
+		}
+	}
 	cancel()
 	if first != nil {
 		return first
