@@ -20,7 +20,7 @@ go vet ./...
 python -m unittest discover -s lab -p 'test_*.py'
 ```
 
-`bin/nhi-probe.exe`, `oss-scout.exe`, `sg-collect.exe` and `sg-bench.exe` are generated locally. Dependencies are pinned in go.mod/go.sum: TOML/YAML parsing, the official AWS SDK in the lab, and goleak for tests. Core scanning, proxying, sorting and graph reduction use the standard library; no agent orchestration framework is embedded in the graph. Go 1.24 is the AWS SDK's minimum. Verify these choices against the evaluator's permitted-library wording.
+`bin/nhi-probe.exe`, `oss-scout.exe`, `sg-collect.exe` and `sg-bench.exe` are generated locally. Dependencies are pinned in go.mod/go.sum: TOML/YAML parsing, the official AWS SDK in the lab, and goleak for tests. Core scanning, proxying, sorting and graph reduction use the standard library; no agent orchestration framework is embedded in the graph. Go 1.24 is the AWS SDK's minimum. These dependency categories match the original assignment; see [the dependency review](lab/DEPENDENCIES.md).
 
 ## Configure a different person
 

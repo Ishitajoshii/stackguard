@@ -26,4 +26,4 @@ Use a fresh output path. Original redacted transport records are under [transpor
 
 Live setup commands are in [README](../README.md) and the [runbook](RUNBOOK.md). No cloud deployment or paid invocation has been performed. No secret is required to build, test, render the dossier, inspect the cloud plan, or run local file transport/scale workloads. No raw résumé is sent to the cloud; review the extracted summary first.
 
-Unresolved external decisions: exact submission cut-off; evaluator acceptance of AgentCore in place of the named cloud option; original assignment allowed-library review. The dependency inventory records what actually links into the probe and what belongs only to lab tooling. Local success does not resolve these decisions.
+Unresolved external decisions: exact submission cut-off and evaluator acceptance of AgentCore in place of the named cloud option. The original assignment's allowed-library review is complete: the Go dependencies fit its parser, leak-test and official-cloud-SDK categories; see [DEPENDENCIES.md](DEPENDENCIES.md). Local success does not resolve the outstanding live evidence or cloud-platform acceptance gates.

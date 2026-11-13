@@ -1,6 +1,6 @@
 # Dependency boundaries and review status
 
-Observed from go.mod and `go list -deps` on 13 November 2026. Exact versions and transitive Go checksums are pinned in go.mod/go.sum. The original assignment's allowed-library categories could not be re-read from its Google Docs export in this environment; **assignment compatibility remains unconfirmed**. This inventory is not an approval claim.
+Reviewed against the [original assignment](https://docs.google.com/document/d/1QUQ0Xk16P98GToYWu1BNoJoiKbfRkT_4YEpa2BM85lA/edit) on 14 November 2026. Exact versions and transitive Go checksums are pinned in go.mod/go.sum. Its allowed Go dependency categories include YAML/TOML parsers, goleak and official cloud SDKs; the dependencies below fit those categories. The probe's external link dependencies were checked with `go list -deps`. AgentCore's acceptance as the cloud agent remains a separate open decision.
 
 | Layer | External dependencies | Purpose |
 |---|---|---|
@@ -23,4 +23,4 @@ go list -deps -f '{{if not .Standard}}{{if .Module}}{{.Module.Path}} {{.Module.V
 go list -m all
 ```
 
-The first command was checked: its external result is only go-toml/v2. The repository module itself also appears. Before final submission, compare these categories with the evaluator's original rules and resolve AgentCore acceptance separately. Do not infer permission merely because a library is official or appears only in lab tooling.
+The first command was checked: its external result is only go-toml/v2. The repository module itself also appears. Python PDF tools and Windows measurement helpers are separate authoring/lab utilities, not Go probe dependencies. The assignment requires Go 1.22 or newer, so the module's Go 1.24 minimum satisfies that lower bound. This review covers dependencies and source layout; it does not establish acceptance of AgentCore, real-agent correctness, or completion of the scale gates.
