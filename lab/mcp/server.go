@@ -3,7 +3,6 @@
 package mcp
 
 import (
-	"bufio"
 	"context"
 	"encoding/json"
 	"errors"
@@ -142,26 +141,6 @@ func (s Server) HTTP() http.Handler {
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(res)
 	})
-}
-func (s Server) Stdio(ctx context.Context, in io.Reader, out io.Writer) error {
-	reader := bufio.NewScanner(in)
-	reader.Buffer(make([]byte, 64<<10), 1<<20)
-	encoder := json.NewEncoder(out)
-	for reader.Scan() {
-		if ctx.Err() != nil {
-			return ctx.Err()
-		}
-		res, e := s.Handle(ctx, reader.Bytes())
-		if e != nil {
-			return e
-		}
-		if res != nil {
-			if e = encoder.Encode(res); e != nil {
-				return e
-			}
-		}
-	}
-	return reader.Err()
 }
 func ProviderCall(gh, notion *scout.API, p scout.Profile, summaries ...scout.Summary) Call {
 	return func(ctx context.Context, name string, args json.RawMessage) (any, error) {
