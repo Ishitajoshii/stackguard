@@ -79,6 +79,9 @@ func Kind(m Match) string {
 func Detect(text, field string) []Match {
 	result := contextualAzure(text)
 	for _, sig := range signatures {
+		if !candidatePrefix(sig.provider, text) {
+			continue
+		}
 		for _, pos := range sig.re.FindAllStringIndex(text, -1) {
 			value := text[pos[0]:pos[1]]
 			if sig.provider == "openai" && strings.HasPrefix(value, "sk-ant-") {
@@ -94,6 +97,27 @@ func Detect(text, field string) []Match {
 		}
 	}
 	return nonoverlap(result)
+}
+
+func candidatePrefix(provider, text string) bool {
+	switch provider {
+	case "github":
+		return strings.Contains(text, "gh") || strings.Contains(text, "github_pat_")
+	case "notion":
+		return strings.Contains(text, "ntn_") || strings.Contains(text, "secret_")
+	case "anthropic":
+		return strings.Contains(text, "sk-ant-")
+	case "openai":
+		return strings.Contains(text, "sk-")
+	case "slack":
+		return strings.Contains(text, "xox")
+	case "google":
+		return strings.Contains(text, "AIza")
+	case "aws":
+		return strings.Contains(text, "AKIA") || strings.Contains(text, "ASIA")
+	default:
+		return true
+	}
 }
 
 func nonoverlap(result []Match) []Match {

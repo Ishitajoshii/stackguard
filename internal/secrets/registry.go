@@ -45,7 +45,10 @@ type providerDetector struct {
 func (d providerDetector) Name() string { return d.name }
 func (d providerDetector) Detect(text, field string) []Match {
 	var out []Match
-	if d.re != nil {
+	if d.name == "azure" {
+		out = contextualAzure(text)
+	}
+	if d.re != nil && candidatePrefix(d.name, text) {
 		for _, pos := range d.re.FindAllStringIndex(text, -1) {
 			value := text[pos[0]:pos[1]]
 			if d.name == "openai" && strings.HasPrefix(value, "sk-ant-") {
@@ -75,6 +78,17 @@ var azureAssignment = regexp.MustCompile(`(?i)(?:azure[_a-z0-9-]{0,64}(?:key|tok
 
 func contextualAzure(text string) []Match {
 	var out []Match
+	// ASCII Azure prefixes have no non-ASCII Unicode case-fold equivalents.
+	found := false
+	for i := 0; i+5 <= len(text); i++ {
+		if text[i]|32 == 'a' && text[i+1]|32 == 'z' && text[i+2]|32 == 'u' && text[i+3]|32 == 'r' && text[i+4]|32 == 'e' {
+			found = true
+			break
+		}
+	}
+	if !found {
+		return nil
+	}
 	for _, p := range azureAssignment.FindAllStringSubmatchIndex(text, -1) {
 		value := text[p[2]:p[3]]
 		out = append(out, Match{p[2], p[3], "azure", Fingerprint(value), Mask(value)})

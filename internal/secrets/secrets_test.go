@@ -36,6 +36,11 @@ func TestStructuredRedaction(t *testing.T) {
 func FuzzRedaction(f *testing.F) {
 	f.Add("hello")
 	f.Fuzz(func(t *testing.T, s string) {
+		for _, sig := range signatures {
+			if sig.re.MatchString(s) && !candidatePrefix(sig.provider, s) {
+				t.Fatal("prefix optimization missed a regex candidate")
+			}
+		}
 		_ = Redact(s)
 		if len(Fingerprint(s)) != 64 {
 			t.Fatal("digest")
