@@ -46,7 +46,13 @@ type Event struct {
 	Status       string    `json:"status,omitempty"`
 	Evidence     []string  `json:"evidence_refs,omitempty"`
 	// Only an observer with evidence of credential transfer may populate this.
-	DelegatedFrom string `json:"delegated_from,omitempty"`
+	DelegatedFrom string          `json:"delegated_from,omitempty"`
+	Credentials   []CredentialUse `json:"credential_uses,omitempty"`
+}
+
+type CredentialUse struct {
+	ID          string `json:"id"`
+	Attribution string `json:"attribution_kind"`
 }
 
 func (e Event) Validate() error {
@@ -66,6 +72,14 @@ func (e Event) Validate() error {
 	}
 	if e.NHI != "" && !ValidIdentity(e.NHI) {
 		return errors.New("invalid identity identifier")
+	}
+	if len(e.Credentials) > 64 {
+		return errors.New("too many credential observations")
+	}
+	for _, c := range e.Credentials {
+		if !ValidIdentity(c.ID) || (c.Attribution != "direct" && c.Attribution != "implicit") {
+			return errors.New("invalid credential observation")
+		}
 	}
 	switch e.Attribution {
 	case "", "direct", "implicit", "unknown":
