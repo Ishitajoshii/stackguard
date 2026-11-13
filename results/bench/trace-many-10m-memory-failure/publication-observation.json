@@ -1,0 +1,8 @@
+{
+  "source_filename": ".manifest-4237747374",
+  "sha256": "4a60fa5a17141793923c04520fd2d357c46b31d8ee2b0565d4a26d72c618bbb0",
+  "published_manifest_present": false,
+  "unpublished_manifest_records": 10000000,
+  "partial_event_stream_independently_parsed": false,
+  "observation": "A complete JSON-encoded temporary manifest remained after forced termination. output.Publish had reached encoding, but publication to manifest.json did not finish. The exact blocking OS operation is unknown. This narrows the failure to publication rather than proving CPU-profiler finalization was responsible. The unpublished count is not an independent validation of partial events."
+}
