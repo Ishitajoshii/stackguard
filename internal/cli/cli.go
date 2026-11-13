@@ -26,10 +26,15 @@ func (v *values) String() string     { return strings.Join(*v, ",") }
 func (v *values) Set(s string) error { *v = append(*v, s); return nil }
 func Run(ctx context.Context, args []string, stdin io.ReadCloser, stdout, stderr io.Writer) int {
 	if len(args) == 0 {
+		printUsage(stderr)
 		return 2
 	}
+	if args[0] == "--help" || args[0] == "-h" || args[0] == "help" {
+		printUsage(stdout)
+		return 0
+	}
 	err := execute(ctx, args, stdin, stdout)
-	if err == nil {
+	if err == nil || errors.Is(err, flag.ErrHelp) {
 		return 0
 	}
 	if ctx.Err() != nil || errors.Is(err, context.Canceled) {
@@ -38,6 +43,17 @@ func Run(ctx context.Context, args []string, stdin io.ReadCloser, stdout, stderr
 	}
 	fmt.Fprintln(stderr, "operation failed:", safeError(err))
 	return 2
+}
+
+func printUsage(out io.Writer) {
+	fmt.Fprintln(out, `Usage: nhi-probe <scan|proxy|trace> [options]
+
+  scan   Find redacted credential candidates in explicit roots/configs
+  proxy  Forward MCP over stdio or Streamable HTTP and record observations
+  trace  Normalize captures, resolve credential paths and report risks
+
+Run nhi-probe <command> --help for command options.
+Choose a fresh --out directory. Ctrl-C writes partial output and exits 17.`)
 }
 
 // Do not echo OS/provider errors, paths or flag values, which can contain secrets.
@@ -52,6 +68,14 @@ func safeError(err error) string {
 func execute(ctx context.Context, args []string, stdin io.ReadCloser, stdout io.Writer) (resultErr error) {
 	f := flag.NewFlagSet(args[0], flag.ContinueOnError)
 	f.SetOutput(io.Discard)
+	f.Usage = func() {
+		// Called only by the known command branches below. Defaults are static;
+		// parsing errors and supplied values still go to io.Discard.
+		fmt.Fprintf(stdout, "Usage: nhi-probe %s [options]\n", args[0])
+		f.SetOutput(stdout)
+		f.PrintDefaults()
+		f.SetOutput(io.Discard)
+	}
 	out := f.String("out", "", "new output directory")
 	temp := f.String("temp", "", "temporary/spill directory (defaults to OS TEMP)")
 	workers := f.Int("workers", 4, "bounded worker count")
