@@ -1,0 +1,18 @@
+schema_version: 1
+github: your-github-handle
+resume: ""
+interests: [ai-agent-tools, backend]
+languages: []
+effort: meaningful-starter
+notion_page: ""
+hours_budget: 12
+activity_days: 90
+candidates: 20
+issues_per_repository: 5
+results: 5
+max_queries: 160
+exclude_repositories: []
+contribution_types: []
+aws_profile: default
+aws_region: ""
+harness_arn: ""

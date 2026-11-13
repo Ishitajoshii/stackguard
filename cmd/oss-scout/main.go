@@ -26,6 +26,7 @@ Commands:
   configure  Edit an existing profile
   prepare    Extract a local reviewable resume summary
   doctor     Show readiness without contacting providers
+  cloud-plan Write bounded deployment input without contacting AWS
   run        Discover, score and recheck real GitHub issues
   cloud      Let the configured AgentCore researcher call local MCP tools
   bridge     Expose cloud research as a stdio MCP tool for Codex
@@ -76,6 +77,10 @@ func execute(ctx context.Context, args []string, in *os.File, out io.Writer) err
 	endpoint := f.String("endpoint", "http://127.0.0.1:8765/mcp", "HTTP proxy endpoint")
 	listen := f.String("listen", "127.0.0.1:8766", "local server address")
 	files := f.String("files", "", "repository root for read-only file workload")
+	barrier := f.Int("barrier", 1, "file workload's required simultaneous server calls")
+	cloudName := f.String("name", "StackGuardResearcher", "harness name")
+	executionRole := f.String("execution-role", "", "actual AWS execution role ARN")
+	modelID := f.String("model", "", "permitted model ID")
 	draft := f.Bool("draft-comments", false, "include local drafts without posting")
 	github := f.String("github", "", "GitHub handle")
 	resume := f.String("resume", "", "resume path or skip")
@@ -95,8 +100,25 @@ func execute(ctx context.Context, args []string, in *os.File, out io.Writer) err
 		return errors.New("invalid options; run oss-scout --help")
 	}
 	if args[0] == "serve" && *files != "" {
-		s := mcp.Server{Tools: []mcp.Tool{{Name: "repository_file", Description: "Hash up to 256 KiB from a real repository file", Schema: map[string]any{"type": "object", "properties": map[string]any{"path": map[string]any{"type": "string"}}, "required": []string{"path"}}}}, Call: mcp.FileCall(*files)}
+		if *barrier < 1 || *barrier > 2000 {
+			return errors.New("barrier must be 1..2000")
+		}
+		workload := mcp.NewWorkload(*files, *barrier)
+		s := mcp.Server{Tools: []mcp.Tool{{Name: "repository_file", Description: "Hash up to 256 KiB from a real repository file", Schema: map[string]any{"type": "object", "properties": map[string]any{"path": map[string]any{"type": "string"}}, "required": []string{"path"}}}}, Call: workload.Run}
 		return proxy.Serve(ctx, *listen, s.HTTP())
+	}
+	if args[0] == "cloud-plan" {
+		plan, e := cloud.Plan(*cloudName, *executionRole, *modelID)
+		if e != nil {
+			return e
+		}
+		if *destination == "" {
+			return errors.New("--out must be a new private plan directory")
+		}
+		if e = os.MkdirAll(*destination, 0700); e != nil {
+			return errors.New("create plan directory failed")
+		}
+		return output.Publish(filepath.Join(*destination, "harness.json"), plan)
 	}
 	interactive := false
 	if info, e := in.Stat(); e == nil {

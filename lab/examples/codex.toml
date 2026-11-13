@@ -1,0 +1,10 @@
+# Copy into an isolated CODEX_HOME and replace paths/profile as needed.
+# Prompt text collection stays disabled. Configure an OTLP exporter only after
+# choosing a local collector and checking the installed Codex configuration.
+[mcp_servers.stackguard]
+command = "C:/path/to/stackguard/bin/nhi-probe.exe"
+args = ["proxy", "--mode", "stdio", "--agent", "codex", "--client", "codex-cli", "--out", "C:/path/to/stackguard/captures/new-run/local", "--", "C:/path/to/stackguard/bin/oss-scout.exe", "bridge", "--profile", "C:/path/to/stackguard/profiles/default.yaml", "--summary", "C:/path/to/stackguard/profiles/summary.json", "--endpoint", "http://127.0.0.1:8765/mcp", "--out", "C:/path/to/stackguard/captures/new-run/bridge"]
+env_vars = ["AWS_PROFILE", "AWS_REGION"]
+
+[otel]
+log_user_prompt = false

@@ -19,10 +19,24 @@ func main() {
 	out := f.String("out", "", "new output directory")
 	concurrency := f.Int("concurrency", 1000, "concurrent requests")
 	requests := f.Int("requests", 2000, "total calls")
+	replay := f.String("replay", "", "normalized original event file; enables throughput replay mode")
+	sourceManifest := f.String("source-manifest", "", "original capture manifest for replay provenance")
+	events := f.Int64("events", 10000000, "throughput replay event count")
 	f.Parse(os.Args[1:])
 	if *out == "" {
 		fmt.Fprintln(os.Stderr, "--out is required")
 		os.Exit(2)
+	}
+	if *replay != "" {
+		e := bench.Replay(ctx, *replay, *sourceManifest, *out, *events)
+		if ctx.Err() != nil {
+			os.Exit(17)
+		}
+		if e != nil {
+			fmt.Fprintln(os.Stderr, "replay failed; check original normalized capture, manifest and new destination")
+			os.Exit(2)
+		}
+		return
 	}
 	report, e := bench.Load(ctx, bench.LoadOptions{URL: *endpoint, Path: *path, Output: *out, Concurrency: *concurrency, Requests: *requests})
 	if report != nil {
