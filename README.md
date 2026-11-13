@@ -88,6 +88,8 @@ All output directories must be fresh. Exit codes: 0 successful operation, 2 fail
 
 Scan has one walker, N workers with 64 KiB read buffers, bounded queues and one output coordinator. The walker closes jobs; workers finish or see cancellation; a waiter closes results. The coordinator drains results and finishes evidence. Proxy routes session state to N `kestrelShard` goroutines; each owns its request map. Stdio uses separate input/output pumps and waits for the child. HTTP forwards JSON or SSE without rewriting protocol bodies and cancels upstream work when clients disconnect.
 
+Use [the goroutine walkthrough](lab/GOROUTINES.md) to rehearse channel ownership, cancellation, EOF versus interrupt, and the limitations of OS-blocked operations. [The feasibility checkpoint](lab/FEASIBILITY.md) separates demonstrated local behavior from live setup gates.
+
 Trace spills normalized events and graph nodes to disk, externally sorts 8 MiB chunks with eight-way merges, then resolves explicit ancestry through a disk index. Session-partitioned workers share an immutable index, not mutable graph maps. A serial reducer gives deterministic edge ordering. Queues block producers rather than grow without limit. Cancellation stops producers, unblocks sends, joins workers, closes children/listeners and writes incomplete provenance. Windows process-level HTTP shutdown is measured in [SCALING.md](SCALING.md); other acceptance gaps are listed there.
 
 ## Evidence and remaining gates

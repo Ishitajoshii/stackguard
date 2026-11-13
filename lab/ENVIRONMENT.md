@@ -22,6 +22,6 @@ The available RAM snapshot also reflects other running applications. Measure the
 
 Continue on native Windows. The initial Go binary builds, ordinary/race tests run with the installed GCC, and the local Python helper extracts the real PDF successfully. AWS CLI and Codex CLI are available. No demonstrated dependency currently requires WSL.
 
-Use the user-selected `D:\stackguard-data` tree for repositories, replays, profiles, Go build cache and temporary test files. The directories have been created, but no benchmark corpus has been downloaded. Cloud access is still a separate feasibility gate. Revisit WSL only if a concrete integration failure requires it.
+Use the user-selected `D:\stackguard-data` tree for repositories, replays, profiles, Go build cache and temporary test files. Go, LLVM and Firefox working trees now total 5.84 GB; their exact commits and byte inventory are in results/bench/corpus. Cloud access is still a separate feasibility gate. Revisit WSL only if a concrete integration failure requires it.
 
 Benchmark CPU: Intel Core Ultra 5 125H, 14 cores and 18 logical processors (Win32_Processor observation, 13 November 2026).

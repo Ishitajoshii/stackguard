@@ -19,9 +19,11 @@ Memory uses Windows GetProcessMemoryInfo peak working set (MiB = 1,048,576 bytes
 
 Earlier connection bursts produced baseline OS error 10061. Staggered connection initiation fixed those runs while preserving the server barrier. A later proxied attempt had 23 HTTP 502s; increasing reusable upstream idle connections from the default small pool to 2,048 removed that failure in subsequent complete runs. Earlier failed attempts are retained locally under ignored .work/bench-attempts. They are not passing measurements.
 
+After the HTTP disconnect and stdio shutdown fixes, a new [four-worker transport check](results/bench/transport-cancellation-fixes-r2/summary.json) again passed 2,000 requests with 1,000 simultaneous server handlers and matching 2,000 call/2,000 completion records. Peak working set was **121.05 MiB**; Ctrl-C returned 17 in **0.115 s**. Baseline p50/p99 were 363.02/1513.19 ms; proxied 193.98/1437.57 ms. The same separate-run/no-speedup caveat applies. An initial attempt exited before producing the proxied load report; its cause is unresolved and the failed attempt is retained privately. The runner now records a failed driver's exit code and private diagnostics.
+
 ## Scan and trace worker matrices
 
-Scan corpus: https://github.com/golang/go at commit `224934336832d84eedcf168ae633e376a5decb22`; 16,255 working-tree files, **156,228,793 bytes actually scanned** (about 149 MiB). `.git` is excluded. This is below the 5 GB requirement and does not include the user's machine credential scope. Three candidate fingerprints came from repository content; no provider verification was attempted. Candidate strings in public code may be examples, not valid secrets.
+Initial scan corpus: https://github.com/golang/go at commit `224934336832d84eedcf168ae633e376a5decb22`; 16,255 working-tree files, **156,228,793 bytes actually scanned** (about 149 MiB). `.git` is excluded. The following original matrix is below the 5 GB requirement. Three candidate fingerprints came from repository content; no provider verification was attempted. Candidate strings in public code may be examples, not valid secrets.
 
 | Workers | Warm scan seconds | Scan peak MiB | 100k trace seconds | Trace peak MiB |
 |---|---:|---:|---:|---:|
@@ -35,6 +37,12 @@ Raw matrix summaries and CPU/heap profiles: [scan](results/bench/scan-go-warm-ma
 The 100,000-event replay is 59,840,000 bytes, derived from the original 4,000 real local-file proxy records. Its provenance manifest hashes both the original JSONL and capture manifest. IDs and parent mappings are rewritten consistently for each copy. **Throughput only:** there are no credential observations in this file workload, so edges/findings/lineage are empty. It exercises normalization, spill sorting, node indexing and event processing, not a large credential graph. Large replay/output files remain on D:, while summary, manifests and profiles are tracked.
 
 Both inventory output and normalized trace/edge/finding output hashes are identical across 1/4/8/16 workers for their respective inputs. [Original 4,000-event trace results](results/bench/trace-original-files/summary.json) are also preserved. This does not replace a hand-checked native Codex/cloud correctness oracle.
+
+The expanded [corpus manifest](results/bench/corpus/manifest.json) records Go, LLVM and Firefox commits, clean working-tree checks, and **5,835,736,856 bytes** in 594,629 files after the stated exclusions. This is a measured input inventory, not yet a successful full scan. The large worker matrix is still running. A separate [selected machine configuration scan](results/bench/corpus/machine-scope.json) completed with zero errors; personal bindings remain in ignored local evidence and do not contribute to the repository byte total.
+
+The [ten-million-event replay input check](results/bench/replay-file-10m/input-check.json) verified exactly **10,000,000 JSONL records / 5,984,000,000 bytes**, with SHA-256 and original-capture provenance. Its 1/4/8/16 trace matrix remains running. A long wall-clock gap occurred during the first worker, and the full scan ran concurrently; elapsed times from that run must not be treated as isolated active-compute throughput.
+
+A separate [single-session run](results/bench/trace-single-1m/summary.json) completed **1,000,000 events / 598,400,000 input bytes** with four workers in **394.882 s**, peak working set **39.63 MiB** and peak commit **77.29 MiB**. `--sessions single` merges source sessions only for this load shape while preserving namespaced span/request ancestry. CPU/heap profiles and the complete trace manifest are retained. It ran concurrently with the larger workloads, so time is not an isolated benchmark. As with the original file capture, credential edges/findings are empty; this proves the stated event-volume memory result, not a million-credential graph or the ten-million-event gate.
 
 ## Cancellation and test scope
 
@@ -58,8 +66,8 @@ All destinations must be new. Keep large replays outside the repository. The pip
 
 ## Unmet scale gates
 
-- At least 5 GB of public repositories plus selected machine roots. Attempts to shallow-clone Linux and LLVM failed with connection reset/early EOF; only the verified Go corpus is counted.
-- Ten million events, including evidence representative of a credential-bearing delegated graph. The replay command supports the count, but 100k is the completed measured run.
+- Completion and matching output hashes for the full 5.84 GB scan worker matrix. Corpus download/inventory and the separate selected machine configuration scan are complete.
+- Completion of the ten-million-event trace worker matrix, plus evidence representative of a credential-bearing delegated graph. Input generation/count/hash are verified; the completed larger trace result is one million events in one session.
 - Peak-memory proof for every required workload size, including one extremely large session and many small sessions. Current measurements prove only the stated inputs.
 - Native agent correctness and a recorded live demo. Local-file workload evidence cannot establish either.
 
