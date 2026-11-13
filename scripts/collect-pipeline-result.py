@@ -73,6 +73,10 @@ def main():
     heap = source/f'heap-w{a.workers}.pprof'
     if mode == 'both':
         valid_gzip(heap)
+        # Complete gzip framing alone does not establish a usable pprof payload.
+        # Check the heap schema as well as the merged CPU profile below.
+        subprocess.run(['go', 'tool', 'pprof', '-top', '-nodecount=1', str(heap)],
+                       check=True, capture_output=True)
     build = subprocess.check_output(['go', 'version', '-m', str(a.probe)], text=True)
     dest.mkdir(parents=True)
     small = dest/f'w{a.workers}'

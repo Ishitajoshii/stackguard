@@ -1,0 +1,7 @@
+{
+  "real_five_segment_100k_collection": "passed",
+  "largest_corrected_10m_heap_pprof_parse": "passed",
+  "single_session_10m_heap_pprof_parse": "passed",
+  "invalid_heap_inside_valid_gzip_rejected_before_bundle_creation": true,
+  "scope": "Negative test changes only the profile format in copied benchmark metadata; it does not create agent events. Actual original completed profiles used for positive checks."
+}
