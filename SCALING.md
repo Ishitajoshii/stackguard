@@ -38,7 +38,9 @@ The 100,000-event replay is 59,840,000 bytes, derived from the original 4,000 re
 
 Both inventory output and normalized trace/edge/finding output hashes are identical across 1/4/8/16 workers for their respective inputs. [Original 4,000-event trace results](results/bench/trace-original-files/summary.json) are also preserved. This does not replace a hand-checked native Codex/cloud correctness oracle.
 
-The expanded [corpus manifest](results/bench/corpus/manifest.json) records Go, LLVM and Firefox commits, clean working-tree checks, and **5,835,736,856 bytes** in 594,629 files after the stated exclusions. This is a measured input inventory, not yet a successful full scan. The latest scan matrix uses 16/8/4/1 worker order and runs without a competing trace job; earlier concurrent attempts were interrupted, not counted as passes. A separate [selected machine configuration scan](results/bench/corpus/machine-scope.json) completed with zero errors; personal bindings remain in ignored local evidence and do not contribute to the repository byte total.
+The expanded [corpus manifest](results/bench/corpus/manifest.json) records Go, LLVM and Firefox commits, clean working-tree checks, and **5,835,736,856 bytes** in 594,629 files after the stated exclusions. The [full sixteen-worker scan](results/bench/scan-corpus-full-w16/summary.json) completed those bytes with zero errors, 137 deduplicated candidates and 378 redacted observations. Peak working set was **104.13 MiB**, peak commit **108.73 MiB**. Inventory SHA-256 is `10205e082646c1658842791d2ee1c76741b09a82a0df86121cee06ae1a0f3d1c`. No candidate was verified against a provider. CPU/heap profiles and redacted outputs are retained alongside the summary.
+
+Elapsed wall time was **10,557.695 s**, including a long host pause/gap; this is not an uninterrupted throughput comparison. The profile attributes 89.79% of samples to Windows syscall entry (`runtime.cgocall`), mainly file access; these samples do not establish equivalent active CPU utilization. The remaining full-corpus worker rows are running in 8/4/1 order. Earlier interrupted attempts are not counted as passes. A separate [selected machine configuration scan](results/bench/corpus/machine-scope.json) completed with zero errors; personal bindings remain in ignored local evidence and do not contribute to the repository byte total.
 
 The [ten-million-event replay input check](results/bench/replay-file-10m/input-check.json) verified exactly **10,000,000 JSONL records / 5,984,000,000 bytes**, with SHA-256 and original-capture provenance. The first large trace matrix was stopped after the million-event profile identified unused ancestry lookups. It is not a completed measurement. It also included a long wall-clock gap and competing scans. A full run on the optimized code remains required.
 
@@ -64,11 +66,11 @@ python scripts/cancel-check.py --repo D:/stackguard-data/repos/golang-go --event
 go tool pprof -top results/bench/scan-go-warm-matrix/cpu-w4.pprof
 ```
 
-All destinations must be new. Keep large replays outside the repository. The pipeline runner records memory and hashes, rejects incomplete runs or a peak >=512 MiB, and compares all worker outputs. Queues are bounded to small multiples of workers; external sort chunks are 8 MiB with eight-way merges. More workers need not improve throughput when sorting/disk access is serial or shared.
+All destinations must be new. Keep large replays outside the repository. The pipeline runner records memory and hashes, rejects incomplete runs, and compares worker outputs. The scan/trace and transport drivers now reject either peak working set or peak commit at **512,000,000 bytes** (decimal 512 MB); missing measurements fail too. Display tables use MiB and do not redefine the limit. Older runs used a 512 MiB guard, but their recorded peaks are also below the stricter decimal limit. Queues are bounded to small multiples of workers; external sort chunks are 8 MiB with eight-way merges. More workers need not improve throughput when sorting/disk access is serial or shared.
 
 ## Unmet scale gates
 
-- Completion and matching output hashes for the full 5.84 GB scan worker matrix. Corpus download/inventory and the separate selected machine configuration scan are complete.
+- Completion and matching output hashes for the remaining full 5.84 GB scan worker rows. The sixteen-worker full scan and selected machine configuration scan are complete.
 - Completion of the ten-million-event trace worker matrix, plus evidence representative of a credential-bearing delegated graph. Input generation/count/hash are verified; the completed larger trace result is one million events in one session.
 - Peak-memory proof for every required workload size, including one extremely large session and many small sessions. Current measurements prove only the stated inputs.
 - Native agent correctness and a recorded live demo. Local-file workload evidence cannot establish either.

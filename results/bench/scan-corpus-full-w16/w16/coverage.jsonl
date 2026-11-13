@@ -1,0 +1,17 @@
+{"path":"D:\\stackguard-data\\repos\\gecko-dev\\.git","reason":"excluded_basename"}
+{"path":"D:\\stackguard-data\\repos\\gecko-dev\\browser\\components\\profiles","reason":"excluded_basename"}
+{"path":"D:\\stackguard-data\\repos\\gecko-dev\\browser\\components\\urlbar\\private","reason":"excluded_basename"}
+{"path":"D:\\stackguard-data\\repos\\gecko-dev\\gfx\\qcms\\profiles","reason":"excluded_basename"}
+{"path":"D:\\stackguard-data\\repos\\gecko-dev\\gfx\\skia\\skia\\include\\private","reason":"excluded_basename"}
+{"path":"D:\\stackguard-data\\repos\\gecko-dev\\nsprpub\\pr\\include\\private","reason":"excluded_basename"}
+{"path":"D:\\stackguard-data\\repos\\gecko-dev\\testing\\profiles","reason":"excluded_basename"}
+{"path":"D:\\stackguard-data\\repos\\gecko-dev\\third_party\\rust\\glean\\src\\private","reason":"excluded_basename"}
+{"path":"D:\\stackguard-data\\repos\\gecko-dev\\third_party\\rust\\icu_locale_core\\src\\extensions\\private","reason":"excluded_basename"}
+{"path":"D:\\stackguard-data\\repos\\gecko-dev\\third_party\\rust\\serde\\src\\private","reason":"excluded_basename"}
+{"path":"D:\\stackguard-data\\repos\\gecko-dev\\toolkit\\components\\contentrelevancy\\private","reason":"excluded_basename"}
+{"path":"D:\\stackguard-data\\repos\\gecko-dev\\toolkit\\components\\glean\\api\\src\\private","reason":"excluded_basename"}
+{"path":"D:\\stackguard-data\\repos\\gecko-dev\\toolkit\\components\\glean\\bindings\\private","reason":"excluded_basename"}
+{"path":"D:\\stackguard-data\\repos\\golang-go\\.git","reason":"excluded_basename"}
+{"path":"D:\\stackguard-data\\repos\\llvm-project\\.git","reason":"excluded_basename"}
+{"path":"D:\\stackguard-data\\repos\\llvm-project\\clang\\test\\Modules\\Inputs\\private","reason":"excluded_basename"}
+{"path":"D:\\stackguard-data\\repos\\llvm-project\\llvm\\test\\tools\\dsymutil\\Inputs\\private","reason":"excluded_basename"}
