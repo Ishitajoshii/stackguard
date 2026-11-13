@@ -19,8 +19,18 @@ import (
 
 type Writer struct {
 	mu      sync.Mutex
-	file    *os.File
+	file    recordFile
+	offset  int64
+	failed  bool
 	Records uint64
+}
+
+type recordFile interface {
+	Write([]byte) (int, error)
+	Truncate(int64) error
+	Seek(int64, int) (int64, error)
+	Sync() error
+	Close() error
 }
 
 // New refuses to overwrite evidence from an earlier run.
@@ -42,9 +52,17 @@ func (w *Writer) Write(v any) error {
 	b = append(b, '\n')
 	w.mu.Lock()
 	defer w.mu.Unlock()
-	if _, err = w.file.Write(b); err != nil {
-		return errors.New("write record failed")
+	if w.failed {
+		return errors.New("output is incomplete after an earlier write failure")
 	}
+	n, err := w.file.Write(b)
+	if err != nil || n != len(b) {
+		w.failed = true
+		truncateErr := w.file.Truncate(w.offset)
+		_, seekErr := w.file.Seek(w.offset, io.SeekStart)
+		return errors.Join(errors.New("write record failed"), truncateErr, seekErr)
+	}
+	w.offset += int64(n)
 	w.Records++
 	return nil
 }
