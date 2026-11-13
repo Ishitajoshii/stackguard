@@ -42,7 +42,7 @@ func NewClient(endpoint, session string, audit func(any) error) (*Client, error)
 	transport := http.DefaultTransport.(*http.Transport).Clone()
 	transport.MaxIdleConns = 2048
 	transport.MaxIdleConnsPerHost = 2048
-	return &Client{URL: endpoint, Session: session, Audit: audit, http: &http.Client{Transport: transport, Timeout: 45 * time.Second, CheckRedirect: func(*http.Request, []*http.Request) error { return http.ErrUseLastResponse }}}, nil
+	return &Client{URL: endpoint, Session: session, Audit: audit, http: &http.Client{Transport: transport, Timeout: 180 * time.Second, CheckRedirect: func(*http.Request, []*http.Request) error { return http.ErrUseLastResponse }}}, nil
 }
 func (c *Client) Close() { c.http.CloseIdleConnections() }
 func (c *Client) Call(ctx context.Context, name string, args json.RawMessage) (any, error) {
