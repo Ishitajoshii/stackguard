@@ -1,7 +1,11 @@
 package scout
 
 import (
+	"context"
 	"encoding/json"
+	"net/http"
+	"net/http/httptest"
+	"strings"
 	"testing"
 	"time"
 )
@@ -21,6 +25,37 @@ func TestQualification(t *testing.T) {
 	r.Archived = true
 	if Suitable(r, i) {
 		t.Fatal("archived accepted")
+	}
+}
+
+// Contract fixture, not a claim about a live provider or agent run.
+func TestFinalRepositoryRecheckRejectsNewlyArchivedProject(t *testing.T) {
+	finalChecks := 0
+	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		switch r.URL.Path {
+		case "/search/repositories":
+			w.Write([]byte(`{"items":[{"full_name":"org/backend","language":"Go","license":{"spdx_id":"MIT"}}]}`))
+		case "/repos/org/backend/issues":
+			json.NewEncoder(w).Encode([]map[string]any{{"number": 1, "state": "open", "body": strings.Repeat("clear acceptance ", 10)}})
+		case "/repos/org/backend/community/profile":
+			w.Write([]byte(`{}`))
+		case "/repos/org/backend":
+			finalChecks++
+			w.Write([]byte(`{"full_name":"org/backend","archived":true,"license":{"spdx_id":"MIT"}}`))
+		case "/repos/org/backend/issues/1":
+			w.Write([]byte(`{"number":1,"state":"open"}`))
+		default:
+			w.Write([]byte(`[]`))
+		}
+	}))
+	defer server.Close()
+	p := Defaults()
+	p.GitHub = "example"
+	p.Results = 1
+	p.Interests = []string{"backend"}
+	v, e := Discover(context.Background(), p, Summary{Reviewed: true}, newAPI(server.URL, "", "github", 160), false)
+	if e != nil || finalChecks != 1 || len(v.Recommendations) != 0 {
+		t.Fatal(v, e, finalChecks)
 	}
 }
 func TestFrozenScores(t *testing.T) {

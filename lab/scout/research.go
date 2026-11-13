@@ -176,6 +176,11 @@ func Discover(ctx context.Context, p Profile, s Summary, api *API, draft bool) (
 	sort.Strings(names)
 	var candidates []Recommendation
 	for _, name := range names {
+		// Leave capacity for fresh repository, issue and PR-state checks.
+		if api.Queries()+2+2*p.Issues+3*p.Results > int(api.limit) {
+			result.Coverage = append(result.Coverage, "Discovery stopped to reserve the remaining query budget for final rechecks.")
+			break
+		}
 		if ctx.Err() != nil {
 			return result, ctx.Err()
 		}
@@ -261,13 +266,19 @@ func Discover(ctx context.Context, p Profile, s Summary, api *API, draft bool) (
 		if selected[v.Repository] {
 			continue
 		}
+		currentRepo, e := api.Repo(ctx, v.Repository)
+		if e != nil {
+			result.Complete = false
+			result.Coverage = append(result.Coverage, "Final repository recheck failed: "+e.Error())
+			break
+		}
 		latest, e := api.Issue(ctx, v.Repository, v.Issue)
 		if e != nil {
 			result.Complete = false
 			result.Coverage = append(result.Coverage, "Final issue recheck failed: "+e.Error())
 			break
 		}
-		if !Suitable(repos[v.Repository], latest) {
+		if !Suitable(currentRepo, latest) {
 			continue
 		}
 		active, complete, e := api.ActivePR(ctx, v.Repository, v.Issue)
