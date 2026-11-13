@@ -39,8 +39,12 @@ func NewClient(endpoint, session string, audit func(any) error) (*Client, error)
 	if e != nil || u.Scheme != "http" || !proxy.Loopback(u.Hostname()) || u.User != nil {
 		return nil, errors.New("MCP endpoint must be an HTTP loopback URL without credentials")
 	}
-	return &Client{URL: endpoint, Session: session, Audit: audit, http: &http.Client{Timeout: 45 * time.Second, CheckRedirect: func(*http.Request, []*http.Request) error { return http.ErrUseLastResponse }}}, nil
+	transport := http.DefaultTransport.(*http.Transport).Clone()
+	transport.MaxIdleConns = 2048
+	transport.MaxIdleConnsPerHost = 2048
+	return &Client{URL: endpoint, Session: session, Audit: audit, http: &http.Client{Transport: transport, Timeout: 45 * time.Second, CheckRedirect: func(*http.Request, []*http.Request) error { return http.ErrUseLastResponse }}}, nil
 }
+func (c *Client) Close() { c.http.CloseIdleConnections() }
 func (c *Client) Call(ctx context.Context, name string, args json.RawMessage) (any, error) {
 	id := fmt.Sprintf("%s-%d", c.Session, c.sequence.Add(1))
 	b, e := json.Marshal(map[string]any{"jsonrpc": "2.0", "id": id, "method": "tools/call", "params": map[string]any{"name": name, "arguments": args}})

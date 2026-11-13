@@ -33,6 +33,7 @@ func Load(ctx context.Context, o LoadOptions) (map[string]any, error) {
 		return nil, e
 	}
 	args, _ := json.Marshal(map[string]string{"path": o.Path})
+	defer client.Close()
 	var active, peak, serverPeak, failed, sequence atomic.Int64
 	var wg sync.WaitGroup
 	var mu sync.Mutex
@@ -41,10 +42,20 @@ func Load(ctx context.Context, o LoadOptions) (map[string]any, error) {
 	start := time.Now()
 	var writeErr error
 	for i := 0; i < o.Concurrency; i++ {
+		workerIndex := i
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
 			<-gate
+			// Avoid a TCP listen-backlog burst. The server barrier still verifies
+			// simultaneous in-flight calls independently of connection startup.
+			timer := time.NewTimer(time.Duration(workerIndex) * time.Millisecond)
+			select {
+			case <-ctx.Done():
+				timer.Stop()
+				return
+			case <-timer.C:
+			}
 			for {
 				index := sequence.Add(1)
 				if index > int64(o.Requests) || ctx.Err() != nil {

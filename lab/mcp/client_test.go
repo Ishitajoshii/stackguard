@@ -18,6 +18,7 @@ func TestClientRealServerFileRoundTrip(t *testing.T) {
 	if e != nil {
 		t.Fatal(e)
 	}
+	defer c.Close()
 	result, e := c.Call(context.Background(), "repository_file", json.RawMessage(`{"path":"data.txt"}`))
 	if e != nil {
 		t.Fatal(e)
