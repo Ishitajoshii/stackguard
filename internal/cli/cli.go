@@ -79,7 +79,7 @@ func execute(ctx context.Context, args []string, stdin io.ReadCloser, stdout io.
 	out := f.String("out", "", "new output directory")
 	temp := f.String("temp", "", "temporary/spill directory (defaults to OS TEMP)")
 	workers := f.Int("workers", 4, "bounded worker count")
-	cpu := f.String("cpu-profile", "", "new CPU profile file")
+	cpu := f.String("cpu-profile", "", "new CPU profile base; rotates every 30s with a .segments.jsonl index")
 	heap := f.String("heap-profile", "", "new heap profile file; skipped on interruption")
 	var profileFinish func() error
 	defer func() {

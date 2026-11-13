@@ -76,12 +76,26 @@ All destinations must be new. Keep large replays outside the repository. The pip
 
 ## Unmet scale gates
 
+- The latest [long-running 10M attempt](results/bench/trace-10m-memory-failure/observation.json) exceeded the memory budget before completion: peak working set 496,435,200 bytes and peak commit 539,484,160 bytes. Deliberate interruption then missed two seconds; an incomplete data manifest exists but the CPU profile is truncated. Neither measurement is a pass. The next build uses a 256 MiB Go runtime target and 30-second CPU-profile segments; their large-run effectiveness must still be measured.
+
 - Completion and matching output hashes for the remaining full 5.84 GB scan worker rows. The sixteen-worker full scan and selected machine configuration scan are complete.
 - Completion of the ten-million-event trace worker matrix, plus evidence representative of a credential-bearing delegated graph. Input generation/count/hash are verified; the completed larger trace result is one million events in one session.
 - Peak-memory proof for every required workload size, including one extremely large session and many small sessions. Current measurements prove only the stated inputs.
 - Native agent correctness and a recorded live demo. Local-file workload evidence cannot establish either.
 
 ## Profile-guided optimization
+
+New CPU recordings rotate every 30 seconds. The requested `.pprof` path is the first segment; subsequent files append `.part-NNNNNN`, and `<base>.segments.jsonl` lists finalized segments with enclosing wall times. Keep the index and **all** listed files; the first segment alone is not a whole-run profile. Rotation has small unsampled gaps. To aggregate a completed recording in PowerShell:
+
+```powershell
+$profileBase = 'D:/path/to/run/cpu-w4.pprof'
+$profileParts = Get-Content ($profileBase + '.segments.jsonl') | ForEach-Object {
+    Join-Path (Split-Path $profileBase) ($_ | ConvertFrom-Json).file
+}
+go tool pprof -top @profileParts
+```
+
+The runtime soft target and profile windows supplement the existing bounded queues, sort chunks and disk indexes. They do not replace measured process working-set/commit limits. The exact cause of the earlier process-memory peak was not isolated; unbounded CPU-profile metadata and its finalization are now bounded independently of workload length.
 
 The warm four-worker baseline attributed 71.7% of samples to regexp matching. The focused change skips a provider regex if its mandatory literal prefix is absent and does an allocation-free ASCII precheck for Azure-labelled assignments. Existing detection, chunk-boundary, proxy, trace and race checks passed; an added fuzz property verifies that a matching regex is never rejected by the prefix check.
 
