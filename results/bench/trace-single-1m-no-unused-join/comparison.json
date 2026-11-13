@@ -1,0 +1,8 @@
+{
+  "baseline": "results/bench/trace-single-1m/summary.json",
+  "after": "results/bench/trace-single-1m-no-unused-join/summary.json",
+  "output_hashes_identical": true,
+  "elapsed_reduction_percent": 43.100275863765305,
+  "after_peak_mib": 78.71875,
+  "caveat": "Single runs concurrent with other workloads; not a statistical speedup claim. Credentialless file-call workload; not a large credential graph."
+}
