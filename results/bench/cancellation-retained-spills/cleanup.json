@@ -1,0 +1,12 @@
+[
+  {
+    "removed": true,
+    "workspace": "stackguard-scan-1199952184",
+    "reason": "Owned early-interruption test completed with exit 17; output evidence retained separately."
+  },
+  {
+    "removed": true,
+    "workspace": "stackguard-trace-3314419909",
+    "reason": "Owned early-interruption test completed with exit 17; output evidence retained separately."
+  }
+]
