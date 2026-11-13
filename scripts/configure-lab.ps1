@@ -1,6 +1,7 @@
 param(
  [string]$Profile='profiles/default.yaml',
  [string]$Summary='profiles/summary.json',
+ [string]$BinDirectory='bin',
  [ValidatePattern('^[A-Za-z0-9_-]+$')][string]$RunName=('run-'+(Get-Date -Format 'yyyyMMdd-HHmmss')),
  [ValidateRange(1024,65535)][int]$ProxyPort=8765,
  [ValidateRange(1024,65535)][int]$ToolPort=8766,
@@ -8,11 +9,16 @@ param(
 )
 $ErrorActionPreference='Stop'
 $root=[IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
-$profilePath=[IO.Path]::GetFullPath((Join-Path $root $Profile))
-$summaryPath=[IO.Path]::GetFullPath((Join-Path $root $Summary))
+function Resolve-LabPath([string]$value) {
+ if ([IO.Path]::IsPathRooted($value)) { return [IO.Path]::GetFullPath($value) }
+ return [IO.Path]::GetFullPath((Join-Path $root $value))
+}
+$profilePath=Resolve-LabPath $Profile
+$summaryPath=Resolve-LabPath $Summary
 if (@($ProxyPort,$ToolPort,$CollectorPort | Select-Object -Unique).Count -ne 3) { throw 'Choose three distinct ports.' }
-$probe=Join-Path $root 'bin/nhi-probe.exe'
-$scout=Join-Path $root 'bin/oss-scout.exe'
+$binPath=Resolve-LabPath $BinDirectory
+$probe=Join-Path $binPath 'nhi-probe.exe'
+$scout=Join-Path $binPath 'oss-scout.exe'
 if (-not (Test-Path -LiteralPath $probe) -or -not (Test-Path -LiteralPath $scout)) { throw 'Build first: go build -o bin/ ./cmd/...' }
 & $scout doctor --profile $profilePath | Out-Null
 if ($LASTEXITCODE -ne 0) { throw 'Create a valid personal profile with oss-scout init first.' }
