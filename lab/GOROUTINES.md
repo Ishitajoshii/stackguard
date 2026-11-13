@@ -32,6 +32,20 @@ In [transform.go](../internal/pipeline/transform.go), a producer hashes the sess
 
 Many records from one session route to one worker. This preserves per-session ownership but can reduce parallelism; increasing `--workers` does not guarantee a speedup. Crucially, that worker does not retain the session's full history. The immutable graph index, event spool and sort runs stay on disk. External sort uses 8 MiB chunks and an eight-way merge. Stable sorting after parallel work provides deterministic final output.
 
+The bounds come from data structures, not just a Go GC memory target:
+
+| State | Bound or storage strategy |
+|---|---|
+| Input record | `pipeline.Lines` rejects records exceeding 1 MiB. Normalized events allow at most 64 credential observations and 64 evidence references. |
+| Parent history | `graph.Index` writes all nodes and request aliases to disk. Late parents are available before path resolution; there is no growing in-memory pending-parent map. |
+| One ancestry walk | At most 128 node visits and a local cycle-detection set. Longer or cyclic paths carry an explicit unresolved reason. |
+| Graph lookup | `pipeline.Table` stores both its fixed-width index and values on disk; binary search reads individual records with `ReadAt`. |
+| Session count | Session IDs select a fixed worker queue. Trace does not allocate a history map per session. |
+| Sort metadata | An on-disk run list and groups of at most eight merge readers, rather than one in-memory filename per run. |
+| Credential aggregates | Sorted streams reduce one edge/identity group at a time. Evidence is capped at 64 references; complete per-event evidence remains in `events.jsonl`. Risk agent samples are capped at 64. |
+
+These limits explain the design. Actual peak working set and commit measurements for the one-session and many-session load shapes are separate scale gates; a bounded design alone does not establish the 512 MB result.
+
 ## What Ctrl-C guarantees have actually been checked
 
 The CLI creates a signal-aware context. Cancellation stops intake and blocked channel operations, closes network/child resources and writes an incomplete manifest. Exit 17 distinguishes interruption from an ordinary failure. JSONL writes roll back short writes to the last whole-record offset; output close calls `Sync`, and completion status includes output flush failures. A forced kill or power loss can prevent manifest publication. These are not per-record power-loss durability guarantees.
@@ -39,5 +53,7 @@ The CLI creates a signal-aware context. Cancellation stops intake and blocked ch
 An earlier large trace failed the two-second interruption check while deleting multi-gigabyte spill files before publishing its manifest. Interrupted runs now retain their spill workspace, record its location and leave deletion for an explicit later cleanup. Successful runs still remove their workspace. The correction is covered by retention/cancellation tests; early process-level interruption alone is not proof of every possible late-stage disk condition.
 
 The measured process tests and limits are linked from [SCALING.md](../SCALING.md). The latest 1,000-in-flight transport run shut down in 0.115 seconds. Unit tests cover cancellation, idle input, blocked output and child shutdown; race checks and goleak address different failure classes. A filesystem operation stuck inside the OS may not respond to a Go context immediately, so measured two-second shutdown results apply to the tested local workloads.
+
+The later [large-spill interruption](../results/bench/late-spill-interruption/summary.json) also passed: Ctrl-C returned 17 in 0.486 seconds after 9,930,978 events had been published. Every retained JSONL record parsed, the incomplete manifest matched that count, and the spill workspace was explicitly cleaned only after exit and validation. This closes the tested late-cleanup regression without promising arbitrary OS disk-stall latency.
 
 For rehearsal, trace one path aloud: Ctrl-C cancels the CLI context; the producer stops; worker sends choose cancellation; the waiter joins workers; the coordinator drains and closes output; the manifest says incomplete; the process returns 17. Then explain why closing a channel from an arbitrary receiver could panic another sender, and why explicit ownership avoids that race.
