@@ -2,3 +2,4 @@
 *.jsonl text eol=lf
 *.json text eol=lf
 *.pprof binary
+*.pdf binary
