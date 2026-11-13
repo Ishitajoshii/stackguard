@@ -1,0 +1,6 @@
+{
+  "history_blobs_checked": 309,
+  "pattern_match_object_ids": [],
+  "scope": "Seven provider prefix families across reachable history blobs plus planning-file exclusions. Azure and other formatless credentials require contextual review; this heuristic audit is not a proof of absence.",
+  "planning_files_ignored": true
+}
