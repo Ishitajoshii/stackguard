@@ -91,12 +91,13 @@ def main():
     parser.add_argument("--out", required=True, type=Path)
     parser.add_argument("--workers", type=int, default=4)
     parser.add_argument("--concurrency", type=int, default=1000)
+    parser.add_argument("--bin-dir", type=Path, default=Path(__file__).resolve().parents[1] / "bin")
     args = parser.parse_args()
     workspace = Path(__file__).resolve().parents[1]
     args.out.mkdir(parents=True, exist_ok=False)
-    scout = workspace / "bin" / "oss-scout.exe"
-    probe = workspace / "bin" / "nhi-probe.exe"
-    driver = workspace / "bin" / "sg-bench.exe"
+    scout = args.bin_dir.resolve() / "oss-scout.exe"
+    probe = args.bin_dir.resolve() / "nhi-probe.exe"
+    driver = args.bin_dir.resolve() / "sg-bench.exe"
     summary = {"workers": args.workers, "repository": str(args.repo),
                "memory_method": "Windows GetProcessMemoryInfo OS peak working set and peak commit; sampled every 20 ms; probe separate from server/driver",
                "correctness_scope": "real repository-file MCP transport, not native Codex/cloud correctness"}
@@ -117,7 +118,10 @@ def main():
                 wait_port(port, proxy)
             completed = subprocess.run([str(driver), "--url", f"http://127.0.0.1:{port}/mcp", "--path", "README.md", "--concurrency", str(args.concurrency), "--requests", str(args.concurrency * 2), "--out", str(args.out / mode)], stdin=subprocess.DEVNULL, capture_output=True, timeout=180)
             if completed.returncode != 0:
-                raise RuntimeError(f"{mode} load failed; inspect load.json")
+                diagnostics = workspace / ".work" / "bench-attempts" / args.out.name
+                diagnostics.mkdir(parents=True, exist_ok=True)
+                (diagnostics / f"{mode}-stderr.txt").write_bytes(completed.stderr)
+                raise RuntimeError(f"{mode} load failed with exit {completed.returncode}; inspect load.json if present and private diagnostics at {diagnostics}")
             row = json.loads((args.out / mode / "load.json").read_text())
             if row["server_peak_inflight"] < args.concurrency or row["failures"]:
                 raise RuntimeError("required actual server concurrency was not achieved")

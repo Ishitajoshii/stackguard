@@ -19,13 +19,14 @@ def main():
     p.add_argument("--out", type=Path, required=True)
     p.add_argument("--temp", required=True)
     p.add_argument("--workers", default="1,4,8,16")
+    p.add_argument("--probe", type=Path, default=Path("bin/nhi-probe.exe"))
     a = p.parse_args()
     a.out.mkdir(parents=True, exist_ok=False)
     reports = []
     expected = None
     for workers in map(int, a.workers.split(",")):
         dest = a.out / f"w{workers}"
-        command = [str(Path("bin/nhi-probe.exe").resolve()), a.operation,
+        command = [str(a.probe.resolve()), a.operation,
                    "--root" if a.operation == "scan" else "--input", a.input,
                    "--out", str(dest), "--temp", a.temp, "--workers", str(workers),
                    "--cpu-profile", str(a.out / f"cpu-w{workers}.pprof"),
