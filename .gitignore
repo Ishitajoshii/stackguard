@@ -1,3 +1,18 @@
 # Local planning documents
 /PRD.md
 /TODO.md
+
+# Private lab inputs and local working data
+/private/
+/.work/
+/profiles/
+/lab/private/
+/.env
+/.env.*
+!/.env.example
+
+# Generated executables and Python caches
+/bin/
+/nhi-probe.exe
+__pycache__/
+*.pyc
