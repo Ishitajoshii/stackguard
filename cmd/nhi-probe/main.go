@@ -7,6 +7,7 @@ import (
 	"io"
 	"os"
 	"os/signal"
+	"runtime/debug"
 )
 
 var version = "dev"
@@ -37,6 +38,7 @@ func run(args []string, stdout, stderr io.Writer) int {
 }
 
 func main() {
+	configureMemoryTarget()
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt)
 	defer stop()
 	args := os.Args[1:]
@@ -44,4 +46,13 @@ func main() {
 		os.Exit(run(args, os.Stdout, os.Stderr))
 	}
 	os.Exit(cli.Run(ctx, args, os.Stdin, os.Stdout, os.Stderr))
+}
+
+// The disk/queue bounds constrain live state. A separate runtime target leaves
+// headroom for OS/native memory under the measured 512 MB process budget.
+func configureMemoryTarget() {
+	const target = 256 << 20
+	if debug.SetMemoryLimit(-1) > target {
+		debug.SetMemoryLimit(target)
+	}
 }

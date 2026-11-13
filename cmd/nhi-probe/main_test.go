@@ -2,9 +2,27 @@ package main
 
 import (
 	"bytes"
+	"math"
+	"runtime/debug"
 	"strings"
 	"testing"
 )
+
+func TestRuntimeMemoryTarget(t *testing.T) {
+	previous := debug.SetMemoryLimit(-1)
+	defer debug.SetMemoryLimit(previous)
+	for _, initial := range []int64{math.MaxInt64, 512 << 20, 64 << 20} {
+		debug.SetMemoryLimit(initial)
+		configureMemoryTarget()
+		want := int64(256 << 20)
+		if initial < want {
+			want = initial
+		}
+		if got := debug.SetMemoryLimit(-1); got != want {
+			t.Fatalf("initial=%d got=%d want=%d", initial, got, want)
+		}
+	}
+}
 
 func TestRun(t *testing.T) {
 	tests := []struct {

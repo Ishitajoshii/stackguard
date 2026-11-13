@@ -1,0 +1,10 @@
+{
+  "pid": 46132,
+  "operation": "trace",
+  "output": "D:\\stackguard-data\\replays\\trace-10m-final\\w4",
+  "workspace": "D:\\stackguard-data\\temp\\stackguard-trace-1686245942",
+  "complete": false,
+  "events_bytes_before_interrupt": 6852888897,
+  "spill_bytes_before_interrupt": 28115777794,
+  "failure": "Ctrl-C shutdown exceeded two seconds"
+}

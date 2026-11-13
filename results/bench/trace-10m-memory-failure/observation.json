@@ -1,0 +1,14 @@
+{
+  "observed_at_utc": "2026-11-13T19:52:20.6387495Z",
+  "process_id": 46132,
+  "peak_working_set_bytes": 496435200,
+  "peak_commit_bytes": 539484160,
+  "memory_limit_bytes": 512000000,
+  "budget_pass": false,
+  "completed_trace": false,
+  "reason": "Peak committed memory exceeded the decimal 512 MB gate before the run completed. Interrupting this known-failed row; not a throughput pass.",
+  "probe_sha256": "9445c6d81e5c224d0e12e0efe04a915b3bceeedc7f7669a6cda19d1f49c9c9fb",
+  "source_base_commit": "25d13a94370518dad4821cc3f3564fe7957315b4",
+  "build_vcs_modified": true,
+  "measurement": "Windows Get-Process PeakWorkingSet64 and PeakPagedMemorySize64 while running; OS-maintained peaks."
+}
