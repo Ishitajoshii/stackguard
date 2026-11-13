@@ -7,6 +7,7 @@ from pathlib import Path
 import threading
 import time
 from bench_budget import check_memory
+from profile_artifacts import profile_files
 
 spec = importlib.util.spec_from_file_location("transport", Path(__file__).with_name("transport-check.py"))
 transport = importlib.util.module_from_spec(spec)
@@ -46,8 +47,12 @@ def main():
             done.set()
             monitor.join()
         elapsed = time.monotonic() - began
-        manifest = json.loads((dest / "manifest.json").read_text())
-        if code != 0 or not manifest["complete"]:
+        manifest_path = dest / 'manifest.json'
+        manifest = json.loads(manifest_path.read_text()) if manifest_path.exists() else {}
+        if code != 0 or not manifest.get("complete"):
+            failure = dict(workers=workers, seconds=elapsed, exit_code=code,
+                           failure='incomplete process or manifest', manifest=manifest, **memory)
+            (a.out / f"failure-w{workers}.json").write_text(json.dumps(failure, indent=2)+"\n")
             raise RuntimeError(f"worker {workers} incomplete, exit {code}")
         names = ["inventory.jsonl"] if a.operation == "scan" else ["events.jsonl", "edges.jsonl", "findings.jsonl", "lineage.txt"]
         digests = {}
@@ -59,7 +64,12 @@ def main():
         expected = digests
         report = dict(workers=workers, seconds=elapsed, bytes=manifest.get("bytes", 0),
                       records=manifest["records"], digests=digests, **memory)
-        check_memory(memory)
+        try:
+            check_memory(memory)
+            report['cpu_profile_files'] = [p.name for p in profile_files(a.out / f'cpu-w{workers}.pprof')]
+        except (RuntimeError, ValueError, OSError) as exc:
+            (a.out / f'failure-w{workers}.json').write_text(json.dumps(dict(report, failure=str(exc)), indent=2)+'\n')
+            raise
         reports.append(report)
         (a.out / "summary.json").write_text(json.dumps(reports, indent=2)+"\n")
         print(json.dumps(report), flush=True)
