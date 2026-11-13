@@ -1,0 +1,8 @@
+{
+  "workspace": "D:\\stackguard-data\\temp\\stackguard-trace-1686245942",
+  "derived_spill_bytes_removed": 28115777794.0,
+  "partial_outputs_retained": "D:/stackguard-data/replays/trace-10m-final/w4",
+  "validated_records": 10000000,
+  "complete": true,
+  "scope": "Only the stopped failed run temporary spill directory was removed; original capture, replay and validated partial output remain."
+}

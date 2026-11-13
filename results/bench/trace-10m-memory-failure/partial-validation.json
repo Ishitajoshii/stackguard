@@ -1,0 +1,10 @@
+{
+  "records": 10000000,
+  "events_sha256": "6043884603f4d8271d5f1b179213a8ff59b59ffcee483ba4ffe3c11b77a9166a",
+  "quarantine_records": 0,
+  "manifest_matches": true,
+  "trace_complete": false,
+  "shutdown_pass": false,
+  "cpu_profile_complete": false,
+  "scope": "Validated partial data after a failed memory-budget run and forced shutdown. Not a completed throughput or shutdown pass."
+}
