@@ -178,7 +178,9 @@ func (a *API) Search(ctx context.Context, interest string, count int) ([]Reposit
 		Items      []Repository `json:"items"`
 		Incomplete bool         `json:"incomplete_results"`
 	}
-	e := a.Get(ctx, "/search/repositories", url.Values{"q": {clean + " in:name,description,topics is:public archived:false"}, "sort": {"updated"}, "per_page": {fmt.Sprint(count)}}, &v)
+	// GitHub's default relevance order avoids letting newly-created empty
+	// repositories monopolize the small candidate budget.
+	e := a.Get(ctx, "/search/repositories", url.Values{"q": {clean + " in:name,description,topics is:public archived:false"}, "per_page": {fmt.Sprint(count)}}, &v)
 	if e == nil && v.Incomplete {
 		e = errors.New("GitHub search returned incomplete results; narrow interests")
 	}

@@ -150,8 +150,13 @@ func Discover(ctx context.Context, p Profile, s Summary, api *API, draft bool) (
 	for _, r := range p.Exclude {
 		excluded[strings.ToLower(r)] = true
 	}
-	for _, interest := range p.Interests {
-		items, e := api.Search(ctx, interest, p.Candidates)
+	for index, interest := range p.Interests {
+		remaining := p.Candidates - len(repos)
+		if remaining == 0 {
+			break
+		}
+		share := (remaining + len(p.Interests) - index - 1) / (len(p.Interests) - index)
+		items, e := api.Search(ctx, interest, share)
 		if e != nil {
 			result.Complete = false
 			result.Coverage = append(result.Coverage, e.Error())
