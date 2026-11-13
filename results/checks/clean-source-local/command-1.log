@@ -1,0 +1,22 @@
+ok  	github.com/Ishitajoshii/stackguard/cmd/nhi-probe	13.034s
+ok  	github.com/Ishitajoshii/stackguard/cmd/oss-scout	6.595s
+?   	github.com/Ishitajoshii/stackguard/cmd/sg-bench	[no test files]
+?   	github.com/Ishitajoshii/stackguard/cmd/sg-collect	[no test files]
+ok  	github.com/Ishitajoshii/stackguard/internal/adapters	2.625s
+ok  	github.com/Ishitajoshii/stackguard/internal/cli	6.651s
+ok  	github.com/Ishitajoshii/stackguard/internal/config	5.395s
+?   	github.com/Ishitajoshii/stackguard/internal/correlation	[no test files]
+ok  	github.com/Ishitajoshii/stackguard/internal/graph	2.275s
+ok  	github.com/Ishitajoshii/stackguard/internal/model	5.169s
+ok  	github.com/Ishitajoshii/stackguard/internal/output	5.239s
+ok  	github.com/Ishitajoshii/stackguard/internal/pipeline	6.461s
+ok  	github.com/Ishitajoshii/stackguard/internal/proxy	9.593s
+ok  	github.com/Ishitajoshii/stackguard/internal/scan	3.870s
+ok  	github.com/Ishitajoshii/stackguard/internal/secrets	4.829s
+ok  	github.com/Ishitajoshii/stackguard/internal/trace	15.954s
+ok  	github.com/Ishitajoshii/stackguard/internal/verify	3.075s
+ok  	github.com/Ishitajoshii/stackguard/lab/bench	12.096s
+ok  	github.com/Ishitajoshii/stackguard/lab/cloud	2.091s
+ok  	github.com/Ishitajoshii/stackguard/lab/mcp	9.489s
+ok  	github.com/Ishitajoshii/stackguard/lab/scout	10.605s
+ok  	github.com/Ishitajoshii/stackguard/lab/telemetry	2.362s

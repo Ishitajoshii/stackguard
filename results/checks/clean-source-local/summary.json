@@ -1,0 +1,36 @@
+{
+  "source_commit": "c147a2147ebd85b177c09342e48380402311da50",
+  "timestamp_utc": "2026-11-13T19:45:15.838564+00:00",
+  "method": "Fresh git archive snapshot on D:, existing shared compiler/module cache and installed toolchain. This is not an empty-machine or cloud setup test.",
+  "commands": [
+    {
+      "command": "go build -o <separate-D-build-dir>/ ./cmd/...",
+      "exit_code": 0
+    },
+    {
+      "command": "go test -race ./...",
+      "exit_code": 0
+    },
+    {
+      "command": "go vet ./...",
+      "exit_code": 0
+    },
+    {
+      "command": "python -m unittest discover -s lab -p 'test_*.py'",
+      "exit_code": 0
+    },
+    {
+      "command": "python -m unittest discover -s scripts -p 'test_*.py'",
+      "exit_code": 0
+    },
+    {
+      "command": "nhi-probe trace --input codex-otlp=captures/codex-file-stdio-20261114/native/native-otlp.jsonl --out <fresh-D-directory> --temp D:/stackguard-data/temp --lineage",
+      "exit_code": 0
+    }
+  ],
+  "native_events": 2,
+  "native_edges": 0,
+  "private_inputs_present": false,
+  "initial_attempt": "Build and all test suites passed. The first trace command incorrectly used a pretty-printed unit fixture as JSONL and failed; the walkthrough was corrected to use the original native JSONL capture. The fresh-destination rerun passed.",
+  "scope": "Local build, full race/vet/Python suites, original Codex capture trace. Live cloud/scout credentials and human resume review remain pending."
+}

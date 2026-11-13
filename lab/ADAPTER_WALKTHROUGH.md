@@ -14,9 +14,9 @@ Run the example without cloud credentials:
 ```powershell
 go test -race ./internal/adapters ./internal/trace
 go build -o bin/walkthrough/nhi-probe.exe ./cmd/nhi-probe
-./bin/walkthrough/nhi-probe.exe trace --input codex-otlp=internal/adapters/testdata/codex-file-tool.otlp.json --out results/local-adapter-walkthrough --temp D:/stackguard-data/temp --lineage
+./bin/walkthrough/nhi-probe.exe trace --input codex-otlp=captures/codex-file-stdio-20261114/native/native-otlp.jsonl --out results/local-adapter-walkthrough --temp D:/stackguard-data/temp --lineage
 ```
 
-Choose a fresh output directory. Expected output: one native event, no credential edges, no invented lineage and a complete manifest. The complete original native-plus-proxy examples are documented in [NATIVE_LOCAL_PROOF.md](NATIVE_LOCAL_PROOF.md). A new cloud source still needs its own real export and mapping review; supporting a generic OTLP envelope does not prove every provider's schema.
+Choose a fresh output directory. The CLI reads one envelope per JSONL line; the pretty-printed unit fixture is passed directly to `Decode` only in tests. Expected CLI output from this original capture: two native events (the repository tool and its `functions.exec` wrapper), no credential edges, no invented lineage and a complete manifest. The complete native-plus-proxy examples are documented in [NATIVE_LOCAL_PROOF.md](NATIVE_LOCAL_PROOF.md). A new cloud source still needs its own real export and mapping review; supporting a generic OTLP envelope does not prove every provider's schema.
 
 For a live walkthrough, explain why this adapter returns normalized events through the same small interface and why the core graph does not know about OTLP attribute names. The implementation and tests are complete; Ishita's rehearsal remains a separate TODO.
