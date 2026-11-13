@@ -1,0 +1,17 @@
+{
+  "selected_config": "~/.codex/config.toml",
+  "parser": "codex",
+  "selected_at": "2026-11-13T14:51:19.829633Z",
+  "config_scan_records": 1,
+  "config_scan_errors": 0,
+  "verification_attempted": false,
+  "private_evidence_directory": ".work/local-config-scan",
+  "inventory_sha256": "b297010e5ad3632297de9e23588b176ae4730f9ed5681287e3cd7b9670b079f5",
+  "excluded_scope": [
+    "Codex auth store",
+    "browser data",
+    "general home-directory scan",
+    "raw credentials"
+  ],
+  "note": "Explicit selected-machine configuration scan, separate from public repository byte totals. Personal binding details remain ignored; no validity check or exposure claim."
+}

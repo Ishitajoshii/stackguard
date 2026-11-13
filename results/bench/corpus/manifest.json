@@ -1,0 +1,39 @@
+{
+  "repositories": [
+    {
+      "repository": "https://github.com/golang/go.git",
+      "commit": "224934336832d84eedcf168ae633e376a5decb22",
+      "root": "D:\\stackguard-data\\repos\\golang-go",
+      "files": 16255,
+      "bytes": 156228793,
+      "skipped": 1,
+      "working_tree_clean": true
+    },
+    {
+      "repository": "https://github.com/llvm/llvm-project.git",
+      "commit": "110d9915f51b88f184b0006dd58f98e69c8dd2a3",
+      "root": "D:\\stackguard-data\\repos\\llvm-project",
+      "files": 190840,
+      "bytes": 2522045621,
+      "skipped": 3,
+      "working_tree_clean": true
+    },
+    {
+      "repository": "https://github.com/mozilla/gecko-dev.git",
+      "commit": "5836a062726f715fda621338a17b51aff30d0a8c",
+      "root": "D:\\stackguard-data\\repos\\gecko-dev",
+      "files": 387534,
+      "bytes": 3157462442,
+      "skipped": 13,
+      "working_tree_clean": true
+    }
+  ],
+  "bytes": 5835736856,
+  "scope": "Actual working-tree files on D:, default scan exclusions, no provider verification.",
+  "excluded_basenames": [
+    ".git",
+    ".work",
+    "private",
+    "profiles"
+  ]
+}
