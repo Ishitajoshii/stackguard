@@ -22,6 +22,8 @@ def main():
     p.add_argument("--temp", required=True)
     p.add_argument("--workers", default="1,4,8,16")
     p.add_argument("--probe", type=Path, default=Path("bin/nhi-probe.exe"))
+    p.add_argument('--profiles', choices=['both', 'none'], default='both',
+                   help='both records CPU/heap profiles; none measures normal CLI throughput')
     a = p.parse_args()
     a.out.mkdir(parents=True, exist_ok=False)
     reports = []
@@ -32,9 +34,10 @@ def main():
         dest = a.out / f"w{workers}"
         command = [str(a.probe.resolve()), a.operation,
                    "--root" if a.operation == "scan" else "--input", a.input,
-                   "--out", str(dest), "--temp", a.temp, "--workers", str(workers),
-                   "--cpu-profile", str(a.out / f"cpu-w{workers}.pprof"),
-                   "--heap-profile", str(a.out / f"heap-w{workers}.pprof")]
+                   "--out", str(dest), "--temp", a.temp, "--workers", str(workers)]
+        if a.profiles == 'both':
+            command += ['--cpu-profile', str(a.out/f'cpu-w{workers}.pprof'),
+                        '--heap-profile', str(a.out/f'heap-w{workers}.pprof')]
         if a.operation == "trace":
             command.append("--lineage")
         began = time.monotonic()
@@ -53,7 +56,8 @@ def main():
         manifest = json.loads(manifest_path.read_text()) if manifest_path.exists() else {}
         if code != 0 or not manifest.get("complete"):
             failure = dict(workers=workers, seconds=elapsed, exit_code=code,
-                           failure='incomplete process or manifest', manifest=manifest, **memory)
+                           failure='incomplete process or manifest', manifest=manifest,
+                           profiles=a.profiles, probe_sha256=probe_sha256, **memory)
             (a.out / f"failure-w{workers}.json").write_text(json.dumps(failure, indent=2)+"\n")
             raise RuntimeError(f"worker {workers} incomplete, exit {code}")
         names = ["inventory.jsonl"] if a.operation == "scan" else ["events.jsonl", "edges.jsonl", "findings.jsonl", "lineage.txt"]
@@ -65,10 +69,12 @@ def main():
             raise RuntimeError("worker output is nondeterministic")
         expected = digests
         report = dict(workers=workers, seconds=elapsed, bytes=manifest.get("bytes", 0),
-                      records=manifest["records"], digests=digests, probe_sha256=probe_sha256, **memory)
+                      records=manifest["records"], digests=digests, probe_sha256=probe_sha256,
+                      profiles=a.profiles, **memory)
         try:
             check_memory(memory)
-            report['cpu_profile_files'] = [p.name for p in profile_files(a.out / f'cpu-w{workers}.pprof')]
+            report['cpu_profile_files'] = ([p.name for p in profile_files(a.out / f'cpu-w{workers}.pprof')]
+                                           if a.profiles == 'both' else [])
         except (RuntimeError, ValueError, OSError) as exc:
             (a.out / f'failure-w{workers}.json').write_text(json.dumps(dict(report, failure=str(exc)), indent=2)+'\n')
             raise

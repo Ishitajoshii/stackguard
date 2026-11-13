@@ -64,11 +64,15 @@ def main():
     if manifest['operation'] not in ('scan', 'trace'):
         raise RuntimeError('unsupported operation')
     cpu_base = source/f'cpu-w{a.workers}.pprof'
-    parts = profile_files(cpu_base)
+    mode = row.get('profiles', 'both')
+    if mode not in ('both', 'none'):
+        raise RuntimeError('unknown profiling mode')
+    parts = profile_files(cpu_base) if mode == 'both' else []
     if 'cpu_profile_files' in row and row['cpu_profile_files'] != [p.name for p in parts]:
         raise RuntimeError('CPU profile list differs from measured summary')
     heap = source/f'heap-w{a.workers}.pprof'
-    valid_gzip(heap)
+    if mode == 'both':
+        valid_gzip(heap)
     build = subprocess.check_output(['go', 'version', '-m', str(a.probe)], text=True)
     dest.mkdir(parents=True)
     small = dest/f'w{a.workers}'
@@ -93,21 +97,24 @@ def main():
             copy_small(path, small/name)
             if name in row['digests'] and digest(small/name) != row['digests'][name]:
                 raise RuntimeError('copied output differs from measured hash')
-    copy_small(heap, dest/heap.name)
-    merged = dest/f'cpu-w{a.workers}-merged.pprof'
-    subprocess.run(['go', 'tool', 'pprof', '-proto', '-output', str(merged),
-                    *map(str, parts)], check=True, capture_output=True)
-    valid_gzip(merged)
-    if merged.stat().st_size > 32*1024*1024:
-        raise RuntimeError('merged profile exceeds bundle limit')
-    copied[merged.name] = digest(merged)
+    merged = None
+    if mode == 'both':
+        copy_small(heap, dest/heap.name)
+        merged = dest/f'cpu-w{a.workers}-merged.pprof'
+        subprocess.run(['go', 'tool', 'pprof', '-proto', '-output', str(merged),
+                        *map(str, parts)], check=True, capture_output=True)
+        valid_gzip(merged)
+        if merged.stat().st_size > 32*1024*1024:
+            raise RuntimeError('merged profile exceeds bundle limit')
+        copied[merged.name] = digest(merged)
     metadata = dict(source_run=str(source), probe_sha256=probe_sha256,
                     runner_recorded_binary_sha256='probe_sha256' in row,
-                    build_info=build, merged_cpu_profile=merged.name,
+                    build_info=build, profiles=mode,
+                    merged_cpu_profile=merged.name if merged else None,
                     original_cpu_profiles=[dict(file=p.name, bytes=p.stat().st_size,
                                                 sha256=digest(p)) for p in parts],
                     copied_sha256=copied,
-                    scope='Large events.jsonl and original CPU segments remain in source_run. Output digests were measured by pipeline-check; copied canonical files were rechecked. Gzip framing and Go pprof merging validated the collected profiles. Throughput replay is not native credential-lineage evidence.')
+                    scope='Large events.jsonl and any original CPU segments remain in source_run. Output digests were measured by pipeline-check; copied canonical files were rechecked. When profiles=both, gzip framing and Go pprof merging validate the profiles. Throughput replay is not native credential-lineage evidence.')
     (dest/'provenance.json').write_text(json.dumps(metadata, indent=2)+'\n')
     (dest/'summary.json').write_text(json.dumps([row], indent=2)+'\n')
     print(json.dumps(dict(bundle=str(dest), workers=a.workers,

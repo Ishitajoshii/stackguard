@@ -1,0 +1,19 @@
+[
+  {
+    "workers": 4,
+    "seconds": 147.89604730001884,
+    "bytes": 59840000,
+    "records": 100000,
+    "digests": {
+      "events.jsonl": "dfb5b0e1921f8e3e211ce1f003ae9163b6305076419875230b108692bfcacd0a",
+      "edges.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "findings.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "lineage.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "probe_sha256": "624c262a7bcc59e3ab72204cf2c2f5f9a3ec415ae08fa14cc4bc9b4e4ef085da",
+    "profiles": "none",
+    "peak_working_set_bytes": 67817472,
+    "peak_commit_bytes": 107188224,
+    "cpu_profile_files": []
+  }
+]
