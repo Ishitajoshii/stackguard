@@ -16,7 +16,7 @@ import (
 )
 
 // Risks treats absence as a coverage gap, never as proof of unauthorized use.
-func Risks(ctx context.Context, dir, temp, inventory string) error {
+func Risks(ctx context.Context, dir, temp, inventory string) (err error) {
 	work, e := os.MkdirTemp(temp, "stackguard-risks-*")
 	if e != nil {
 		return e
@@ -55,7 +55,9 @@ func Risks(ctx context.Context, dir, temp, inventory string) error {
 			return e
 		}
 	}
-	bindings.Close()
+	if e = bindings.Close(); e != nil {
+		return e
+	}
 	table, e := pipeline.BuildTable(ctx, bindings.Name(), work)
 	if e != nil {
 		return e
@@ -121,7 +123,9 @@ func Risks(ctx context.Context, dir, temp, inventory string) error {
 	if e = flush(); e != nil {
 		return e
 	}
-	used.Close()
+	if e = used.Close(); e != nil {
+		return e
+	}
 	useTable, e := pipeline.BuildTable(ctx, used.Name(), work)
 	if e != nil {
 		return e
@@ -178,7 +182,9 @@ func Risks(ctx context.Context, dir, temp, inventory string) error {
 	if e != nil {
 		return e
 	}
-	spool.Close()
+	if e = spool.Close(); e != nil {
+		return e
+	}
 	sorted, e := pipeline.Sort(ctx, spool.Name(), work)
 	if e != nil {
 		return e
@@ -187,7 +193,7 @@ func Risks(ctx context.Context, dir, temp, inventory string) error {
 	if e != nil {
 		return e
 	}
-	defer w.Close()
+	defer func() { err = errors.Join(err, w.Close()) }()
 	last := ""
 	return read(sorted, func(s string) error {
 		k, b, _ := strings.Cut(s, "\t")
