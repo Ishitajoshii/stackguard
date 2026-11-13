@@ -141,14 +141,14 @@ func Risks(ctx context.Context, dir, temp, inventory string) (err error) {
 			if json.Unmarshal([]byte(s), &id) != nil {
 				return errors.New("invalid inventory")
 			}
-			if id.Unresolved || (id.Kind != "secret" && id.Kind != "credential_set") {
+			if id.Unresolved || (id.Kind != "secret" && id.Kind != "credential_set" && id.Kind != "principal") {
 				return nil
 			}
 			_, ok, e := useTable.Get(secrets.Fingerprint(id.ID))
 			if e != nil || ok {
 				return e
 			}
-			return emit("unused_in_window", "low", id.ID, nil, "No use was observed in the supplied capture. Incomplete telemetry or a different observation window can explain absence.", "Confirm coverage and expected usage before rotating or removing the credential.", nil)
+			return emit("unused_in_window", "low", id.ID, nil, "No use was observed in the supplied capture. Incomplete telemetry or a different observation window can explain absence.", "Confirm coverage and expected usage before changing or removing the identity or its credentials.", nil)
 		})
 		if e != nil {
 			return e
