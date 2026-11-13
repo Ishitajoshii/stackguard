@@ -31,6 +31,7 @@ func TestHTTPStreamingPreservesWire(t *testing.T) {
 	o, _ := NewObserver(ctx, 2, "r", "unknown", "http", func(v any) error { mu.Lock(); defer mu.Unlock(); got = append(got, v.(model.Event)); return nil })
 	defer func() { cancel(); o.Wait() }()
 	h, e := HTTP(up.URL, o)
+	defer h.(interface{ CloseIdleConnections() }).CloseIdleConnections()
 	if e != nil {
 		t.Fatal(e)
 	}

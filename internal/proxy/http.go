@@ -27,8 +27,13 @@ func HTTP(upstream string, o *Observer) (http.Handler, error) {
 		return nil, errors.New("plain HTTP upstream must be loopback")
 	}
 	p := httputil.NewSingleHostReverseProxy(u)
+	transport := http.DefaultTransport.(*http.Transport).Clone()
+	transport.MaxIdleConns = 2048
+	transport.MaxIdleConnsPerHost = 2048
+	p.Transport = transport
 	p.FlushInterval = -1
 	p.ErrorHandler = func(w http.ResponseWriter, r *http.Request, e error) {
+		observeHTTPFailure(o, r)
 		http.Error(w, "upstream unavailable", http.StatusBadGateway)
 	}
 	p.ModifyResponse = func(r *http.Response) error {
@@ -39,10 +44,14 @@ func HTTP(upstream string, o *Observer) (http.Handler, error) {
 		if v.session == "" {
 			return nil
 		}
+		if r.StatusCode >= 400 {
+			observeHTTPFailure(o, r.Request)
+			return nil
+		}
 		r.Body = &observedBody{ReadCloser: r.Body, ctx: r.Request.Context(), observer: o, session: v.session, sse: strings.Contains(r.Header.Get("Content-Type"), "text/event-stream")}
 		return nil
 	}
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	return &httpProxyHandler{transport: transport, Handler: http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		if origin := r.Header.Get("Origin"); origin != "" {
 			v, e := url.Parse(origin)
 			if e != nil || !strings.EqualFold(v.Host, r.Host) {
@@ -83,14 +92,36 @@ func HTTP(upstream string, o *Observer) (http.Handler, error) {
 				return
 			}
 			r.Body = io.NopCloser(bytes.NewReader(b))
-			r = r.WithContext(context.WithValue(r.Context(), httpMetaKey{}, httpMeta{session: session}))
+			var metadata struct {
+				ID json.RawMessage `json:"id"`
+			}
+			json.Unmarshal(b, &metadata)
+			r = r.WithContext(context.WithValue(r.Context(), httpMetaKey{}, httpMeta{session: session, id: metadata.ID}))
 		}
 		p.ServeHTTP(w, r)
-	}), nil
+	})}, nil
+}
+
+type httpProxyHandler struct {
+	http.Handler
+	transport *http.Transport
+}
+
+func (h *httpProxyHandler) CloseIdleConnections() { h.transport.CloseIdleConnections() }
+func observeHTTPFailure(o *Observer, r *http.Request) {
+	meta, _ := r.Context().Value(httpMetaKey{}).(httpMeta)
+	if meta.session == "" || len(meta.id) == 0 {
+		return
+	}
+	b, _ := json.Marshal(map[string]any{"id": meta.id, "error": map[string]any{"code": -32098}})
+	_ = o.Observe(r.Context(), meta.session, b, true, nil)
 }
 
 type httpMetaKey struct{}
-type httpMeta struct{ session string }
+type httpMeta struct {
+	session string
+	id      json.RawMessage
+}
 type observedBody struct {
 	io.ReadCloser
 	ctx       context.Context
@@ -156,6 +187,9 @@ func Loopback(host string) bool {
 	return strings.EqualFold(host, "localhost") || net.ParseIP(host) != nil && net.ParseIP(host).IsLoopback()
 }
 func Serve(ctx context.Context, addr string, h http.Handler) error {
+	if closer, ok := h.(interface{ CloseIdleConnections() }); ok {
+		defer closer.CloseIdleConnections()
+	}
 	host, _, e := net.SplitHostPort(addr)
 	if e != nil || !Loopback(host) {
 		return errors.New("listen address must be loopback host:port")
