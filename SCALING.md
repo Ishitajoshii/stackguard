@@ -77,6 +77,7 @@ All destinations must be new. Keep large replays outside the repository. The pip
 ## Unmet scale gates
 
 - The latest [long-running 10M attempt](results/bench/trace-10m-memory-failure/observation.json) exceeded the memory budget before completion: peak working set 496,435,200 bytes and peak commit 539,484,160 bytes. Deliberate interruption then missed two seconds; an incomplete data manifest exists but the CPU profile is truncated. Neither measurement is a pass. The next build uses a 256 MiB Go runtime target and 30-second CPU-profile segments; their large-run effectiveness must still be measured.
+- The older [ten-million-session attempt](results/bench/trace-many-10m-memory-failure/observation.json) also crossed the limit: peak working set 644,505,600 bytes and peak commit 691,257,344 bytes. Its interruption exceeded two seconds and produced no final manifest; the exact shutdown stall is unresolved. Its derived scratch was removed only after the process stopped, with original replay and failed partial outputs retained. A corrected many-session run is queued behind the existing single-session run to reduce competing disk work.
 
 - Completion and matching output hashes for the remaining full 5.84 GB scan worker rows. The sixteen-worker full scan and selected machine configuration scan are complete.
 - Completion of the ten-million-event trace worker matrix, plus evidence representative of a credential-bearing delegated graph. Input generation/count/hash are verified; the completed larger trace result is one million events in one session.

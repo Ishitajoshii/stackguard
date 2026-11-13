@@ -1,0 +1,9 @@
+{
+  "workspace": "D:\\stackguard-data\\temp\\stackguard-trace-2465037458",
+  "derived_spill_bytes_removed": 35599937922.0,
+  "partial_outputs_retained": "D:/stackguard-data/replays/trace-many-10m-final/w16",
+  "complete": true,
+  "manifest_present": false,
+  "validation_scope": "Stopped-process and failure-report workspace checks. No final manifest was produced; partial JSONL was not independently parsed. No validated-output or shutdown-pass claim.",
+  "scope": "Only derived spill files removed. Original replay and failed partial outputs remain. Exact shutdown stall location is unresolved."
+}

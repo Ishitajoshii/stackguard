@@ -1,0 +1,12 @@
+{
+  "observed_at_utc": "2026-11-13T20:21:33.4839334Z",
+  "process_id": 3196,
+  "peak_working_set_bytes": 644505600,
+  "peak_commit_bytes": 691257344,
+  "memory_limit_bytes": 512000000,
+  "budget_pass": false,
+  "completed_trace": false,
+  "reason": "Old unwindowed-profile many-session run exceeded the process memory gate. Superseded by bounded-profile build; not a passing stress result.",
+  "source_base_commit": "25d13a94370518dad4821cc3f3564fe7957315b4",
+  "build_vcs_modified": true
+}
