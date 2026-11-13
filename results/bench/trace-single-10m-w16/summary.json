@@ -1,0 +1,16 @@
+[
+  {
+    "workers": 16,
+    "seconds": 4784.87482180004,
+    "bytes": 5984000000,
+    "records": 10000000,
+    "digests": {
+      "events.jsonl": "97f528e41b92ca5bcbc89cdd5eed020cde0061add9b2ceb3d03333e6468a260c",
+      "edges.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "findings.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "lineage.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "peak_working_set_bytes": 271728640,
+    "peak_commit_bytes": 316817408
+  }
+]

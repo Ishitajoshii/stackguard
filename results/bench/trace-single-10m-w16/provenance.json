@@ -1,0 +1,25 @@
+{
+  "source_run": "D:\\stackguard-data\\replays\\trace-single-10m-final",
+  "probe_sha256": "9445c6d81e5c224d0e12e0efe04a915b3bceeedc7f7669a6cda19d1f49c9c9fb",
+  "runner_recorded_binary_sha256": false,
+  "build_info": "bin\\final\\nhi-probe.exe: go1.26.5\n\tpath\tgithub.com/Ishitajoshii/stackguard/cmd/nhi-probe\n\tmod\tgithub.com/Ishitajoshii/stackguard\tv0.0.0-20261113190830-25d13a943705+dirty\t\n\tdep\tgithub.com/pelletier/go-toml/v2\tv2.4.3\th1:GTRvJQutkOSftxIFD5xw9aepkYNuPWmVJpffdDPYVpY=\n\tbuild\t-buildmode=exe\n\tbuild\t-compiler=gc\n\tbuild\tDefaultGODEBUG=containermaxprocs=0,cryptocustomrand=1,decoratemappings=0,tlssecpmlkem=0,tlssha1=1,updatemaxprocs=0,urlstrictcolons=0,x509sha256skid=0\n\tbuild\tCGO_ENABLED=1\n\tbuild\tCGO_CFLAGS=\n\tbuild\tCGO_CPPFLAGS=\n\tbuild\tCGO_CXXFLAGS=\n\tbuild\tCGO_LDFLAGS=\n\tbuild\tGOARCH=amd64\n\tbuild\tGOOS=windows\n\tbuild\tGOAMD64=v1\n\tbuild\tvcs=git\n\tbuild\tvcs.revision=25d13a94370518dad4821cc3f3564fe7957315b4\n\tbuild\tvcs.time=2026-11-13T19:08:30Z\n\tbuild\tvcs.modified=true\n",
+  "profiles": "both",
+  "merged_cpu_profile": "cpu-w16-merged.pprof",
+  "original_cpu_profiles": [
+    {
+      "file": "cpu-w16.pprof",
+      "bytes": 791897,
+      "sha256": "2037b529506afe7a435b43c95a9286633f3288d474256657d3903c4d34280b61"
+    }
+  ],
+  "copied_sha256": {
+    "w16/manifest.json": "cb304c8ddfa170ac6a6d49209e0bdcab740d8414187f4a9a9ac29a7e653903f2",
+    "w16/edges.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "w16/findings.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "w16/lineage.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "w16/quarantine.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "heap-w16.pprof": "9378cbfc958e1cae02a07af5edbf74e8b6a99b19524181a72ac240cd7760f3f4",
+    "cpu-w16-merged.pprof": "db93339dec3e26c0b33e91d861a020c048dd65f16e03a2c36448a71e428fe48f"
+  },
+  "scope": "Large events.jsonl and any original CPU segments remain in source_run. Output digests were measured by pipeline-check; copied canonical files were rechecked. When profiles=both, gzip framing and Go pprof merging validate the profiles. Throughput replay is not native credential-lineage evidence."
+}
