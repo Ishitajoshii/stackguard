@@ -2,6 +2,7 @@
 package graph
 
 import (
+	"bufio"
 	"context"
 	"encoding/json"
 	"errors"
@@ -55,6 +56,7 @@ func Index(ctx context.Context, path, dir string) (*pipeline.Table, error) {
 		return nil, err
 	}
 	defer out.Close()
+	writer := bufio.NewWriterSize(out, 64<<10)
 	var key string
 	var node Node
 	flush := func() error {
@@ -62,7 +64,7 @@ func Index(ctx context.Context, path, dir string) (*pipeline.Table, error) {
 			return nil
 		}
 		b, _ := json.Marshal(node)
-		_, e := fmt.Fprintf(out, "%s\t%s\n", key, b)
+		_, e := fmt.Fprintf(writer, "%s\t%s\n", key, b)
 		return e
 	}
 	err = pipeline.Lines(ctx, f, func(line string) error {
@@ -100,7 +102,7 @@ func Index(ctx context.Context, path, dir string) (*pipeline.Table, error) {
 	if err != nil {
 		return nil, err
 	}
-	if err = out.Close(); err != nil {
+	if err = errors.Join(writer.Flush(), out.Close()); err != nil {
 		return nil, err
 	}
 	return pipeline.BuildTable(ctx, out.Name(), dir)

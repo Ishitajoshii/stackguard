@@ -1,6 +1,7 @@
 package pipeline
 
 import (
+	"bufio"
 	"context"
 	"encoding/binary"
 	"errors"
@@ -36,6 +37,8 @@ func BuildTable(ctx context.Context, input, dir string) (*Table, error) {
 		return nil, e
 	}
 	t := &Table{index: idx, data: data}
+	indexWriter := bufio.NewWriterSize(idx, 64<<10)
+	dataWriter := bufio.NewWriterSize(data, 64<<10)
 	var offset int64
 	previous := ""
 	previousValue := ""
@@ -56,16 +59,19 @@ func BuildTable(ctx context.Context, input, dir string) (*Table, error) {
 		copy(record[:64], k)
 		binary.LittleEndian.PutUint64(record[64:72], uint64(offset))
 		binary.LittleEndian.PutUint32(record[72:], uint32(len(v)))
-		if _, e := idx.Write(record[:]); e != nil {
+		if _, e := indexWriter.Write(record[:]); e != nil {
 			return e
 		}
-		if _, e := io.WriteString(data, v); e != nil {
+		if _, e := io.WriteString(dataWriter, v); e != nil {
 			return e
 		}
 		offset += int64(len(v))
 		t.count++
 		return nil
 	})
+	if e == nil {
+		e = errors.Join(indexWriter.Flush(), dataWriter.Flush())
+	}
 	if e != nil {
 		t.Close()
 		return nil, e

@@ -1,6 +1,7 @@
 package trace
 
 import (
+	"bufio"
 	"context"
 	"encoding/json"
 	"errors"
@@ -67,6 +68,7 @@ func Run(ctx context.Context, o Options) (m model.Manifest, err error) {
 		return m, err
 	}
 	defer spool.Close()
+	spoolWriter := bufio.NewWriterSize(spool, 64<<10)
 	registry := adapters.DefaultRegistry()
 	for _, input := range o.Inputs {
 		adapter, ok := registry[input.Adapter]
@@ -100,7 +102,7 @@ func Run(ctx context.Context, o Options) (m model.Manifest, err error) {
 				b, _ := json.Marshal(event)
 				b = []byte(secrets.Redact(string(b)))
 				key := secrets.Fingerprint(event.Source + "\x00" + event.ID)
-				if _, e = fmt.Fprintf(spool, "%s\t%s\n", key, b); e != nil {
+				if _, e = fmt.Fprintf(spoolWriter, "%s\t%s\n", key, b); e != nil {
 					return e
 				}
 			}
@@ -111,7 +113,7 @@ func Run(ctx context.Context, o Options) (m model.Manifest, err error) {
 			return m, e
 		}
 	}
-	if err = spool.Close(); err != nil {
+	if err = errors.Join(spoolWriter.Flush(), spool.Close()); err != nil {
 		return m, err
 	}
 	sorted, err := pipeline.Sort(ctx, spool.Name(), dir)
@@ -123,6 +125,7 @@ func Run(ctx context.Context, o Options) (m model.Manifest, err error) {
 		return m, err
 	}
 	defer nodes.Close()
+	nodeWriter := bufio.NewWriterSize(nodes, 64<<10)
 	f, err := os.Open(sorted)
 	if err != nil {
 		return m, err
@@ -136,7 +139,7 @@ func Run(ctx context.Context, o Options) (m model.Manifest, err error) {
 		if err := events.Write(current); err != nil {
 			return err
 		}
-		_, err := nodes.WriteString(graph.NodeRecord(current))
+		_, err := nodeWriter.WriteString(graph.NodeRecord(current))
 		return err
 	}
 	err = pipeline.Lines(ctx, f, func(s string) error {
@@ -171,7 +174,7 @@ func Run(ctx context.Context, o Options) (m model.Manifest, err error) {
 	if err != nil {
 		return m, err
 	}
-	if err = nodes.Close(); err != nil {
+	if err = errors.Join(nodeWriter.Flush(), nodes.Close()); err != nil {
 		return m, err
 	}
 	table, err := graph.Index(ctx, nodes.Name(), dir)
@@ -184,6 +187,7 @@ func Run(ctx context.Context, o Options) (m model.Manifest, err error) {
 		return m, err
 	}
 	defer edgeSpool.Close()
+	edgeWriter := bufio.NewWriterSize(edgeSpool, 64<<10)
 	err = pipeline.Transform(ctx, filepath.Join(o.Output, "events.jsonl"), o.Workers, func(s string) string { var e model.Event; json.Unmarshal([]byte(s), &e); return e.Session }, func(s string) ([]string, error) {
 		var e model.Event
 		if json.Unmarshal([]byte(s), &e) != nil {
@@ -217,11 +221,11 @@ func Run(ctx context.Context, o Options) (m model.Manifest, err error) {
 			records = append(records, fmt.Sprintf("%s:%s\t%s\t%s\n", edge.NHI, secrets.Fingerprint(string(identity)), secrets.Fingerprint(call), b))
 		}
 		return records, nil
-	}, edgeSpool)
+	}, edgeWriter)
 	if err != nil {
 		return m, err
 	}
-	if err = edgeSpool.Close(); err != nil {
+	if err = errors.Join(edgeWriter.Flush(), edgeSpool.Close()); err != nil {
 		return m, err
 	}
 	sorted, err = pipeline.Sort(ctx, edgeSpool.Name(), dir)
