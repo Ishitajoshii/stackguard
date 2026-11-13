@@ -9,6 +9,7 @@ import (
 	"strings"
 	"sync"
 	"testing"
+	"time"
 )
 
 func TestHTTPStreamingPreservesWire(t *testing.T) {
@@ -65,5 +66,54 @@ func TestRejectOrigin(t *testing.T) {
 	h.ServeHTTP(w, r)
 	if w.Code != 403 {
 		t.Fatal(w.Code)
+	}
+}
+
+func TestStatelessClientsCanReuseRequestIDsConcurrently(t *testing.T) {
+	entered := make(chan struct{}, 2)
+	release := make(chan struct{})
+	up := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		entered <- struct{}{}
+		<-release
+		w.Header().Set("Content-Type", "application/json")
+		io.WriteString(w, `{"jsonrpc":"2.0","id":1,"result":{}}`)
+	}))
+	defer up.Close()
+	ctx, cancel := context.WithCancel(context.Background())
+	o, _ := NewObserver(ctx, 2, "run", "agent", "client", func(any) error { return nil })
+	defer func() { cancel(); o.Wait() }()
+	h, _ := HTTP(up.URL, o)
+	defer h.(interface{ CloseIdleConnections() }).CloseIdleConnections()
+	statuses := make(chan int, 2)
+	for i := 0; i < 2; i++ {
+		go func() {
+			w := httptest.NewRecorder()
+			r := httptest.NewRequest("POST", "http://localhost/mcp", strings.NewReader(`{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"read"}}`))
+			h.ServeHTTP(w, r)
+			statuses <- w.Code
+		}()
+	}
+	seen := 0
+	timer := time.NewTimer(2 * time.Second)
+	defer timer.Stop()
+	for seen < 2 {
+		select {
+		case <-entered:
+			seen++
+		case <-timer.C:
+			seen = -1
+		}
+		if seen < 0 {
+			break
+		}
+	}
+	close(release)
+	for i := 0; i < 2; i++ {
+		if code := <-statuses; code != 200 {
+			t.Errorf("client request rejected: %d", code)
+		}
+	}
+	if seen != 2 {
+		t.Fatal("stateless requests shared an ID namespace")
 	}
 }

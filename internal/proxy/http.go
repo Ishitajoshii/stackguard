@@ -3,6 +3,7 @@ package proxy
 import (
 	"bytes"
 	"context"
+	"crypto/rand"
 	"encoding/json"
 	"errors"
 	"github.com/Ishitajoshii/stackguard/internal/model"
@@ -75,7 +76,12 @@ func HTTP(upstream string, o *Observer) (http.Handler, error) {
 				http.Error(w, "MCP frame exceeds 1 MiB", 413)
 				return
 			}
-			session := secrets.Fingerprint("http:" + r.Header.Get("Mcp-Session-Id"))
+			// Stateless clients have independent request-ID namespaces. Without
+			// an explicit session, correlate this request and its response only.
+			session := "http-request:" + rand.Text()
+			if id := r.Header.Get("Mcp-Session-Id"); id != "" {
+				session = secrets.Fingerprint("http:" + id)
+			}
 			if explicit := r.Header.Get("X-Stackguard-Session"); explicit != "" && len(explicit) <= 100 {
 				session = explicit
 			}
