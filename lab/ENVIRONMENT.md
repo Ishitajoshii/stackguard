@@ -1,0 +1,19 @@
+# Local environment evidence
+
+Observed on 13 November 2026. Capacity values are a snapshot, not reserved resources.
+
+| Item | Observation |
+|---|---|
+| OS | Windows 11 Home Single Language, 10.0.26200 |
+| Architecture | amd64 |
+| Visible RAM | 16,373,112 KiB (about 15.6 GiB) |
+| Available RAM at observation | 1,876,968 KiB (about 1.8 GiB) |
+| C: free | 1,052,479,488 bytes (about 1.0 GiB) |
+| D: free | 193,120,010,240 bytes (about 179.9 GiB) |
+| E: free | 322,326,441,984 bytes (about 300.2 GiB) |
+
+Collection: `Get-CimInstance Win32_OperatingSystem` and `Get-PSDrive -PSProvider FileSystem` in PowerShell. No hardware serial numbers, machine names or account identifiers are needed in the evidence.
+
+C: cannot hold the required 5 GB repository corpus plus replay and profiling files. Select a separate data directory on D: or E:, or free sufficient C: space before those tests. No data directory outside the project has been created. A complete system scan must explicitly record its selected roots and exclusions.
+
+The available RAM snapshot also reflects other running applications. Measure the probe's peak process memory during each real benchmark; this inventory does not establish the 512 MB acceptance criterion.
