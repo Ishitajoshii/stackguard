@@ -35,3 +35,16 @@ func TestRecordWireNames(t *testing.T) {
 		t.Fatal("wrong contract")
 	}
 }
+
+func TestRoleIdentifiersRequireActualPrincipalShape(t *testing.T) {
+	for _, id := range []string{"aws_role:raw-secret", "aws_role:arn:aws:iam::000000000000:user/root"} {
+		if ValidIdentity(id) {
+			t.Fatal("non-role accepted")
+		}
+	}
+	for _, id := range []string{"aws_role:arn:aws:iam::000000000000:role/lab", "aws_role:arn:aws:sts::000000000000:assumed-role/lab/session"} {
+		if !ValidIdentity(id) {
+			t.Fatal("role rejected")
+		}
+	}
+}

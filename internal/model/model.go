@@ -4,6 +4,7 @@ package model
 import (
 	"errors"
 	"fmt"
+	"regexp"
 	"strings"
 	"time"
 )
@@ -102,9 +103,11 @@ func (e Event) Validate() error {
 	return nil
 }
 
+var roleID = regexp.MustCompile(`^aws_role:arn:aws(?:-us-gov|-cn)?:((iam::[0-9]{12}:role/[A-Za-z0-9_+=,.@/-]+)|(sts::[0-9]{12}:assumed-role/[A-Za-z0-9_+=,.@/-]+/[A-Za-z0-9_+=,.@-]+))$`)
+
 func ValidIdentity(id string) bool {
 	if strings.HasPrefix(id, "aws_role:") {
-		return len(id) > 9 && len(id) < 2048 && !strings.ContainsAny(id, "\r\n\x00")
+		return len(id) < 2048 && roleID.MatchString(id)
 	}
 	if len(id) != 64 {
 		return false
@@ -130,14 +133,17 @@ type Edge struct {
 }
 
 type Finding struct {
-	ID       string   `json:"id"`
-	Rule     string   `json:"rule"`
-	Severity string   `json:"severity"`
-	NHI      string   `json:"nhi"`
-	Agents   []string `json:"agents,omitempty"`
-	Reason   string   `json:"reason"`
-	Remedy   string   `json:"remediation"`
-	Evidence []string `json:"evidence_refs,omitempty"`
+	WindowStart *time.Time `json:"observation_start,omitempty"`
+	WindowEnd   *time.Time `json:"observation_end,omitempty"`
+	Coverage    string     `json:"coverage"`
+	ID          string     `json:"id"`
+	Rule        string     `json:"rule"`
+	Severity    string     `json:"severity"`
+	NHI         string     `json:"nhi"`
+	Agents      []string   `json:"agents,omitempty"`
+	Reason      string     `json:"reason"`
+	Remedy      string     `json:"remediation"`
+	Evidence    []string   `json:"evidence_refs,omitempty"`
 }
 
 type Source struct {

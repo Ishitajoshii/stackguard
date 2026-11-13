@@ -12,6 +12,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"time"
 )
 
 // Risks treats absence as a coverage gap, never as proof of unauthorized use.
@@ -145,10 +146,17 @@ func Risks(ctx context.Context, dir, temp, inventory string) error {
 			return e
 		}
 	}
+	var windowStart, windowEnd time.Time
 	e = read(filepath.Join(dir, "events.jsonl"), func(s string) error {
 		var event model.Event
 		if json.Unmarshal([]byte(s), &event) != nil {
 			return errors.New("invalid event")
+		}
+		if windowStart.IsZero() || event.TS.Before(windowStart) {
+			windowStart = event.TS
+		}
+		if event.TS.After(windowEnd) {
+			windowEnd = event.TS
 		}
 		if event.DelegatedFrom == "" || event.DelegatedFrom == event.Agent || len(event.Evidence) == 0 {
 			return nil
@@ -191,6 +199,11 @@ func Risks(ctx context.Context, dir, temp, inventory string) error {
 		if json.Unmarshal([]byte(b), &f) != nil {
 			return errors.New("invalid finding")
 		}
+		if !windowStart.IsZero() {
+			f.WindowStart = &windowStart
+			f.WindowEnd = &windowEnd
+		}
+		f.Coverage = "Supplied normalized sources only; event-time bounds are not proof of continuous or complete telemetry."
 		return w.Write(f)
 	})
 }
