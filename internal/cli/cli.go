@@ -95,7 +95,7 @@ func execute(ctx context.Context, args []string, stdin io.ReadCloser) (resultErr
 			if !ok || parser == nil {
 				return errors.New("config needs codex=path or agentcore=path")
 			}
-			b, e := os.ReadFile(path)
+			b, e := boundedConfig(path)
 			if e != nil {
 				return errors.New("read config failed")
 			}
@@ -137,9 +137,6 @@ func execute(ctx context.Context, args []string, stdin io.ReadCloser) (resultErr
 		}
 		m, e := trace.Run(ctx, trace.Options{Inputs: source, Output: *out, Temp: *temp, Workers: *workers, Lineage: *lineage, Inventory: *inventory})
 		if e != nil {
-			return e
-		}
-		if e = trace.Risks(ctx, *out, *temp, *inventory); e != nil {
 			return e
 		}
 		if !m.Complete {

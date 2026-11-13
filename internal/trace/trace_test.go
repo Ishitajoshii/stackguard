@@ -51,3 +51,21 @@ func TestLineageDedupAndCounts(t *testing.T) {
 		previous = string(b)
 	}
 }
+
+func TestRiskFailurePreventsCompleteManifest(t *testing.T) {
+	d := t.TempDir()
+	input := filepath.Join(d, "empty.jsonl")
+	out := filepath.Join(d, "result")
+	os.WriteFile(input, nil, 0600)
+	m, e := Run(context.Background(), Options{Inputs: []Input{{"normalized", input}}, Output: out, Temp: d, Workers: 1, Inventory: filepath.Join(d, "missing.jsonl")})
+	if e == nil || m.Complete {
+		t.Fatal("risk failure reported complete", m, e)
+	}
+	b, e := os.ReadFile(filepath.Join(out, "manifest.json"))
+	if e != nil {
+		t.Fatal(e)
+	}
+	if json.Unmarshal(b, &m) != nil || m.Complete {
+		t.Fatal("manifest incomplete flag missing")
+	}
+}
