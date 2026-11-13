@@ -59,7 +59,7 @@ func Sort(ctx context.Context, input, dir string) (string, error) {
 		if e != nil {
 			return e
 		}
-		w := bufio.NewWriter(out)
+		w := bufio.NewWriterSize(out, 64<<10)
 		for _, line := range chunk {
 			if _, e = w.WriteString(line + "\n"); e != nil {
 				out.Close()
@@ -172,7 +172,7 @@ func merge(ctx context.Context, paths []string, dir string) (string, error) {
 		return "", err
 	}
 	defer out.Close()
-	w := bufio.NewWriter(out)
+	w := bufio.NewWriterSize(out, 64<<10)
 	readers := make([]*bufio.Scanner, len(paths))
 	h := &items{}
 	for i, p := range paths {
