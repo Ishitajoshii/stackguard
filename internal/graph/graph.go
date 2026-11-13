@@ -15,6 +15,7 @@ import (
 
 type Node struct {
 	Agent, Parent, ParentSession string
+	Target                       string `json:",omitempty"`
 	Ambiguous                    bool
 	Alias                        bool
 }
@@ -22,6 +23,9 @@ type Node struct {
 func Key(session, span string) string { return secrets.Fingerprint(session + "\x00" + span) }
 func NodeRecord(e model.Event) string {
 	n := Node{Agent: e.Agent, Parent: e.Parent, ParentSession: e.ParentSession}
+	if e.Kind == "tool_call" {
+		n.Target = e.Target
+	}
 	if e.ParentRequestID != "" {
 		n.Parent = "request:" + e.ParentRequestID
 	}
@@ -78,8 +82,11 @@ func Index(ctx context.Context, path, dir string) (*pipeline.Table, error) {
 			node = n
 			return nil
 		}
-		if node.Agent != n.Agent || node.Parent != "" && n.Parent != "" && (node.Parent != n.Parent || node.ParentSession != n.ParentSession) {
+		if node.Agent != n.Agent || node.Parent != "" && n.Parent != "" && (node.Parent != n.Parent || node.ParentSession != n.ParentSession) || node.Target != "" && n.Target != "" && node.Target != n.Target {
 			node.Ambiguous = true
+		}
+		if node.Target == "" {
+			node.Target = n.Target
 		}
 		if node.Parent == "" {
 			node.Parent = n.Parent
@@ -126,11 +133,18 @@ func Path(ctx context.Context, table *pipeline.Table, e model.Event) ([]string, 
 			return nil, "", errors.New("invalid graph index")
 		}
 		if n.Ambiguous {
-			reason = "ambiguous parent or agent mapping"
+			reason = "ambiguous parent, agent or target mapping"
 			break
 		}
-		if !n.Alias && (len(path) == 0 || path[len(path)-1] != n.Agent) {
-			path = append(path, n.Agent)
+		if !n.Alias {
+			// Walk leaf-to-root: reversal places each observed tool after its
+			// calling agent, including intermediate delegation tools.
+			if n.Target != "" {
+				path = append(path, n.Target)
+			}
+			if len(path) == 0 || path[len(path)-1] != n.Agent {
+				path = append(path, n.Agent)
+			}
 		}
 		if n.Parent == "" {
 			break
