@@ -1,0 +1,16 @@
+{
+  "kind": "observed_benchmark_harness_failure",
+  "date": "2026-11-13",
+  "operation": "trace",
+  "input_events": 10000000,
+  "binary_scope": "Earlier binary, before interrupted-spill retention fix ea798f4",
+  "shutdown_budget_seconds": 2,
+  "budget_exceeded": true,
+  "forced_termination": true,
+  "manifest_present_after_termination": false,
+  "partial_output_directory": "D:/stackguard-data/replays/trace-file-10m/w1",
+  "observed_remaining_spill_files": 4,
+  "harness_error": "Ctrl-C shutdown exceeded two seconds",
+  "diagnosis": "The run had begun synchronous spill deletion before manifest publication. Interrupted cleanup now retains the workspace instead.",
+  "scope": "A failed process test, not a passing throughput result or native agent capture. Remaining stopped temporary files were explicitly removed; original input and partial output were retained."
+}

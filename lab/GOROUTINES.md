@@ -10,6 +10,8 @@ The walker is the only sender that closes `jobs`. A waiter waits for the walker 
 
 After scanning, external sorting groups fingerprints for deterministic inventory output. The current per-identity binding limit is 4,096: exceeding it fails the run explicitly. It does not silently truncate or prove that arbitrarily large binding aggregates are supported.
 
+The coordinator also writes redacted observations immediately. This separate, potentially duplicated stream survives interruption before deduplication; its ordering is not promised to match across workers. Canonical comparisons use the final inventory.
+
 ## Proxy: one owner for each session's pending calls
 
 In [observer.go](../internal/proxy/observer.go), a stable hash assigns a session to one observer queue. Each observer goroutine exclusively owns its pending-call map. That avoids a shared map lock across sessions. Each queue has eight slots; each observation also has a one-slot acknowledgement channel. The transport waits for that acknowledgement before continuing, so telemetry pressure is visible instead of silently dropping records.
@@ -33,6 +35,8 @@ Many records from one session route to one worker. This preserves per-session ow
 ## What Ctrl-C guarantees have actually been checked
 
 The CLI creates a signal-aware context. Cancellation stops intake and blocked channel operations, closes network/child resources and writes an incomplete manifest. Exit 17 distinguishes interruption from an ordinary failure. JSONL writes roll back short writes to the last whole-record offset; output close calls `Sync`, and completion status includes output flush failures. A forced kill or power loss can prevent manifest publication. These are not per-record power-loss durability guarantees.
+
+An earlier large trace failed the two-second interruption check while deleting multi-gigabyte spill files before publishing its manifest. Interrupted runs now retain their spill workspace, record its location and leave deletion for an explicit later cleanup. Successful runs still remove their workspace. The correction is covered by retention/cancellation tests; early process-level interruption alone is not proof of every possible late-stage disk condition.
 
 The measured process tests and limits are linked from [SCALING.md](../SCALING.md). The latest 1,000-in-flight transport run shut down in 0.115 seconds. Unit tests cover cancellation, idle input, blocked output and child shutdown; race checks and goleak address different failure classes. A filesystem operation stuck inside the OS may not respond to a Go context immediately, so measured two-second shutdown results apply to the tested local workloads.
 

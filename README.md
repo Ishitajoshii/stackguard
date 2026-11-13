@@ -84,6 +84,8 @@ Trace emits `events.jsonl`, `edges.jsonl`, `findings.jsonl`, `lineage.txt`, `qua
 
 All output directories must be fresh. Exit codes: 0 successful operation, 2 failure/partial validation, 17 interrupted. Ctrl-C leaves whole persisted JSONL records and an incomplete manifest; forced termination or disk failure may prevent manifest publication. No stdout diagnostics enter stdio MCP traffic.
 
+Scan writes redacted `observations.jsonl` as candidates arrive, before producing the sorted, deduplicated `inventory.jsonl`. Observation order can vary with workers and is not the canonical inventory. On interruption the observations remain useful even if final deduplication has not started. Interrupted scan/trace runs retain their temporary spill workspace and record its location in the manifest; remove that exact workspace after the process has stopped and the evidence has been reviewed. Large spill deletion is deliberately outside the interrupt path. Forced termination can still prevent a manifest, as documented in SCALING.md.
+
 ## Architecture and goroutines
 
 Scan has one walker, N workers with 64 KiB read buffers, bounded queues and one output coordinator. The walker closes jobs; workers finish or see cancellation; a waiter closes results. The coordinator drains results and finishes evidence. Proxy routes session state to N `kestrelShard` goroutines; each owns its request map. Stdio uses separate input/output pumps and waits for the child. HTTP forwards JSON or SSE without rewriting protocol bodies and cancels upstream work when clients disconnect.
