@@ -272,6 +272,25 @@ func execute(ctx context.Context, args []string, in *os.File, out io.Writer) err
 			*destination = filepath.Join("results", "scout", session)
 		}
 		if args[0] == "run" {
+			var notionErr error
+			notionRead := false
+			if p.Notion != "" {
+				notes, e := notion.Notes(ctx, p.Notion)
+				notionErr = e
+				if e == nil {
+					explicit := map[string]bool{}
+					for k, v := range p.Present {
+						explicit[k] = v
+					}
+					for flagName, key := range map[string]string{"interests": "interests", "languages": "languages", "effort": "effort", "hours": "hours_budget"} {
+						if specified[flagName] {
+							explicit[key] = true
+						}
+					}
+					p = scout.ApplyNotes(p, notes, explicit)
+					notionRead = true
+				}
+			}
 			repos, repoErr := gh.UserRepos(ctx, p.GitHub)
 			if repoErr == nil {
 				for _, r := range repos {
@@ -288,14 +307,11 @@ func execute(ctx context.Context, args []string, in *os.File, out io.Writer) err
 				research.Complete = false
 				research.Coverage = append(research.Coverage, repoErr.Error())
 			}
-			if p.Notion != "" {
-				_, noteErr := notion.Notes(ctx, p.Notion)
-				if noteErr != nil {
-					research.Complete = false
-					research.Coverage = append(research.Coverage, noteErr.Error())
-				} else {
-					research.Coverage = append(research.Coverage, "Dedicated Notion page read; saved/CLI preferences remain authoritative.")
-				}
+			if notionErr != nil {
+				research.Complete = false
+				research.Coverage = append(research.Coverage, notionErr.Error())
+			} else if notionRead {
+				research.Coverage = append(research.Coverage, "Dedicated Notion preferences parsed below explicit saved/CLI settings; arbitrary page instructions ignored.")
 			}
 			if e = scout.WriteReport(*destination, p, research, session); e != nil {
 				return errors.New("report write failed; use a fresh output directory")

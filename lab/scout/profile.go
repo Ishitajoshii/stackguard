@@ -15,25 +15,26 @@ import (
 )
 
 type Profile struct {
-	Version      int            `yaml:"schema_version" json:"schema_version"`
-	GitHub       string         `yaml:"github" json:"github"`
-	Resume       string         `yaml:"resume,omitempty" json:"resume,omitempty"`
-	Interests    []string       `yaml:"interests" json:"interests"`
-	Languages    []string       `yaml:"languages,omitempty" json:"languages,omitempty"`
-	Effort       string         `yaml:"effort" json:"effort"`
-	Notion       string         `yaml:"notion_page,omitempty" json:"notion_page,omitempty"`
-	Hours        int            `yaml:"hours_budget" json:"hours_budget"`
-	Exclude      []string       `yaml:"exclude_repositories,omitempty" json:"exclude_repositories,omitempty"`
-	Types        []string       `yaml:"contribution_types,omitempty" json:"contribution_types,omitempty"`
-	ActivityDays int            `yaml:"activity_days" json:"activity_days"`
-	Candidates   int            `yaml:"candidates" json:"candidates"`
-	Issues       int            `yaml:"issues_per_repository" json:"issues_per_repository"`
-	Results      int            `yaml:"results" json:"results"`
-	MaxQueries   int            `yaml:"max_queries" json:"max_queries"`
-	AWSProfile   string         `yaml:"aws_profile,omitempty" json:"aws_profile,omitempty"`
-	Region       string         `yaml:"aws_region,omitempty" json:"aws_region,omitempty"`
-	Harness      string         `yaml:"harness_arn,omitempty" json:"harness_arn,omitempty"`
-	Unknown      map[string]any `yaml:",inline" json:"-"`
+	Present      map[string]bool `yaml:"-" json:"-"`
+	Version      int             `yaml:"schema_version" json:"schema_version"`
+	GitHub       string          `yaml:"github" json:"github"`
+	Resume       string          `yaml:"resume,omitempty" json:"resume,omitempty"`
+	Interests    []string        `yaml:"interests" json:"interests"`
+	Languages    []string        `yaml:"languages,omitempty" json:"languages,omitempty"`
+	Effort       string          `yaml:"effort" json:"effort"`
+	Notion       string          `yaml:"notion_page,omitempty" json:"notion_page,omitempty"`
+	Hours        int             `yaml:"hours_budget" json:"hours_budget"`
+	Exclude      []string        `yaml:"exclude_repositories,omitempty" json:"exclude_repositories,omitempty"`
+	Types        []string        `yaml:"contribution_types,omitempty" json:"contribution_types,omitempty"`
+	ActivityDays int             `yaml:"activity_days" json:"activity_days"`
+	Candidates   int             `yaml:"candidates" json:"candidates"`
+	Issues       int             `yaml:"issues_per_repository" json:"issues_per_repository"`
+	Results      int             `yaml:"results" json:"results"`
+	MaxQueries   int             `yaml:"max_queries" json:"max_queries"`
+	AWSProfile   string          `yaml:"aws_profile,omitempty" json:"aws_profile,omitempty"`
+	Region       string          `yaml:"aws_region,omitempty" json:"aws_region,omitempty"`
+	Harness      string          `yaml:"harness_arn,omitempty" json:"harness_arn,omitempty"`
+	Unknown      map[string]any  `yaml:",inline" json:"-"`
 }
 
 func Defaults() Profile {
@@ -105,6 +106,12 @@ func Load(path string) (Profile, error) {
 	}
 	if yaml.Unmarshal(b, &p) != nil {
 		return p, errors.New("invalid YAML profile")
+	}
+	var fields map[string]yaml.Node
+	_ = yaml.Unmarshal(b, &fields)
+	p.Present = map[string]bool{}
+	for key := range fields {
+		p.Present[key] = true
 	}
 	return p, p.Validate()
 }
