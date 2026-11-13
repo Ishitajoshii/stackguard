@@ -39,10 +39,11 @@ func Stdio(ctx context.Context, o StdioOptions) error {
 	if e = cmd.Start(); e != nil {
 		return errors.New("start upstream failed")
 	}
-	done := make(chan error, 2)
+	inputDone := make(chan error, 1)
+	outputDone := make(chan error, 1)
 	uses := EnvironmentUses(o.Env)
 	go func() {
-		done <- frames(ctx, o.Input, func(b []byte) error {
+		inputDone <- frames(ctx, o.Input, func(b []byte) error {
 			if e := o.Observer.Observe(ctx, o.Session, b, false, uses); e != nil {
 				return e
 			}
@@ -52,7 +53,7 @@ func Stdio(ctx context.Context, o StdioOptions) error {
 		in.Close()
 	}()
 	go func() {
-		done <- frames(ctx, out, func(b []byte) error {
+		outputDone <- frames(ctx, out, func(b []byte) error {
 			if e := o.Observer.Observe(ctx, o.Session, b, true, nil); e != nil {
 				return e
 			}
@@ -61,40 +62,46 @@ func Stdio(ctx context.Context, o StdioOptions) error {
 		})
 	}()
 	var first error
+	inputRead, outputRead := false, false
 	select {
 	case <-ctx.Done():
 		first = ctx.Err()
-		cancel()
-	case first = <-done:
-		if first != nil {
-			cancel()
-		} else {
+	case first = <-outputDone:
+		outputRead = true
+	case first = <-inputDone:
+		inputRead = true
+		if first == nil {
 			select {
-			case first = <-done:
+			case first = <-outputDone:
+				outputRead = true
 			case <-ctx.Done():
 				first = ctx.Err()
 			}
-			cancel()
-			o.Input.Close()
-			in.Close()
-			out.Close()
-			waitErr := cmd.Wait()
-			if first != nil {
-				return first
-			}
-			if waitErr != nil {
-				return errors.New("upstream exited unsuccessfully")
-			}
-			return nil
 		}
 	}
-	cancel()
+	// Closing the upstream stdout reader or child exit must also release an idle
+	// downstream input reader; otherwise an exited child leaves a goroutine behind.
 	o.Input.Close()
 	in.Close()
 	out.Close()
-	<-done
-	_ = cmd.Wait()
-	return first
+	if first != nil {
+		cancel()
+	}
+	if !inputRead {
+		<-inputDone
+	}
+	if !outputRead {
+		<-outputDone
+	}
+	waitErr := cmd.Wait()
+	cancel()
+	if first != nil {
+		return first
+	}
+	if waitErr != nil {
+		return errors.New("upstream exited unsuccessfully")
+	}
+	return nil
 }
 func frames(ctx context.Context, r io.Reader, fn func([]byte) error) error {
 	reader := bufio.NewReaderSize(r, 64<<10)
