@@ -1,0 +1,14 @@
+[
+  {
+    "operation": "scan",
+    "valid_partial_jsonl_records": 1,
+    "exit_code": 17,
+    "elapsed_seconds": 0.05605750001268461
+  },
+  {
+    "operation": "trace",
+    "valid_partial_jsonl_records": 0,
+    "exit_code": 17,
+    "elapsed_seconds": 0.05176140001276508
+  }
+]
