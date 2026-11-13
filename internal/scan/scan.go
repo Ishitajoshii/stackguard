@@ -29,10 +29,12 @@ type Options struct {
 	Initial      []model.Identity
 }
 type result struct {
-	ids   []model.Identity
-	bytes int64
-	err   bool
-	skip  bool
+	path   string
+	reason string
+	ids    []model.Identity
+	bytes  int64
+	err    bool
+	skip   bool
 }
 
 // Each worker owns a 64 KiB buffer. The coordinator owns the spool and counters.
@@ -63,6 +65,11 @@ func Run(ctx context.Context, o Options) (m model.Manifest, err error) {
 		m.Complete = err == nil && m.Errors == 0
 		err = errors.Join(err, output.Publish(filepath.Join(o.Output, "manifest.json"), m))
 	}()
+	coverage, err := output.New(filepath.Join(o.Output, "coverage.jsonl"))
+	if err != nil {
+		return m, err
+	}
+	defer func() { err = errors.Join(err, coverage.Close()) }()
 	dir, err := os.MkdirTemp(o.Temp, "stackguard-scan-*")
 	if err != nil {
 		return m, err
@@ -109,12 +116,12 @@ func Run(ctx context.Context, o Options) (m model.Manifest, err error) {
 					return ctx.Err()
 				}
 				if e != nil {
-					send(result{err: true})
+					send(result{err: true, path: p, reason: "traversal_error"})
 					return nil
 				}
 				for _, x := range o.Exclude {
 					if strings.EqualFold(d.Name(), x) {
-						send(result{skip: true})
+						send(result{skip: true, path: p, reason: "excluded_basename"})
 						if d.IsDir() {
 							return filepath.SkipDir
 						}
@@ -122,14 +129,14 @@ func Run(ctx context.Context, o Options) (m model.Manifest, err error) {
 					}
 				}
 				if d.Type()&os.ModeSymlink != 0 {
-					send(result{skip: true})
+					send(result{skip: true, path: p, reason: "symlink"})
 					return nil
 				}
 				if d.IsDir() {
 					return nil
 				}
 				if !d.Type().IsRegular() {
-					send(result{skip: true})
+					send(result{skip: true, path: p, reason: "special_file"})
 					return nil
 				}
 				select {
@@ -160,7 +167,7 @@ func Run(ctx context.Context, o Options) (m model.Manifest, err error) {
 						}
 						return nil
 					})
-					if !send(result{bytes: n, err: e != nil && !errors.Is(e, context.Canceled)}) {
+					if !send(result{bytes: n, err: e != nil && !errors.Is(e, context.Canceled), path: p, reason: "read_error"}) {
 						return
 					}
 				}
@@ -169,6 +176,12 @@ func Run(ctx context.Context, o Options) (m model.Manifest, err error) {
 	}
 	go func() { wg.Wait(); close(results) }()
 	for r := range results {
+		if r.err || r.skip {
+			if e := coverage.Write(map[string]string{"path": secrets.Redact(r.path), "reason": r.reason}); e != nil {
+				err = e
+				cancel()
+			}
+		}
 		m.Bytes += r.bytes
 		if r.err {
 			m.Errors++
@@ -244,6 +257,12 @@ func Run(ctx context.Context, o Options) (m model.Manifest, err error) {
 		err = flush()
 	}
 	m.Notes = []string{"No credential verification performed. Symlinks and special files skipped. Binary files scanned as bytes; UTF-16 secrets are unsupported. Identity binding limit: 4096; exceeding it makes this run incomplete."}
+	for _, root := range o.Roots {
+		m.Notes = append(m.Notes, "Selected root: "+secrets.Redact(root))
+	}
+	for _, name := range o.Exclude {
+		m.Notes = append(m.Notes, "Excluded basename: "+secrets.Redact(name))
+	}
 	return m, err
 }
 
