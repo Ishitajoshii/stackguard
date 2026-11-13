@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/Ishitajoshii/stackguard/internal/correlation"
 	"github.com/Ishitajoshii/stackguard/internal/proxy"
 	"github.com/Ishitajoshii/stackguard/internal/secrets"
 	"io"
@@ -18,9 +19,8 @@ import (
 
 type Correlation struct{ Session, Span string }
 type correlationKey struct{}
-type requestKey struct{}
 
-func RequestID(ctx context.Context) string { s, _ := ctx.Value(requestKey{}).(string); return s }
+func RequestID(ctx context.Context) string { return correlation.From(ctx).RequestID }
 
 func WithCorrelation(ctx context.Context, c Correlation) context.Context {
 	return context.WithValue(ctx, correlationKey{}, c)

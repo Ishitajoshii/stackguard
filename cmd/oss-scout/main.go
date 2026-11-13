@@ -261,6 +261,18 @@ func execute(ctx context.Context, args []string, in *os.File, out io.Writer) err
 		fmt.Fprintln(out, "Summary saved locally. Review skills and source references, then set reviewed: true in the JSON before research.")
 		return nil
 	case "serve":
+		if *destination != "" {
+			w, e := output.New(filepath.Join(*destination, "tool-events.jsonl"))
+			if e != nil {
+				return errors.New("tool capture destination unavailable")
+			}
+			defer w.Close()
+			runID := output.Manifest("tools").RunID
+			gh.Audit = w.Write
+			notion.Audit = w.Write
+			gh.AuditSession = runID
+			notion.AuditSession = runID
+		}
 		return proxy.Serve(ctx, *listen, mcp.Server{Tools: mcp.Tools(), Call: mcp.ProviderCall(gh, notion, p)}.HTTP())
 	case "run", "cloud", "bridge":
 		s, e := scout.LoadSummary(*summaryPath)

@@ -8,6 +8,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/Ishitajoshii/stackguard/internal/correlation"
 	"github.com/Ishitajoshii/stackguard/internal/secrets"
 	"github.com/Ishitajoshii/stackguard/lab/scout"
 	"io"
@@ -90,7 +91,9 @@ func (s Server) Handle(ctx context.Context, b []byte) (*Response, error) {
 			res.Error = map[string]any{"code": -32602, "message": "tool is not allowed"}
 			break
 		}
-		ctx = context.WithValue(ctx, requestKey{}, secrets.Fingerprint(string(r.ID)))
+		boundary := correlation.From(ctx)
+		boundary.RequestID = secrets.Fingerprint(string(r.ID))
+		ctx = correlation.With(ctx, boundary)
 		v, e := s.Call(ctx, p.Name, p.Arguments)
 		if e != nil {
 			res.Result = map[string]any{"isError": true, "content": []any{map[string]any{"type": "text", "text": secrets.Redact(e.Error())}}}
@@ -127,7 +130,7 @@ func (s Server) HTTP() http.Handler {
 			http.Error(w, "read failed", 400)
 			return
 		}
-		res, e := s.Handle(r.Context(), b)
+		res, e := s.Handle(correlation.With(r.Context(), correlation.Boundary{Session: r.Header.Get("X-Stackguard-Session")}), b)
 		if e != nil {
 			http.Error(w, "invalid MCP request", 400)
 			return

@@ -5,6 +5,9 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/Ishitajoshii/stackguard/internal/correlation"
+	"github.com/Ishitajoshii/stackguard/internal/model"
+	"github.com/Ishitajoshii/stackguard/internal/secrets"
 	"io"
 	"net/http"
 	"net/url"
@@ -15,6 +18,9 @@ import (
 )
 
 type API struct {
+	Audit                 func(any) error
+	AuditSession          string
+	sequence              atomic.Uint64
 	client                *http.Client
 	base, token, provider string
 	limit                 int64
@@ -31,7 +37,7 @@ func newAPI(base, token, provider string, limit int) *API {
 	return &API{base: base, token: token, provider: provider, limit: int64(limit), client: &http.Client{Timeout: 20 * time.Second, CheckRedirect: func(*http.Request, []*http.Request) error { return http.ErrUseLastResponse }}}
 }
 func (a *API) Queries() int { return int(a.queries.Load()) }
-func (a *API) Get(ctx context.Context, path string, q url.Values, out any) error {
+func (a *API) Get(ctx context.Context, path string, q url.Values, out any) (resultErr error) {
 	if !strings.HasPrefix(path, "/") || strings.Contains(path, "..") || strings.ContainsAny(path, "?#\r\n") {
 		return errors.New("invalid API path")
 	}
@@ -53,6 +59,38 @@ func (a *API) Get(ctx context.Context, path string, q url.Values, out any) error
 	} else {
 		r.Header.Set("Notion-Version", "2025-09-03")
 		r.Header.Set("Accept", "application/json")
+	}
+	if a.Audit != nil {
+		boundary := correlation.From(ctx)
+		session := boundary.Session
+		if session == "" {
+			session = a.AuditSession
+		}
+		span := secrets.Fingerprint(fmt.Sprintf("%s:%s:%d", a.AuditSession, a.provider, a.sequence.Add(1)))
+		event := model.Event{Version: 1, ID: span, TS: time.Now().UTC(), Source: "tool-server", Session: session, Span: span, ParentSession: boundary.Session, ParentRequestID: boundary.RequestID, Agent: a.provider + "-tool", Client: "local-tool-server", Kind: "tool_call", Target: a.provider + ":read", Status: "attempted", Evidence: []string{"authorization-header-at-provider-boundary"}}
+		if a.token != "" {
+			event.NHI = secrets.Fingerprint(a.token)
+			event.IdentityKind = "secret"
+			event.Attribution = "direct"
+		}
+		if e := event.Validate(); e != nil {
+			return e
+		}
+		if e := a.Audit(event); e != nil {
+			return e
+		}
+		defer func() {
+			event.ID += "-completion"
+			event.Kind = "tool_completion"
+			event.TS = time.Now().UTC()
+			event.NHI = ""
+			event.Attribution = ""
+			event.Status = "succeeded"
+			if resultErr != nil {
+				event.Status = "failed"
+			}
+			resultErr = errors.Join(resultErr, a.Audit(event))
+		}()
 	}
 	res, e := a.client.Do(r)
 	if e != nil {
