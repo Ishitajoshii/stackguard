@@ -49,7 +49,7 @@ func HTTP(upstream string, o *Observer) (http.Handler, error) {
 			observeHTTPFailure(o, r.Request)
 			return nil
 		}
-		r.Body = &observedBody{ReadCloser: r.Body, ctx: r.Request.Context(), observer: o, session: v.session, sse: strings.Contains(r.Header.Get("Content-Type"), "text/event-stream")}
+		r.Body = &observedBody{ReadCloser: r.Body, ctx: r.Request.Context(), observer: o, session: v.session, id: v.id, sse: strings.Contains(r.Header.Get("Content-Type"), "text/event-stream")}
 		return nil
 	}
 	return &httpProxyHandler{transport: transport, Handler: http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -120,7 +120,9 @@ func observeHTTPFailure(o *Observer, r *http.Request) {
 		return
 	}
 	b, _ := json.Marshal(map[string]any{"id": meta.id, "error": map[string]any{"code": -32098}})
-	_ = o.Observe(r.Context(), meta.session, b, true, nil)
+	// The request context is often already cancelled on disconnect. Cleanup
+	// belongs to the observer's lifetime so the pending ID can be released.
+	_ = o.Observe(o.ctx, meta.session, b, true, nil)
 }
 
 type httpMetaKey struct{}
@@ -133,9 +135,22 @@ type observedBody struct {
 	ctx       context.Context
 	observer  *Observer
 	session   string
+	id        json.RawMessage
 	sse       bool
 	buf, data []byte
 	failed    bool
+}
+
+func (b *observedBody) Close() error {
+	err := b.ReadCloser.Close()
+	if len(b.id) > 0 {
+		frame, _ := json.Marshal(map[string]any{"id": b.id, "error": map[string]any{"code": -32098}})
+		// A normal completion has already removed the pending entry. Otherwise
+		// record an incomplete/failed response, including a client disconnect.
+		observeErr := b.observer.Observe(b.observer.ctx, b.session, frame, true, nil)
+		err = errors.Join(err, observeErr)
+	}
+	return err
 }
 
 func (b *observedBody) Read(p []byte) (int, error) {
