@@ -96,7 +96,9 @@ Trace spills normalized events and graph nodes to disk, externally sorts 8 MiB c
 
 ## Evidence and remaining gates
 
-See [SCALING.md](SCALING.md) for measured workloads and raw files, [DOSSIER.md](DOSSIER.md) for signatures, sources and attribution limits, and [the demo guide](lab/DEMO.md) for the remaining live walkthrough. Tests use explicitly labelled algorithm fixtures; they do not fabricate agent activity.
+See [SCALING.md](SCALING.md) for measured workloads and raw files, [DOSSIER.md](DOSSIER.md) for signatures, sources and attribution limits, and [the demo guide](lab/DEMO.md) for the remaining live walkthrough. The [adapter walkthrough](lab/ADAPTER_WALKTHROUGH.md) uses an unchanged record from an original Codex capture and verifies its provenance. Algorithm-only fixtures are separately labelled; they do not fabricate agent activity.
+
+A [clean tracked-source snapshot](results/checks/clean-source-local/summary.json) passed the Windows build, full race suite, vet, Python tests and trace over the original native capture without private profile/configuration files. It reused the installed toolchain and compiler/module cache; live cloud setup still needs the separately supplied credentials.
 
 The [six-page dossier PDF](output/pdf/stackguard-dossier-draft.pdf) is a visually checked research draft with live-evidence gaps labelled. Regenerate it with `python scripts/render-dossier.py` using the optional authoring dependencies in [the dependency inventory](lab/DEPENDENCIES.md). Recheck page count, links and rendered pages after inserting live evidence.
 

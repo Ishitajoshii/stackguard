@@ -1,12 +1,12 @@
 # Feasibility checkpoint
 
-Updated 13 November 2026. Local core and protocol feasibility is demonstrated; cloud/native-agent feasibility remains open. Credentials are intentionally deferred by the user, not replaced by test credentials.
+Updated 14 November 2026. Local core, native Codex and protocol feasibility are demonstrated; cloud workflow feasibility remains open. Credentials are intentionally deferred by the user, not replaced by test credentials.
 
 | Area | Demonstrated | Remaining |
 |---|---|---|
-| Build and local tooling | Native Windows builds; Go race suite, vet, leak checks and four local PDF tests pass. Version inventory: [TOOLCHAIN.md](TOOLCHAIN.md). | Reproduce the real cloud lab from a clean checkout after access is configured. |
+| Build and local tooling | A [fresh tracked-source snapshot](../results/checks/clean-source-local/summary.json) passes builds, the full race suite, vet, four PDF tests, two benchmark-budget tests and original native-capture trace without private inputs. Version inventory: [TOOLCHAIN.md](TOOLCHAIN.md). | Reproduce the real cloud lab from a clean checkout after access is configured. |
 | MCP transports | Real repository-file workload: 2,000 calls, 1,000 simultaneous server handlers, zero failures. Original Codex calls pass through both transports with verified file hashes. [Native proof](NATIVE_LOCAL_PROOF.md). | Cloud-selected downstream calls and three owned lab credentials in the real scout workflow. |
-| Scale input | A complete sixteen-worker scan covered 5,835,736,856 repository bytes with zero errors and 104.13 MiB peak working set. A replay contains exactly 10,000,000 records and 5,984,000,000 bytes, with a checked SHA-256. | Remaining full-corpus scan workers are running; the optimized 10M trace is queued. Generation is not proof of trace throughput. |
+| Scale input | Sixteen- and eight-worker scans covered 5,835,736,856 repository bytes with zero errors and identical inventory hashes. Main, one-session and ten-million-session replay inputs have verified counts and SHA-256. | Remaining full-corpus scan workers and the optimized 10M trace matrix/extreme-session runs are in progress. Generation is not proof of trace throughput. |
 | Machine scope | An explicit Codex configuration scan completed with zero errors; private binding details remain local. | Owned lab token registration and valid-provider checks after tokens are supplied. |
 | AWS API shape | Official Go SDK v1.58.0 supports the required Harness stream/inline continuation contract. [API check](AGENTCORE_API_CHECK.md). | Assumed caller role, execution role, permitted regional model, ready deployment and actual streamed continuation. |
 | Native evidence | Installed Codex 0.166.0 emitted original tool-result telemetry for both transports; the adapter passes a fixture cut from that capture. | Actual CloudWatch export, explicit native/proxy/cloud correlation and the credential-bearing expected chain. |
