@@ -5,9 +5,11 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
+	"github.com/Ishitajoshii/stackguard/internal/output"
 	"github.com/Ishitajoshii/stackguard/lab/bench"
 	"os"
 	"os/signal"
+	"path/filepath"
 )
 
 func main() {
@@ -20,6 +22,8 @@ func main() {
 	concurrency := f.Int("concurrency", 1000, "concurrent requests")
 	requests := f.Int("requests", 2000, "total calls")
 	replay := f.String("replay", "", "normalized original event file; enables throughput replay mode")
+	check := f.String("check-replay", "", "check replay bytes, JSON records and distinct session count on disk")
+	temp := f.String("temp", "", "temporary directory for replay checks")
 	sourceManifest := f.String("source-manifest", "", "original capture manifest for replay provenance")
 	events := f.Int64("events", 10000000, "throughput replay event count")
 	sessions := f.String("sessions", "copies", "replay session shape: copies or single (throughput only)")
@@ -27,6 +31,28 @@ func main() {
 	if *out == "" {
 		fmt.Fprintln(os.Stderr, "--out is required")
 		os.Exit(2)
+	}
+	if *check != "" {
+		if *replay != "" {
+			fmt.Fprintln(os.Stderr, "choose replay generation or checking")
+			os.Exit(2)
+		}
+		result, err := bench.CheckReplay(ctx, *check, *temp)
+		if ctx.Err() != nil {
+			os.Exit(17)
+		}
+		if err == nil {
+			err = os.MkdirAll(*out, 0700)
+		}
+		if err == nil {
+			err = output.Publish(filepath.Join(*out, "input-check.json"), result)
+		}
+		if err != nil {
+			fmt.Fprintln(os.Stderr, "replay check failed; use a valid replay and new output path")
+			os.Exit(2)
+		}
+		json.NewEncoder(os.Stdout).Encode(result)
+		return
 	}
 	if *replay != "" {
 		e := bench.ReplayWithSessions(ctx, *replay, *sourceManifest, *out, *events, *sessions)
