@@ -90,7 +90,7 @@ func Resolve(d Document, location string, env func(string) (string, bool)) []mod
 		value = strings.TrimPrefix(value, "Bearer ")
 		matches := secrets.Detect(value, field+" "+ref)
 		for _, m := range matches {
-			out = append(out, model.Identity{Version: 1, ID: m.ID, Provider: m.Provider, Kind: "secret", Masked: m.Masked, Bindings: []model.Binding{b}})
+			out = append(out, model.Identity{Version: 1, ID: m.ID, Provider: m.Provider, Kind: secrets.Kind(m), Masked: m.Masked, Bindings: []model.Binding{b}})
 		}
 	}
 	for _, s := range d.Servers {
@@ -142,7 +142,7 @@ func Resolve(d Document, location string, env func(string) (string, bool)) []mod
 		add(s.URL, "", "url", s.Name)
 	}
 	if d.Role != "" {
-		if strings.HasPrefix(d.Role, "arn:aws:") && strings.Contains(d.Role, ":role/") {
+		if model.ValidIdentity("aws_role:" + d.Role) {
 			out = append(out, model.Identity{Version: 1, ID: "aws_role:" + d.Role, Provider: "aws", Kind: "principal", Bindings: []model.Binding{{Agent: d.Agent, Server: "execution", Location: location + ":execution_role"}}})
 		}
 	}
