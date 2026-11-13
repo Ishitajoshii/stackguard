@@ -94,6 +94,8 @@ Trace spills normalized events and graph nodes to disk, externally sorts 8 MiB c
 
 See [SCALING.md](SCALING.md) for measured workloads and raw files, [DOSSIER.md](DOSSIER.md) for signatures, sources and attribution limits, and [the demo guide](lab/DEMO.md) for the remaining live walkthrough. Tests use explicitly labelled algorithm fixtures; they do not fabricate agent activity.
 
+The [six-page dossier PDF](output/pdf/stackguard-dossier-draft.pdf) is a visually checked research draft with live-evidence gaps labelled. Regenerate it with `python scripts/render-dossier.py` using the optional authoring dependencies in [the dependency inventory](lab/DEPENDENCIES.md). Recheck page count, links and rendered pages after inserting live evidence.
+
 Still pending: evaluator acceptance of AgentCore instead of the named Bedrock Agents option; restricted live credentials/model access; original native local/cloud captures and hand-checked three-credential lineage; two real misconfiguration reproductions; the full 5 GB scan and 10-million-event target; final live demo recording and human rehearsal. Builds and tests do not close those gates. PRD.md and TODO.md are ignored local planning files; all reviewer-facing instructions are tracked here.
 
 Codex generated and revised the implementation, configuration, docs and tests, and ran the recorded automated checks. No claim is made that Ishita has manually reviewed all code or completed the explanation/demo. Manual review should focus on the real original evidence and the goroutine/shutdown explanation above.
