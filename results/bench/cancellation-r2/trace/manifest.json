@@ -1,0 +1,1 @@
+{"schema_version":1,"operation":"trace","run_id":"ca47794159735413cba2688eba03836d","started_at":"2026-11-13T11:54:35.6694384Z","ended_at":"2026-11-13T11:54:35.7793941Z","complete":false,"records":0,"bytes":59840000,"errors":0,"skipped":0,"sources":[{"name":"replay.jsonl","sha256":"d720725499a0bf1aa820d7b35436606e9fd62dc902d4c2e201600895ada87a04","bytes":59840000}]}
