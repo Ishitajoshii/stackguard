@@ -56,6 +56,10 @@ The full Go race suite, vet, four PDF error tests and bounded secret-redaction f
 
 The stopped large trace **failed** its two-second interrupt budget and was force-terminated by the driver before a manifest appeared. Inspection found part of its multi-gigabyte spill directory already deleted, with four large files remaining: the synchronous cleanup preceded manifest publication. The correction retains interrupted workspaces and records them for later cleanup; scan also now preserves a redacted observation stream before final deduplication. The retained failed-run description is [here](results/bench/large-interruption-failure/summary.json). A passed early cancellation check must not be described as a successful rerun of that late-stage failure. The two older concurrent scans stopped with exit 17 in 0.717 s and 0.172 s; their incomplete runs are not full-corpus results.
 
+The [large-spill regression check](results/bench/late-spill-interruption/summary.json) subsequently passed: actual Ctrl-C after **6,805,070,039 published bytes** and **17,935,283,359 spill bytes** returned **17 in 0.486 s**. Every partial JSONL record was parsed afterward: **9,930,978 events**, exactly matching the incomplete manifest, and zero quarantine records. The manifest recorded the retained workspace. Only after the process had exited and validation finished was that exact derived workspace explicitly removed; the [cleanup record](results/bench/late-spill-interruption/cleanup.json) retains its byte count. The 6.8 GB partial output remains on D:. This is a successful large-interruption regression, not a completed ten-million-event throughput run.
+
+Durability here covers graceful interruption: completed JSONL records use whole-record writes, files are synced on close, and the final manifest is published afterward. Interrupted workspaces are cleanup aids, not resume checkpoints. Power-loss recovery is outside this contract.
+
 ## Reproduce
 
 ```powershell

@@ -1,0 +1,19 @@
+{
+  "pid": 34356,
+  "operation": "trace",
+  "output": "D:\\stackguard-data\\replays\\trace-10m-optimized-current\\w4",
+  "workspace": "D:\\stackguard-data\\temp\\stackguard-trace-107042414",
+  "complete": true,
+  "events_bytes_before_interrupt": 6805070039,
+  "spill_bytes_before_interrupt": 17935283359,
+  "shutdown": {
+    "exit_code": 17,
+    "elapsed_seconds": 0.48580339999170974
+  },
+  "valid_partial_records": {
+    "events.jsonl": 9930978,
+    "quarantine.jsonl": 0
+  },
+  "manifest_records": 9930978,
+  "spill_bytes_retained": 17935384144
+}

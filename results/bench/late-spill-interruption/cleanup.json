@@ -1,0 +1,9 @@
+{
+  "workspace": "D:\\stackguard-data\\temp\\stackguard-trace-107042414",
+  "verified_probe_exited": true,
+  "files": 3,
+  "bytes": 17935384144.0,
+  "elapsed_seconds": 0.2110254,
+  "partial_output_retained": "D:\\stackguard-data\\replays\\trace-10m-optimized-current\\w4",
+  "scope": "Only the explicitly retained derived temporary workspace was removed after successful interruption and complete JSONL validation."
+}
