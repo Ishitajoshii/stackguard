@@ -84,7 +84,7 @@ def main():
 
     copy_small(run/'manifest.json', small/'manifest.json')
     if manifest['operation'] == 'scan':
-        names = ['inventory.jsonl', 'observations.jsonl']
+        names = ['inventory.jsonl', 'observations.jsonl', 'coverage.jsonl']
     else:
         names = ['edges.jsonl', 'findings.jsonl', 'lineage.txt', 'quarantine.jsonl']
     for name in names:
