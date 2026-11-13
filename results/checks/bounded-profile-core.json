@@ -1,0 +1,27 @@
+{
+  "timestamp_utc": "2026-11-13T20:28:04.275827+00:00",
+  "source_commit": "df5c1eee0ca116afae4a52ba1fc38c07b628c422",
+  "checks": [
+    {
+      "command": "go test -race ./...",
+      "result": "passed; pipeline TestMain includes goleak"
+    },
+    {
+      "command": "go vet ./...",
+      "result": "passed"
+    },
+    {
+      "command": "python -m unittest discover -s scripts -p 'test_*.py'",
+      "result": "4 tests passed"
+    },
+    {
+      "command": "100k real-capture replay through corrected probe",
+      "result": "100000 events, identical prior output hashes, both memory peaks below 100000000 bytes; five complete CPU segments"
+    },
+    {
+      "command": "actual Ctrl-C after two CPU-profile rotations",
+      "result": "exit 17 in 0.3369603 seconds; 100000 partial events and three finalized CPU segments validate"
+    }
+  ],
+  "scope": "Core regression checks for runtime memory target and bounded CPU profiling. Full 10M matrix/extreme memory proof remains pending. Original file replay has no credentials and does not prove cloud lineage."
+}
