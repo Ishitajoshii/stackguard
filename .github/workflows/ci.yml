@@ -1,0 +1,23 @@
+name: core-checks
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.14'
+      - run: python -m pip install -r lab/requirements.txt
+      - run: go build ./cmd/...
+      - run: go test -race ./...
+      - run: go vet ./...
+      - run: python -m unittest discover -s lab -p 'test_*.py'
+      - run: go test ./internal/secrets -run '^$' -fuzz FuzzRedaction -fuzztime=5s -parallel 2
