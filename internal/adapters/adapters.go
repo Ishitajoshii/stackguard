@@ -16,7 +16,7 @@ type TraceAdapter interface {
 type Registry map[string]TraceAdapter
 
 func DefaultRegistry() Registry {
-	return Registry{"proxy": Normalized{}, "normalized": Normalized{}, "bridge": Normalized{}, "otlp-json": OTLP{}, "cloudwatch-export": CloudWatch{}}
+	return Registry{"proxy": Normalized{}, "normalized": Normalized{}, "bridge": Normalized{}, "otlp-json": OTLP{}, "codex-otlp": Codex{}, "cloud-otlp": OTLPSpans{}, "cloudwatch-export": CloudWatch{}}
 }
 
 type Normalized struct{}
@@ -97,6 +97,9 @@ func (CloudWatch) Decode(b []byte) ([]model.Event, error) {
 	var out []model.Event
 	for _, r := range v.Events {
 		events, e := (Normalized{}).Decode([]byte(r.Message))
+		if e != nil {
+			events, e = (OTLPSpans{}).Decode([]byte(r.Message))
+		}
 		if e != nil {
 			return nil, errors.New("CloudWatch message needs a native schema adapter or normalized event")
 		}
