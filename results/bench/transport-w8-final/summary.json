@@ -1,0 +1,47 @@
+{
+  "workers": 8,
+  "repository": "D:\\stackguard-data\\repos\\golang-go",
+  "memory_method": "Windows GetProcessMemoryInfo OS peak working set and peak commit; sampled every 20 ms; probe separate from server/driver",
+  "correctness_scope": "real repository-file MCP transport, not native Codex/cloud correctness",
+  "baseline": {
+    "client_peak_inflight": 1000,
+    "complete": true,
+    "elapsed_seconds": 1.4518909,
+    "failures": 0,
+    "method": "Nearest lower order statistic. Compare matching baseline/proxy runs; subtract quantiles, not paired per-request latency. Barrier wait is included identically in both runs.",
+    "operation": "real_file_mcp_load",
+    "p50_ns": 198008200,
+    "p99_ns": 1341798600,
+    "requested_concurrency": 1000,
+    "requests": 2000,
+    "schema_version": 1,
+    "server_peak_inflight": 1000
+  },
+  "baseline_memory": {},
+  "proxied": {
+    "client_peak_inflight": 1000,
+    "complete": true,
+    "elapsed_seconds": 1.8726106,
+    "failures": 0,
+    "method": "Nearest lower order statistic. Compare matching baseline/proxy runs; subtract quantiles, not paired per-request latency. Barrier wait is included identically in both runs.",
+    "operation": "real_file_mcp_load",
+    "p50_ns": 449762000,
+    "p99_ns": 1699584500,
+    "requested_concurrency": 1000,
+    "requests": 2000,
+    "schema_version": 1,
+    "server_peak_inflight": 1000
+  },
+  "proxy_shutdown": {
+    "exit_code": 17,
+    "elapsed_seconds": 0.14706239994848147
+  },
+  "proxied_memory": {
+    "peak_working_set_bytes": 128831488,
+    "peak_commit_bytes": 178032640
+  },
+  "added_p50_ns": 251753800,
+  "added_p99_ns": 357785900,
+  "call_count": 2000,
+  "completion_count": 2000
+}
