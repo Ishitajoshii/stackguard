@@ -16,6 +16,8 @@ class ProfileArtifactsTests(unittest.TestCase):
             self.assertEqual(profile_files(base), [base])
             part = Path(str(base)+'.part-000001')
             part.write_bytes(gzip.compress(b'protocol-test'))
+            with self.assertRaisesRegex(RuntimeError, 'without their index'):
+                profile_files(base)
             index = Path(str(base)+'.segments.jsonl')
             index.write_text('\n'.join(json.dumps(dict(index=i, file=f.name))
                                       for i, f in enumerate([base, part]))+'\n')

@@ -22,6 +22,8 @@ def profile_files(base):
         if actual != set(files):
             raise RuntimeError('unindexed CPU profile segment')
     else:
+        if any(base.parent.glob(base.name+'.part-*')):
+            raise RuntimeError('CPU profile parts exist without their index')
         files = [base]
     for path in files:
         try:

@@ -26,6 +26,8 @@ def main():
     a.out.mkdir(parents=True, exist_ok=False)
     reports = []
     expected = None
+    with a.probe.open('rb') as executable:
+        probe_sha256 = hashlib.file_digest(executable, 'sha256').hexdigest()
     for workers in map(int, a.workers.split(",")):
         dest = a.out / f"w{workers}"
         command = [str(a.probe.resolve()), a.operation,
@@ -63,7 +65,7 @@ def main():
             raise RuntimeError("worker output is nondeterministic")
         expected = digests
         report = dict(workers=workers, seconds=elapsed, bytes=manifest.get("bytes", 0),
-                      records=manifest["records"], digests=digests, **memory)
+                      records=manifest["records"], digests=digests, probe_sha256=probe_sha256, **memory)
         try:
             check_memory(memory)
             report['cpu_profile_files'] = [p.name for p in profile_files(a.out / f'cpu-w{workers}.pprof')]
