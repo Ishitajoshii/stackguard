@@ -1,0 +1,2 @@
+# Lab helper only; not linked into the Go probe.
+pypdf==6.21.3
