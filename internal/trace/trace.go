@@ -50,7 +50,7 @@ func Run(ctx context.Context, o Options) (m model.Manifest, err error) {
 	if err != nil {
 		return m, err
 	}
-	defer quarantine.Close()
+	defer func() { err = errors.Join(err, quarantine.Close()) }()
 	dir, err := os.MkdirTemp(o.Temp, "stackguard-trace-*")
 	if err != nil {
 		return m, err
@@ -221,14 +221,14 @@ func Run(ctx context.Context, o Options) (m model.Manifest, err error) {
 	if err != nil {
 		return m, err
 	}
-	defer edges.Close()
+	defer func() { err = errors.Join(err, edges.Close()) }()
 	var tree *os.File
 	if o.Lineage {
 		tree, err = os.OpenFile(filepath.Join(o.Output, "lineage.txt"), os.O_CREATE|os.O_EXCL|os.O_WRONLY, 0600)
 		if err != nil {
 			return m, err
 		}
-		defer tree.Close()
+		defer func() { err = errors.Join(err, tree.Sync(), tree.Close()) }()
 	}
 	f, err = os.Open(sorted)
 	if err != nil {
