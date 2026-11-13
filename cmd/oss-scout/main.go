@@ -240,6 +240,14 @@ func execute(ctx context.Context, args []string, in *os.File, out io.Writer) (re
 	if specified["types"] {
 		p.Types = split(*types)
 	}
+	if p.Present == nil {
+		p.Present = map[string]bool{}
+	}
+	for flagName, key := range map[string]string{"interests": "interests", "languages": "languages", "effort": "effort", "hours": "hours_budget"} {
+		if specified[flagName] {
+			p.Present[key] = true
+		}
+	}
 	if e = p.Validate(); e != nil {
 		return e
 	}
@@ -350,18 +358,30 @@ func execute(ctx context.Context, args []string, in *os.File, out io.Writer) (re
 			}
 			return nil
 		}
-		invoke := func(callCtx context.Context) (any, error) {
+		invoke := func(callCtx context.Context) (value any, invokeErr error) {
 			runSession := output.Manifest("cloud").RunID + "-scout"
 			audit, e := output.New(filepath.Join(*destination, runSession, "bridge.jsonl"))
 			if e != nil {
 				return nil, e
 			}
-			defer audit.Close()
 			events, e := output.New(filepath.Join(*destination, runSession, "bridge-events.jsonl"))
 			if e != nil {
+				audit.Close()
 				return nil, e
 			}
-			defer events.Close()
+			manifest := output.Manifest("bridge_capture")
+			manifest.RunID = runSession
+			defer func() {
+				invokeErr = errors.Join(invokeErr, events.Close(), audit.Close())
+				manifest.Ended = time.Now().UTC()
+				manifest.Records = events.Records
+				manifest.Complete = invokeErr == nil
+				if invokeErr != nil {
+					manifest.Errors = 1
+				}
+				manifest.Notes = []string{"Supplementary bridge observations; native local/cloud captures must be validated separately."}
+				invokeErr = errors.Join(invokeErr, output.Publish(filepath.Join(*destination, runSession, "capture-manifest.json"), manifest))
+			}()
 			client, e := mcp.NewClient(*endpoint, runSession, audit.Write)
 			if e != nil {
 				return nil, e
