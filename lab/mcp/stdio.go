@@ -27,11 +27,18 @@ func (s Server) Stdio(parent context.Context, in io.Reader, out io.Writer) (resu
 			c.Close()
 		}
 	}
-	stopClose := context.AfterFunc(ctx, closeInput)
+	closed := make(chan struct{})
+	stopClose := context.AfterFunc(ctx, func() {
+		defer close(closed)
+		closeInput()
+	})
 	defer func() {
 		cancel()
-		closeInput()
-		stopClose()
+		if stopClose() {
+			closeInput()
+		} else {
+			<-closed
+		}
 		wg.Wait()
 		writeMu.Lock()
 		resultErr = errors.Join(resultErr, writeErr)
