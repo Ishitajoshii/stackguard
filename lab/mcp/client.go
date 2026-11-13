@@ -12,6 +12,7 @@ import (
 	"net/http"
 	"net/url"
 	"sync/atomic"
+	"syscall"
 	"time"
 )
 
@@ -63,6 +64,10 @@ func (c *Client) Call(ctx context.Context, name string, args json.RawMessage) (a
 	if e != nil {
 		if ctx.Err() != nil {
 			return nil, ctx.Err()
+		}
+		var errno syscall.Errno
+		if errors.As(e, &errno) {
+			return nil, fmt.Errorf("local MCP transport failed (OS error %d)", errno)
 		}
 		return nil, errors.New("local MCP service unavailable; start server and proxy")
 	}
