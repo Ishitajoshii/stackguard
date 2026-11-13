@@ -38,7 +38,7 @@ The initial public example preferences are in [lab/examples/ishita.yaml](lab/exa
 
 ## Open gates
 
-- Complete default-profile AWS sign-in and validate model/account access.
+- Default-profile AWS sign-in is verified; establish a restricted lab role and validate regional model access.
 - Obtain and wire dedicated restricted GitHub and read-only Notion lab tokens.
 - Prove cloud inline-function continuation and native local/cloud capture.
 - Resolve evaluator acceptance of AgentCore in place of the assignment's named Bedrock Agents option.
