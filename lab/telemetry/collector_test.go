@@ -19,3 +19,10 @@ func TestCollectorDropsContentAndAccounts(t *testing.T) {
 		t.Fatal(w.Code, string(b))
 	}
 }
+
+func TestCollectorRejectsUnknownEnvelopeContent(t *testing.T) {
+	b, _ := json.Marshal(sanitize(map[string]any{"resourceLogs": []any{}, "futurePrompt": "PRIVATE", "scope": map[string]any{"name": "PRIVATE"}}, 0))
+	if strings.Contains(string(b), "PRIVATE") {
+		t.Fatal(string(b))
+	}
+}

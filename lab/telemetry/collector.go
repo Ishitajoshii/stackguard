@@ -44,7 +44,11 @@ func sanitize(v any, depth int) any {
 				}
 				out[key] = attrs
 			default:
-				out[key] = sanitize(value, depth+1)
+				// Unknown envelope fields can contain prompts or account data too.
+				switch key {
+				case "resourceLogs", "resourceSpans", "resource", "scopeLogs", "scopeSpans", "scope", "logRecords", "spans", "timeUnixNano", "observedTimeUnixNano", "startTimeUnixNano", "endTimeUnixNano", "traceId", "spanId", "parentSpanId", "flags", "key", "value", "stringValue", "boolValue", "intValue", "doubleValue":
+					out[key] = sanitize(value, depth+1)
+				}
 			}
 		}
 		return out
