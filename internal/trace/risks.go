@@ -21,7 +21,11 @@ func Risks(ctx context.Context, dir, temp, inventory string) (err error) {
 	if e != nil {
 		return e
 	}
-	defer os.RemoveAll(work)
+	defer func() {
+		if ctx.Err() == nil {
+			err = errors.Join(err, os.RemoveAll(work))
+		}
+	}()
 	bindings, e := os.Create(filepath.Join(work, "bindings"))
 	if e != nil {
 		return e

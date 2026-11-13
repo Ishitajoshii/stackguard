@@ -81,4 +81,7 @@ func TestInterruptRetainsAlreadyObservedCandidates(t *testing.T) {
 	if json.Unmarshal(b, &manifest) != nil || manifest.Complete {
 		t.Fatal("interrupted scan marked complete")
 	}
+	if !strings.Contains(strings.Join(manifest.Notes, "\n"), "workspace retained for explicit cleanup") {
+		t.Fatal("interrupted workspace cleanup was not recorded")
+	}
 }

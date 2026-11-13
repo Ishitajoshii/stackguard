@@ -82,7 +82,14 @@ func Run(ctx context.Context, o Options) (m model.Manifest, err error) {
 	if err != nil {
 		return m, err
 	}
-	defer os.RemoveAll(dir)
+	cleanupCtx := ctx
+	defer func() {
+		if cleanupCtx.Err() != nil {
+			m.Notes = append(m.Notes, "Interrupted temporary workspace retained for explicit cleanup: "+secrets.Redact(dir))
+			return
+		}
+		err = errors.Join(err, os.RemoveAll(dir))
+	}()
 	spool, err := os.Create(filepath.Join(dir, "spool"))
 	if err != nil {
 		return m, err

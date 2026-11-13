@@ -55,7 +55,13 @@ func Run(ctx context.Context, o Options) (m model.Manifest, err error) {
 	if err != nil {
 		return m, err
 	}
-	defer os.RemoveAll(dir)
+	defer func() {
+		if ctx.Err() != nil {
+			m.Notes = append(m.Notes, "Interrupted temporary workspace retained for explicit cleanup: "+secrets.Redact(dir))
+			return
+		}
+		err = errors.Join(err, os.RemoveAll(dir))
+	}()
 	spool, err := os.Create(filepath.Join(dir, "events"))
 	if err != nil {
 		return m, err
@@ -292,7 +298,7 @@ func Run(ctx context.Context, o Options) (m model.Manifest, err error) {
 	}
 	m.Notes = []string{"call_count counts distinct observed attempts, including failed calls; completion records do not increment it.", "Duplicate source IDs must agree. Cross-source calls merge only with an explicit shared session/call_id and equal path.", "Evidence references per aggregate are capped at 64; full references remain in events.jsonl.", "Native Codex/AgentCore schema mapping and correctness require real original captures; envelope support alone is not validation.", "Session-partitioned workers resolve lineage against an immutable disk index; external sort and reduction are serial."}
 	// Publish completion only after risk reduction succeeds as well.
-	if err = Risks(ctx, o.Output, o.Temp, o.Inventory); err != nil {
+	if err = Risks(ctx, o.Output, dir, o.Inventory); err != nil {
 		return m, err
 	}
 	return m, nil
