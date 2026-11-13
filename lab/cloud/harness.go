@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/Ishitajoshii/stackguard/internal/model"
 	"github.com/Ishitajoshii/stackguard/internal/secrets"
 	"github.com/Ishitajoshii/stackguard/lab/mcp"
 	"github.com/aws/aws-sdk-go-v2/aws"
@@ -24,6 +25,8 @@ type Options struct {
 	MaxRounds                         int
 	ToolCall                          mcp.Call
 	Audit                             func(any) error
+	Events                            func(any) error
+	ParentSession, ParentRequestID    string
 }
 type ToolRequest struct {
 	ID, Name string
@@ -100,6 +103,11 @@ func Run(ctx context.Context, o Options, prompt string) (string, error) {
 		return "", errors.New("AWS configuration unavailable; configure a restricted profile")
 	}
 	client := bedrockagentcore.NewFromConfig(cfg)
+	if o.Events != nil {
+		if e = o.Events(model.Event{Version: 1, ID: o.Session + ":root", TS: time.Now().UTC(), Source: "bridge", Session: o.Session, Span: o.Session, ParentSession: o.ParentSession, ParentRequestID: o.ParentRequestID, Agent: "agentcore-researcher", Client: "local-bridge", Kind: "delegation", Evidence: []string{"bridge:" + o.Session}}); e != nil {
+			return "", e
+		}
+	}
 	definitions, allowed := Definitions()
 	messages := []types.HarnessMessage{{Role: types.HarnessConversationRole("user"), Content: []types.HarnessContentBlock{&types.HarnessContentBlockMemberText{Value: prompt}}}}
 	seen := map[string]bool{}
@@ -171,7 +179,12 @@ func Run(ctx context.Context, o Options, prompt string) (string, error) {
 			if !json.Valid([]byte(args)) {
 				return final.String(), errors.New("invalid cloud tool arguments")
 			}
-			result, callErr := o.ToolCall(ctx, tool.Name, json.RawMessage(args))
+			if o.Events != nil {
+				if e = o.Events(model.Event{Version: 1, ID: tool.ID, TS: time.Now().UTC(), Source: "bridge", Session: o.Session, Span: tool.ID, Parent: o.Session, Agent: "agentcore-researcher", Client: "local-bridge", Kind: "tool_call", Target: tool.Name, Status: "attempted", Evidence: []string{"agentcore-sdk-tool-handoff:" + tool.ID}}); e != nil {
+					return final.String(), e
+				}
+			}
+			result, callErr := o.ToolCall(mcp.WithCorrelation(ctx, mcp.Correlation{Session: o.Session, Span: tool.ID}), tool.Name, json.RawMessage(args))
 			status := types.HarnessToolUseStatusSuccess
 			if callErr != nil {
 				status = types.HarnessToolUseStatus("error")

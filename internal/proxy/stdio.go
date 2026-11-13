@@ -25,7 +25,7 @@ func Stdio(ctx context.Context, o StdioOptions) error {
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 	cmd := exec.CommandContext(ctx, o.Command, o.Args...)
-	cmd.Env = o.Env
+	cmd.Env = append(append([]string{}, o.Env...), "STACKGUARD_PROXY_SESSION="+o.Session)
 	cmd.WaitDelay = 500 * time.Millisecond
 	in, e := cmd.StdinPipe()
 	if e != nil {

@@ -90,6 +90,7 @@ func (s Server) Handle(ctx context.Context, b []byte) (*Response, error) {
 			res.Error = map[string]any{"code": -32602, "message": "tool is not allowed"}
 			break
 		}
+		ctx = context.WithValue(ctx, requestKey{}, secrets.Fingerprint(string(r.ID)))
 		v, e := s.Call(ctx, p.Name, p.Arguments)
 		if e != nil {
 			res.Result = map[string]any{"isError": true, "content": []any{map[string]any{"type": "text", "text": secrets.Redact(e.Error())}}}

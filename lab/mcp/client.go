@@ -17,6 +17,9 @@ import (
 
 type Correlation struct{ Session, Span string }
 type correlationKey struct{}
+type requestKey struct{}
+
+func RequestID(ctx context.Context) string { s, _ := ctx.Value(requestKey{}).(string); return s }
 
 func WithCorrelation(ctx context.Context, c Correlation) context.Context {
 	return context.WithValue(ctx, correlationKey{}, c)

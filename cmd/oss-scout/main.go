@@ -291,6 +291,11 @@ func execute(ctx context.Context, args []string, in *os.File, out io.Writer) err
 				return nil, e
 			}
 			defer audit.Close()
+			events, e := output.New(filepath.Join(*destination, runSession, "bridge-events.jsonl"))
+			if e != nil {
+				return nil, e
+			}
+			defer events.Close()
 			client, e := mcp.NewClient(*endpoint, runSession, audit.Write)
 			if e != nil {
 				return nil, e
@@ -299,7 +304,7 @@ func execute(ctx context.Context, args []string, in *os.File, out io.Writer) err
 			if e != nil {
 				return nil, e
 			}
-			answer, e := cloud.Run(callCtx, cloud.Options{Profile: p.AWSProfile, Region: p.Region, Harness: p.Harness, Session: runSession, MaxRounds: 8, ToolCall: client.Call, Audit: audit.Write}, string(prompt))
+			answer, e := cloud.Run(callCtx, cloud.Options{Profile: p.AWSProfile, Region: p.Region, Harness: p.Harness, Session: runSession, MaxRounds: 8, ToolCall: client.Call, Audit: audit.Write, Events: events.Write, ParentSession: os.Getenv("STACKGUARD_PROXY_SESSION"), ParentRequestID: mcp.RequestID(callCtx)}, string(prompt))
 			if e != nil {
 				return nil, e
 			}

@@ -16,16 +16,25 @@ import (
 type Node struct {
 	Agent, Parent, ParentSession string
 	Ambiguous                    bool
+	Alias                        bool
 }
 
 func Key(session, span string) string { return secrets.Fingerprint(session + "\x00" + span) }
 func NodeRecord(e model.Event) string {
 	n := Node{Agent: e.Agent, Parent: e.Parent, ParentSession: e.ParentSession}
+	if e.ParentRequestID != "" {
+		n.Parent = "request:" + e.ParentRequestID
+	}
 	if n.Parent != "" && n.ParentSession == "" {
 		n.ParentSession = e.Session
 	}
 	b, _ := json.Marshal(n)
-	return Key(e.Session, e.Span) + "\t" + string(b) + "\n"
+	line := Key(e.Session, e.Span) + "\t" + string(b) + "\n"
+	if e.RequestID != "" && e.Kind == "tool_call" {
+		alias, _ := json.Marshal(Node{Parent: e.Span, ParentSession: e.Session, Alias: true})
+		line += Key(e.Session, "request:"+e.RequestID) + "\t" + string(alias) + "\n"
+	}
+	return line
 }
 func Index(ctx context.Context, path, dir string) (*pipeline.Table, error) {
 	p, err := pipeline.Sort(ctx, path, dir)
@@ -120,7 +129,9 @@ func Path(ctx context.Context, table *pipeline.Table, e model.Event) ([]string, 
 			reason = "ambiguous parent or agent mapping"
 			break
 		}
-		path = append(path, n.Agent)
+		if !n.Alias && (len(path) == 0 || path[len(path)-1] != n.Agent) {
+			path = append(path, n.Agent)
+		}
 		if n.Parent == "" {
 			break
 		}

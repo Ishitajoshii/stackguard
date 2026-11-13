@@ -16,11 +16,12 @@ import (
 )
 
 type observation struct {
-	session  string
-	raw      []byte
-	response bool
-	uses     []model.CredentialUse
-	ack      chan error
+	parent, parentSession string
+	session               string
+	raw                   []byte
+	response              bool
+	uses                  []model.CredentialUse
+	ack                   chan error
 }
 type pending struct{ span, call string }
 
@@ -66,6 +67,9 @@ func NewObserver(ctx context.Context, workers int, run, agent, client string, wr
 // Wait is called only after cancelling the observer context.
 func (o *Observer) Wait() { o.wg.Wait() }
 func (o *Observer) Observe(ctx context.Context, session string, raw []byte, response bool, uses []model.CredentialUse) error {
+	return o.ObserveParent(ctx, session, raw, response, uses, "", "")
+}
+func (o *Observer) ObserveParent(ctx context.Context, session string, raw []byte, response bool, uses []model.CredentialUse, parent, parentSession string) error {
 	if len(raw) > 1<<20 {
 		return errors.New("MCP frame exceeds 1 MiB")
 	}
@@ -73,6 +77,8 @@ func (o *Observer) Observe(ctx context.Context, session string, raw []byte, resp
 	h.Write([]byte(session))
 	q := o.queues[int(h.Sum32())%len(o.queues)]
 	v := observation{session: session, raw: append([]byte(nil), raw...), response: response, uses: uses, ack: make(chan error, 1)}
+	v.parent = parent
+	v.parentSession = parentSession
 	select {
 	case q <- v:
 	case <-ctx.Done():
@@ -126,6 +132,9 @@ func (o *Observer) process(s *kestrelShard, index int, v observation) error {
 		event.ID = span
 		event.Span = span
 		event.CallID = span
+		event.RequestID = secrets.Fingerprint(string(m.ID))
+		event.Parent = v.parent
+		event.ParentSession = v.parentSession
 		event.Kind = "tool_call"
 		event.Status = "attempted"
 		event.Target = secrets.Redact(m.Params.Name)

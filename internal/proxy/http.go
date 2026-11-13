@@ -67,6 +67,9 @@ func HTTP(upstream string, o *Observer) (http.Handler, error) {
 				return
 			}
 			session := secrets.Fingerprint("http:" + r.Header.Get("Mcp-Session-Id"))
+			if explicit := r.Header.Get("X-Stackguard-Session"); explicit != "" && len(explicit) <= 100 {
+				session = explicit
+			}
 			var uses []model.CredentialUse
 			for k, values := range r.Header {
 				for _, v := range values {
@@ -75,7 +78,7 @@ func HTTP(upstream string, o *Observer) (http.Handler, error) {
 					}
 				}
 			}
-			if e = o.Observe(r.Context(), session, b, false, uses); e != nil {
+			if e = o.ObserveParent(r.Context(), session, b, false, uses, r.Header.Get("X-Stackguard-Parent-Span"), r.Header.Get("X-Stackguard-Parent-Session")); e != nil {
 				http.Error(w, "observation unavailable or invalid request", 503)
 				return
 			}
