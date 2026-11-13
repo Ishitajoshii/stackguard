@@ -243,7 +243,7 @@ func Run(ctx context.Context, o Options) (m model.Manifest, err error) {
 			return nil
 		}
 		if tree != nil {
-			if _, e := fmt.Fprintf(tree, "%s | %s | calls=%d | attribution=%s | unresolved=%s | evidence=%s\n", edge.NHI, strings.Join(edge.Path, " -> "), edge.Count, strings.Join(edge.Attribution, ","), edge.Unresolved, strings.Join(edge.Evidence, ",")); e != nil {
+			if e := writeLineage(tree, edge); e != nil {
 				return e
 			}
 		}

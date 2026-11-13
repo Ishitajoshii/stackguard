@@ -33,7 +33,7 @@ func TestLineageDedupAndCounts(t *testing.T) {
 	enc.Encode(complete)
 	enc.Encode(parent)
 	f.Close()
-	var previous string
+	var previous, previousTree string
 	for _, workers := range []int{1, 4, 8, 16} {
 		out := filepath.Join(d, strings.Repeat("w", workers))
 		m, err := Run(context.Background(), Options{Inputs: []Input{{"normalized", p}}, Output: out, Temp: d, Workers: workers, Lineage: true})
@@ -49,6 +49,14 @@ func TestLineageDedupAndCounts(t *testing.T) {
 			t.Fatal("worker drift")
 		}
 		previous = string(b)
+		tree, err := os.ReadFile(filepath.Join(out, "lineage.txt"))
+		if err != nil || !strings.Contains(string(tree), "`-- \"researcher\"\n    `-- \"tool\"") || !strings.Contains(string(tree), "attribution=direct") || !strings.Contains(string(tree), "evidence=") {
+			t.Fatal("missing lineage tree or evidence", err)
+		}
+		if previousTree != "" && previousTree != string(tree) {
+			t.Fatal("lineage tree changes with worker count")
+		}
+		previousTree = string(tree)
 	}
 }
 
