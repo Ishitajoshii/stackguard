@@ -64,4 +64,15 @@ For the two required real demonstrations, first use a newly created restricted o
 
 ## 6. Evidence status and delivery limit
 
-The implemented scanner, adapters, graph and risk rules pass automated contract/algorithm checks. The 1,000-in-flight MCP workload is a real local-file experiment with raw outputs linked from SCALING.md. No successful native cloud invocation, native cross-agent correctness oracle, three-credential trace or two controlled misconfiguration reproductions is claimed. Those require the deferred credentials and human-reviewed original captures. This Markdown dossier is the research source; a final three-to-six-page rendered submission still needs layout verification after live evidence is inserted.
+The implemented scanner, adapters, graph and risk rules pass automated contract/algorithm checks. The 1,000-in-flight MCP workload is a real local-file experiment with raw outputs linked from [SCALING.md](SCALING.md). No successful native cloud invocation, native cross-agent correctness oracle, three-credential trace or two controlled misconfiguration reproductions is claimed. Those require the deferred credentials and human-reviewed original captures. This Markdown dossier is the research source for the six-page draft PDF; regenerate and inspect the layout after live evidence is inserted.
+
+| Evidence | Available artifact | What remains to establish |
+|---|---|---|
+| Real MCP file calls | [Original transport capture and measurement](results/bench/transport-w4-r5/summary.json), with 1,000 simultaneous handlers and zero failed calls in that run. | A real Codex-to-cloud delegation using provider credentials. |
+| Credential candidates | [Go repository scan](results/bench/scan-go-warm-matrix/summary.json); only redacted candidate identities are retained. | Selected machine scope and owned credential bindings. No public-corpus credential verification. |
+| Trace load | [100,000-event replay matrix](results/bench/trace-file-100k/summary.json), derived from original file calls. | Largest workload results and a separate native credential-bearing correctness oracle. |
+| Automated correctness | [Validation records](results/validation/windows-race.txt), protocol fixtures, adapter fuzzing and process cancellation measurements. | Live provider schemas, two controlled reproductions and a reviewed recording. |
+
+The [runbook](lab/RUNBOOK.md) records cost and cleanup requirements. Cloud metadata can report usage without proving the final bill; missing usage is never assumed free. The [demo script](lab/DEMO.md) is a plan, not a recording. Public repository findings are not valid lab credentials and must never be tested against providers.
+
+Before submission, attach the original redacted captures and their checksums, inspect the expected delegation chain, reconcile cost, reproduce the two owned-only findings, and review the final five-minute recording. The user must confirm the evaluator accepts AgentCore in place of the assignment's named cloud option. None of these pending gates is satisfied by a successful local algorithm test.
