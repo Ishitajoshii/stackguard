@@ -186,13 +186,18 @@ func Run(ctx context.Context, o Options) (m model.Manifest, err error) {
 		if e.Kind != "tool_call" {
 			return nil, nil
 		}
-		path, reason, err := graph.Path(ctx, table, e)
-		if err != nil {
-			return nil, err
-		}
 		uses := e.Credentials
 		if e.NHI != "" {
 			uses = append(uses, model.CredentialUse{ID: e.NHI, Attribution: e.Attribution})
+		}
+		// All events remain indexed as potential ancestors, but a call with no
+		// observed identity cannot produce an edge and needs no ancestry lookup.
+		if len(uses) == 0 {
+			return nil, nil
+		}
+		path, reason, err := graph.Path(ctx, table, e)
+		if err != nil {
+			return nil, err
 		}
 		var records []string
 		for _, use := range uses {

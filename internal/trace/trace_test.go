@@ -21,7 +21,8 @@ func TestLineageDedupAndCounts(t *testing.T) {
 	parent.Span = "parent"
 	parent.Parent = ""
 	parent.Agent = "researcher"
-	parent.Kind = "delegation"
+	// A credentialless call still has to be indexed for its child's ancestry.
+	parent.Kind = "tool_call"
 	parent.NHI = ""
 	complete := e
 	complete.ID = "done"
