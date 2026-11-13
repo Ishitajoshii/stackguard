@@ -28,23 +28,24 @@ type Identity struct {
 }
 
 type Event struct {
-	Version      int       `json:"schema_version"`
-	ID           string    `json:"event_id"`
-	TS           time.Time `json:"ts"`
-	Source       string    `json:"source"`
-	Session      string    `json:"session"`
-	Span         string    `json:"span"`
-	Parent       string    `json:"parent_span,omitempty"`
-	Agent        string    `json:"agent"`
-	Kind         string    `json:"kind"`
-	Target       string    `json:"target,omitempty"`
-	NHI          string    `json:"nhi,omitempty"`
-	IdentityKind string    `json:"identity_kind,omitempty"`
-	Attribution  string    `json:"attribution_kind,omitempty"`
-	Client       string    `json:"observed_client,omitempty"`
-	CallID       string    `json:"call_id,omitempty"`
-	Status       string    `json:"status,omitempty"`
-	Evidence     []string  `json:"evidence_refs,omitempty"`
+	Version       int       `json:"schema_version"`
+	ID            string    `json:"event_id"`
+	TS            time.Time `json:"ts"`
+	Source        string    `json:"source"`
+	Session       string    `json:"session"`
+	Span          string    `json:"span"`
+	Parent        string    `json:"parent_span,omitempty"`
+	ParentSession string    `json:"parent_session,omitempty"`
+	Agent         string    `json:"agent"`
+	Kind          string    `json:"kind"`
+	Target        string    `json:"target,omitempty"`
+	NHI           string    `json:"nhi,omitempty"`
+	IdentityKind  string    `json:"identity_kind,omitempty"`
+	Attribution   string    `json:"attribution_kind,omitempty"`
+	Client        string    `json:"observed_client,omitempty"`
+	CallID        string    `json:"call_id,omitempty"`
+	Status        string    `json:"status,omitempty"`
+	Evidence      []string  `json:"evidence_refs,omitempty"`
 	// Only an observer with evidence of credential transfer may populate this.
 	DelegatedFrom string          `json:"delegated_from,omitempty"`
 	Credentials   []CredentialUse `json:"credential_uses,omitempty"`
