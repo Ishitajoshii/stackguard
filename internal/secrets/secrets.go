@@ -4,6 +4,7 @@ package secrets
 import (
 	"crypto/sha256"
 	"encoding/hex"
+	"encoding/json"
 	"regexp"
 	"sort"
 	"strings"
@@ -42,12 +43,35 @@ func Mask(value string) string {
 func Sensitive(name string) bool { return sensitive.MatchString(name) }
 func Provider(name string) string {
 	n := strings.ToLower(name)
-	for _, p := range []string{"github", "notion", "anthropic", "openai", "slack", "google", "azure", "aws"} {
+	for _, p := range []string{"github", "notion", "anthropic", "azure", "openai", "slack", "google", "aws"} {
 		if strings.Contains(n, p) {
 			return p
 		}
 	}
 	return "unknown"
+}
+
+// AWSSet fingerprints a length-delimited tuple as ONE credential. Missing pairs
+// are not promoted to a usable credential. Role ARNs are separate principal IDs.
+func AWSSet(access, secret, session string) (string, bool) {
+	if access == "" || secret == "" {
+		return "", false
+	}
+	b, _ := json.Marshal([]string{"aws-credential-set-v1", access, secret, session})
+	return Fingerprint(string(b)), true
+}
+func AWSField(k string) bool {
+	switch strings.ToUpper(k) {
+	case "AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY", "AWS_SESSION_TOKEN":
+		return true
+	}
+	return false
+}
+func Kind(m Match) string {
+	if m.Provider == "aws" && (strings.HasPrefix(m.Masked, "AKIA") || strings.HasPrefix(m.Masked, "ASIA")) {
+		return "access_key_id"
+	}
+	return "secret"
 }
 
 // Detect returns candidates, not proof that a provider issued/accepted a key.

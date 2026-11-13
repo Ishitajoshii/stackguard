@@ -183,8 +183,21 @@ func findUses(v any, key string, out *[]model.CredentialUse) {
 }
 func EnvironmentUses(env []string) []model.CredentialUse {
 	var out []model.CredentialUse
+	awsValues := map[string]string{}
 	for _, entry := range env {
 		k, v, _ := strings.Cut(entry, "=")
+		if secrets.AWSField(k) {
+			awsValues[k] = v
+		}
+	}
+	if id, ok := secrets.AWSSet(awsValues["AWS_ACCESS_KEY_ID"], awsValues["AWS_SECRET_ACCESS_KEY"], awsValues["AWS_SESSION_TOKEN"]); ok {
+		out = append(out, model.CredentialUse{ID: id, Attribution: "implicit"})
+	}
+	for _, entry := range env {
+		k, v, _ := strings.Cut(entry, "=")
+		if secrets.AWSField(k) {
+			continue
+		}
 		for _, m := range secrets.Detect(v, k) {
 			out = append(out, model.CredentialUse{ID: m.ID, Attribution: "implicit"})
 		}

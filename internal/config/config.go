@@ -94,10 +94,37 @@ func Resolve(d Document, location string, env func(string) (string, bool)) []mod
 		}
 	}
 	for _, s := range d.Servers {
+		awsValues := map[string]string{}
+		awsBindings := []model.Binding{}
+		for _, k := range []string{"AWS_ACCESS_KEY_ID", "AWS_SECRET_ACCESS_KEY", "AWS_SESSION_TOKEN"} {
+			if v, ok := s.Env[k]; ok {
+				awsValues[k] = v
+				awsBindings = append(awsBindings, model.Binding{Agent: d.Agent, Server: s.Name, Location: location + ":env." + k})
+			} else {
+				for _, ref := range s.EnvVars {
+					if ref == k {
+						if v, ok := env(ref); ok {
+							awsValues[k] = v
+							awsBindings = append(awsBindings, model.Binding{Agent: d.Agent, Server: s.Name, Location: location + ":env_vars", Reference: ref})
+						}
+					}
+				}
+			}
+		}
+		awsID, awsComplete := secrets.AWSSet(awsValues["AWS_ACCESS_KEY_ID"], awsValues["AWS_SECRET_ACCESS_KEY"], awsValues["AWS_SESSION_TOKEN"])
+		if awsComplete {
+			out = append(out, model.Identity{Version: 1, ID: awsID, Provider: "aws", Kind: "credential_set", Bindings: awsBindings})
+		}
 		for k, v := range s.Env {
+			if awsComplete && secrets.AWSField(k) {
+				continue
+			}
 			add(v, "", k, s.Name)
 		}
 		for _, k := range s.EnvVars {
+			if awsComplete && secrets.AWSField(k) {
+				continue
+			}
 			add("", k, k, s.Name)
 		}
 		for k, v := range s.Headers {

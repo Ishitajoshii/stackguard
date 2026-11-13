@@ -154,7 +154,7 @@ func Run(ctx context.Context, o Options) (m model.Manifest, err error) {
 						return
 					}
 					n, e := File(ctx, p, func(offset int64, match secrets.Match) error {
-						v := model.Identity{Version: 1, ID: match.ID, Provider: match.Provider, Kind: "secret", Masked: match.Masked, Bindings: []model.Binding{{Agent: o.Agent, Location: secrets.Redact(filepath.Clean(p)) + fmt.Sprintf(":byte:%d", offset)}}}
+						v := model.Identity{Version: 1, ID: match.ID, Provider: match.Provider, Kind: secrets.Kind(match), Masked: match.Masked, Bindings: []model.Binding{{Agent: o.Agent, Location: secrets.Redact(filepath.Clean(p)) + fmt.Sprintf(":byte:%d", offset)}}}
 						if !send(result{ids: []model.Identity{v}}) {
 							return ctx.Err()
 						}
