@@ -2,6 +2,7 @@
 package output
 
 import (
+	"context"
 	"crypto/rand"
 	"crypto/sha256"
 	"encoding/hex"
@@ -85,12 +86,34 @@ func Publish(path string, v any) error {
 	return os.Rename(name, path)
 }
 func Checksum(path string) (model.Source, error) {
+	return ChecksumContext(context.Background(), path)
+}
+func ChecksumContext(ctx context.Context, path string) (model.Source, error) {
 	f, err := os.Open(path)
 	if err != nil {
 		return model.Source{}, errors.New("open source failed")
 	}
 	defer f.Close()
 	h := sha256.New()
-	n, err := io.Copy(h, f)
+	var n int64
+	buf := make([]byte, 64<<10)
+	for {
+		if err = ctx.Err(); err != nil {
+			break
+		}
+		read, e := f.Read(buf)
+		if read > 0 {
+			h.Write(buf[:read])
+			n += int64(read)
+		}
+		if e == io.EOF {
+			err = nil
+			break
+		}
+		if e != nil {
+			err = e
+			break
+		}
+	}
 	return model.Source{Name: filepath.Base(path), SHA256: hex.EncodeToString(h.Sum(nil)), Bytes: n}, err
 }

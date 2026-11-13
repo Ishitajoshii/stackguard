@@ -67,7 +67,7 @@ func Run(ctx context.Context, o Options) (m model.Manifest, err error) {
 		if !ok {
 			return m, errors.New("unknown trace adapter")
 		}
-		source, e := output.Checksum(input.Path)
+		source, e := output.ChecksumContext(ctx, input.Path)
 		if e != nil {
 			return m, e
 		}
@@ -178,26 +178,23 @@ func Run(ctx context.Context, o Options) (m model.Manifest, err error) {
 		return m, err
 	}
 	defer edgeSpool.Close()
-	f, err = os.Open(filepath.Join(o.Output, "events.jsonl"))
-	if err != nil {
-		return m, err
-	}
-	err = pipeline.Lines(ctx, f, func(s string) error {
+	err = pipeline.Transform(ctx, filepath.Join(o.Output, "events.jsonl"), o.Workers, func(s string) string { var e model.Event; json.Unmarshal([]byte(s), &e); return e.Session }, func(s string) ([]string, error) {
 		var e model.Event
 		if json.Unmarshal([]byte(s), &e) != nil {
-			return errors.New("invalid normalized event")
+			return nil, errors.New("invalid normalized event")
 		}
 		if e.Kind != "tool_call" {
-			return nil
+			return nil, nil
 		}
 		path, reason, err := graph.Path(ctx, table, e)
 		if err != nil {
-			return err
+			return nil, err
 		}
 		uses := e.Credentials
 		if e.NHI != "" {
 			uses = append(uses, model.CredentialUse{ID: e.NHI, Attribution: e.Attribution})
 		}
+		var records []string
 		for _, use := range uses {
 			edge := model.Edge{NHI: use.ID, Agent: e.Agent, Path: path, Count: 1, First: e.TS, Last: e.TS, Attribution: []string{use.Attribution}, Evidence: e.Evidence, Unresolved: reason}
 			identity, _ := json.Marshal([]any{edge.Agent, edge.Path, edge.Unresolved})
@@ -206,13 +203,10 @@ func Run(ctx context.Context, o Options) (m model.Manifest, err error) {
 				call = e.Session + ":" + e.CallID
 			}
 			b, _ := json.Marshal(edge)
-			if _, err = fmt.Fprintf(edgeSpool, "%s:%s\t%s\t%s\n", edge.NHI, secrets.Fingerprint(string(identity)), secrets.Fingerprint(call), b); err != nil {
-				return err
-			}
+			records = append(records, fmt.Sprintf("%s:%s\t%s\t%s\n", edge.NHI, secrets.Fingerprint(string(identity)), secrets.Fingerprint(call), b))
 		}
-		return nil
-	})
-	f.Close()
+		return records, nil
+	}, edgeSpool)
 	if err != nil {
 		return m, err
 	}
@@ -291,7 +285,7 @@ func Run(ctx context.Context, o Options) (m model.Manifest, err error) {
 	if err != nil {
 		return m, err
 	}
-	m.Notes = []string{"call_count counts distinct observed attempts, including failed calls; completion records do not increment it.", "Duplicate source IDs must agree. Cross-source calls merge only with an explicit shared session/call_id and equal path.", "Evidence references per aggregate are capped at 64; full references remain in events.jsonl.", "Native Codex/AgentCore schema mapping and correctness require real original captures; envelope support alone is not validation.", "Workers currently configure validation only; disk join and merge phases are serial."}
+	m.Notes = []string{"call_count counts distinct observed attempts, including failed calls; completion records do not increment it.", "Duplicate source IDs must agree. Cross-source calls merge only with an explicit shared session/call_id and equal path.", "Evidence references per aggregate are capped at 64; full references remain in events.jsonl.", "Native Codex/AgentCore schema mapping and correctness require real original captures; envelope support alone is not validation.", "Session-partitioned workers resolve lineage against an immutable disk index; external sort and reduction are serial."}
 	return m, nil
 }
 func union(a, b []string, limit int) []string {

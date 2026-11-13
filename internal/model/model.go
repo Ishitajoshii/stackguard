@@ -71,6 +71,11 @@ func (e Event) Validate() error {
 	if len(e.Target) > 4096 || len(e.Evidence) > 64 {
 		return errors.New("event metadata limit exceeded")
 	}
+	for _, ref := range e.Evidence {
+		if len(ref) > 1024 {
+			return errors.New("evidence reference exceeds limit")
+		}
+	}
 	if e.NHI != "" && !ValidIdentity(e.NHI) {
 		return errors.New("invalid identity identifier")
 	}
