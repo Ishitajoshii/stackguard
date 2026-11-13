@@ -15,6 +15,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/bedrockagentcore"
 	"github.com/aws/aws-sdk-go-v2/service/bedrockagentcore/document"
 	"github.com/aws/aws-sdk-go-v2/service/bedrockagentcore/types"
+	"github.com/aws/aws-sdk-go-v2/service/sts"
 	"sort"
 	"strings"
 	"time"
@@ -103,6 +104,13 @@ func Run(ctx context.Context, o Options, prompt string) (string, error) {
 		return "", errors.New("AWS configuration unavailable; configure a restricted profile")
 	}
 	client := bedrockagentcore.NewFromConfig(cfg)
+	identity, identityErr := sts.NewFromConfig(cfg).GetCallerIdentity(ctx, &sts.GetCallerIdentityInput{})
+	if identityErr != nil {
+		return "", errors.New("AWS caller identity unavailable; refresh the restricted lab profile")
+	}
+	if !strings.Contains(aws.ToString(identity.Arn), ":assumed-role/") {
+		return "", errors.New("cloud research requires an assumed lab role; root and long-term IAM user credentials are rejected")
+	}
 	if o.Events != nil {
 		if e = o.Events(model.Event{Version: 1, ID: o.Session + ":root", TS: time.Now().UTC(), Source: "bridge", Session: o.Session, Span: o.Session, ParentSession: o.ParentSession, ParentRequestID: o.ParentRequestID, Agent: "agentcore-researcher", Client: "local-bridge", Kind: "delegation", Evidence: []string{"bridge:" + o.Session}}); e != nil {
 			return "", e
@@ -113,6 +121,17 @@ func Run(ctx context.Context, o Options, prompt string) (string, error) {
 	seen := map[string]bool{}
 	var final strings.Builder
 	for n := 0; n < o.MaxRounds; n++ {
+		if o.Events != nil {
+			credentials, e := cfg.Credentials.Retrieve(ctx)
+			if e != nil {
+				return final.String(), errors.New("AWS role credentials unavailable")
+			}
+			credentialID, _ := secrets.AWSSet(credentials.AccessKeyID, credentials.SecretAccessKey, credentials.SessionToken)
+			span := fmt.Sprintf("%s:invoke:%d", o.Session, n)
+			if e = o.Events(model.Event{Version: 1, ID: span, TS: time.Now().UTC(), Source: "bridge", Session: o.Session, Span: span, ParentSession: o.ParentSession, ParentRequestID: o.ParentRequestID, Agent: "local-bridge", Client: "aws-sdk", Kind: "tool_call", Target: "AgentCore.InvokeHarness", Status: "attempted", Credentials: []model.CredentialUse{{ID: credentialID, Attribution: "implicit"}, {ID: "aws_role:" + aws.ToString(identity.Arn), Attribution: "implicit"}}, Evidence: []string{"aws-sdk-credential-provider", "sts:GetCallerIdentity"}}); e != nil {
+				return final.String(), e
+			}
+		}
 		response, e := client.InvokeHarness(ctx, &bedrockagentcore.InvokeHarnessInput{HarnessArn: aws.String(o.Harness), RuntimeSessionId: aws.String(o.Session), Messages: messages, Tools: definitions, AllowedTools: allowed, MaxIterations: aws.Int32(6), MaxTokens: aws.Int32(2048), TimeoutSeconds: aws.Int32(60)})
 		if e != nil {
 			if ctx.Err() != nil {
