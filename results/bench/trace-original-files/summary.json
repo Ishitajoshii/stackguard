@@ -1,0 +1,58 @@
+[
+  {
+    "workers": 1,
+    "seconds": 0.8089535000035539,
+    "bytes": 2195600,
+    "records": 4000,
+    "digests": {
+      "events.jsonl": "e9ef16c405895b65e103eb0e9adcfba4995720a2ce18574960ada49cf0fa77dd",
+      "edges.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "findings.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "lineage.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "peak_working_set_bytes": 20889600,
+    "peak_commit_bytes": 61714432
+  },
+  {
+    "workers": 4,
+    "seconds": 1.1857826999621466,
+    "bytes": 2195600,
+    "records": 4000,
+    "digests": {
+      "events.jsonl": "e9ef16c405895b65e103eb0e9adcfba4995720a2ce18574960ada49cf0fa77dd",
+      "edges.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "findings.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "lineage.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "peak_working_set_bytes": 21094400,
+    "peak_commit_bytes": 62148608
+  },
+  {
+    "workers": 8,
+    "seconds": 2.972427800006699,
+    "bytes": 2195600,
+    "records": 4000,
+    "digests": {
+      "events.jsonl": "e9ef16c405895b65e103eb0e9adcfba4995720a2ce18574960ada49cf0fa77dd",
+      "edges.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "findings.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "lineage.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "peak_working_set_bytes": 19689472,
+    "peak_commit_bytes": 60764160
+  },
+  {
+    "workers": 16,
+    "seconds": 1.585656699957326,
+    "bytes": 2195600,
+    "records": 4000,
+    "digests": {
+      "events.jsonl": "e9ef16c405895b65e103eb0e9adcfba4995720a2ce18574960ada49cf0fa77dd",
+      "edges.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "findings.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "lineage.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "peak_working_set_bytes": 20168704,
+    "peak_commit_bytes": 60669952
+  }
+]

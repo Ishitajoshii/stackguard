@@ -1,0 +1,4 @@
+# Evidence hashes must survive Windows/Linux checkouts.
+*.jsonl text eol=lf
+*.json text eol=lf
+*.pprof binary
