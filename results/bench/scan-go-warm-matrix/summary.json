@@ -1,0 +1,46 @@
+[
+  {
+    "workers": 1,
+    "seconds": 16.35957979998784,
+    "bytes": 156228793,
+    "records": 3,
+    "digests": {
+      "inventory.jsonl": "029766ab6f35b2e63d32aec79a7f8a503b225f118addfb140d2c4f8f79cbd316"
+    },
+    "peak_working_set_bytes": 18468864,
+    "peak_commit_bytes": 59273216
+  },
+  {
+    "workers": 4,
+    "seconds": 4.655369299987797,
+    "bytes": 156228793,
+    "records": 3,
+    "digests": {
+      "inventory.jsonl": "029766ab6f35b2e63d32aec79a7f8a503b225f118addfb140d2c4f8f79cbd316"
+    },
+    "peak_working_set_bytes": 27676672,
+    "peak_commit_bytes": 70119424
+  },
+  {
+    "workers": 8,
+    "seconds": 4.066430000006221,
+    "bytes": 156228793,
+    "records": 3,
+    "digests": {
+      "inventory.jsonl": "029766ab6f35b2e63d32aec79a7f8a503b225f118addfb140d2c4f8f79cbd316"
+    },
+    "peak_working_set_bytes": 38670336,
+    "peak_commit_bytes": 81375232
+  },
+  {
+    "workers": 16,
+    "seconds": 4.343708399974275,
+    "bytes": 156228793,
+    "records": 3,
+    "digests": {
+      "inventory.jsonl": "029766ab6f35b2e63d32aec79a7f8a503b225f118addfb140d2c4f8f79cbd316"
+    },
+    "peak_working_set_bytes": 39325696,
+    "peak_commit_bytes": 82518016
+  }
+]
