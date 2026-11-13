@@ -1,7 +1,9 @@
 package proxy
 
 import (
+	"bufio"
 	"context"
+	"github.com/Ishitajoshii/stackguard/internal/model"
 	"io"
 	"os"
 	"strings"
@@ -13,6 +15,20 @@ import (
 func TestChildProcess(t *testing.T) {
 	if os.Getenv("STACKGUARD_TEST_CHILD") != "1" {
 		return
+	}
+	if os.Getenv("STACKGUARD_TEST_MODE") == "protocol" {
+		reader := bufio.NewScanner(os.Stdin)
+		for _, exchange := range protocolExchanges {
+			if !reader.Scan() || reader.Text() != exchange.request {
+				os.Exit(3)
+			}
+			if exchange.response != "" {
+				if _, err := io.WriteString(os.Stdout, exchange.response+"\n"); err != nil {
+					os.Exit(4)
+				}
+			}
+		}
+		os.Exit(0)
 	}
 	if os.Getenv("STACKGUARD_TEST_MODE") == "closed-output" {
 		os.Stdout.Close()
@@ -27,6 +43,63 @@ func TestChildProcess(t *testing.T) {
 		}
 	}
 	os.Exit(0)
+}
+
+// These are protocol fixtures, not agent behavior. The child validates every
+// received byte so control messages cannot disappear unnoticed in the proxy.
+var protocolExchanges = []struct{ request, response string }{
+	{`{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-06-18","capabilities":{},"clientInfo":{"name":"test","version":"1"}}}`, `{"jsonrpc":"2.0","id":1,"result":{"protocolVersion":"2025-06-18","capabilities":{"tools":{}},"serverInfo":{"name":"fixture","version":"1"}}}`},
+	{`{"jsonrpc":"2.0","method":"notifications/initialized"}`, ""},
+	{`{"jsonrpc":"2.0","id":"list","method":"tools/list"}`, `{"jsonrpc":"2.0","id":"list","result":{"tools":[]}}`},
+	{`{"jsonrpc":"2.0","id":"ok","method":"tools/call","params":{"name":"read","arguments":{}}}`, `{"jsonrpc":"2.0","id":"ok","result":{"content":[{"type":"text","text":"ok"}]}}`},
+	{`{"jsonrpc":"2.0","id":"cancel","method":"tools/call","params":{"name":"wait","arguments":{}}}`, `{"jsonrpc":"2.0","method":"notifications/progress","params":{"progressToken":"p","progress":1}}`},
+	{`{"jsonrpc":"2.0","method":"notifications/cancelled","params":{"requestId":"cancel","reason":"test"}}`, `{"jsonrpc":"2.0","id":"cancel","error":{"code":-32800,"message":"cancelled"}}`},
+	{`{"jsonrpc":"2.0","id":9,"method":"ping"}`, `{"jsonrpc":"2.0","id":9,"result":{}}`},
+}
+
+func TestStdioForwardsFullProtocolExchange(t *testing.T) {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	var events []model.Event
+	var mu sync.Mutex
+	o, err := NewObserver(ctx, 4, "r", "a", "c", func(v any) error {
+		mu.Lock()
+		defer mu.Unlock()
+		if e, ok := v.(model.Event); ok {
+			events = append(events, e)
+		}
+		return nil
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	var input, want, got strings.Builder
+	for _, exchange := range protocolExchanges {
+		input.WriteString(exchange.request + "\n")
+		if exchange.response != "" {
+			want.WriteString(exchange.response + "\n")
+		}
+	}
+	exe, err := os.Executable()
+	if err != nil {
+		t.Fatal(err)
+	}
+	err = Stdio(ctx, StdioOptions{Command: exe, Args: []string{"-test.run=^TestChildProcess$"}, Env: append(os.Environ(), "STACKGUARD_TEST_CHILD=1", "STACKGUARD_TEST_MODE=protocol", "GORACE=atexit_sleep_ms=0"), Input: io.NopCloser(strings.NewReader(input.String())), Output: &got, Observer: o, Session: "s"})
+	cancel()
+	o.Wait()
+	if err != nil {
+		t.Fatal(err)
+	}
+	if got.String() != want.String() {
+		t.Fatal("protocol response bytes changed or disappeared")
+	}
+	counts := map[string]int{}
+	for _, event := range events {
+		counts[event.Kind]++
+	}
+	if counts["tool_call"] != 2 || counts["tool_completion"] != 2 {
+		t.Fatalf("wrong observed call/result counts: %v", counts)
+	}
 }
 
 func TestClosedOutputCannotKeepChildAlive(t *testing.T) {
