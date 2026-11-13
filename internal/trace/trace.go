@@ -286,6 +286,10 @@ func Run(ctx context.Context, o Options) (m model.Manifest, err error) {
 		return m, err
 	}
 	m.Notes = []string{"call_count counts distinct observed attempts, including failed calls; completion records do not increment it.", "Duplicate source IDs must agree. Cross-source calls merge only with an explicit shared session/call_id and equal path.", "Evidence references per aggregate are capped at 64; full references remain in events.jsonl.", "Native Codex/AgentCore schema mapping and correctness require real original captures; envelope support alone is not validation.", "Session-partitioned workers resolve lineage against an immutable disk index; external sort and reduction are serial."}
+	// Publish completion only after risk reduction succeeds as well.
+	if err = Risks(ctx, o.Output, o.Temp, o.Inventory); err != nil {
+		return m, err
+	}
 	return m, nil
 }
 func union(a, b []string, limit int) []string {

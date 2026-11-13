@@ -132,7 +132,7 @@ func Risks(ctx context.Context, dir, temp, inventory string) error {
 			if json.Unmarshal([]byte(s), &id) != nil {
 				return errors.New("invalid inventory")
 			}
-			if id.Unresolved || id.Kind != "secret" {
+			if id.Unresolved || (id.Kind != "secret" && id.Kind != "credential_set") {
 				return nil
 			}
 			_, ok, e := useTable.Get(secrets.Fingerprint(id.ID))
