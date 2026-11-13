@@ -39,7 +39,7 @@ Common options: --profile profiles/default.yaml --summary profiles/summary.json
 --exclude LIST --types LIST --notion-page URL --out DIR --yes
 
 Cloud: --endpoint http://127.0.0.1:8765/mcp; region/harness/profile in YAML.
-Serve: --listen 127.0.0.1:8766; optional --files ROOT for real local file tests.
+Serve: --listen 127.0.0.1:8766 or --stdio; optional --files ROOT for real local file tests.
 Credentials come only from dedicated environment variables and AWS profiles.
 `
 
@@ -77,6 +77,7 @@ func execute(ctx context.Context, args []string, in *os.File, out io.Writer) (re
 	temp := f.String("temp", "", "private temp directory")
 	endpoint := f.String("endpoint", "http://127.0.0.1:8765/mcp", "HTTP proxy endpoint")
 	listen := f.String("listen", "127.0.0.1:8766", "local server address")
+	stdio := f.Bool("stdio", false, "serve MCP over stdin/stdout instead of HTTP")
 	files := f.String("files", "", "repository root for read-only file workload")
 	barrier := f.Int("barrier", 1, "file workload's required simultaneous server calls")
 	cloudName := f.String("name", "StackGuardResearcher", "harness name")
@@ -100,13 +101,25 @@ func execute(ctx context.Context, args []string, in *os.File, out io.Writer) (re
 	if e := f.Parse(args[1:]); e != nil || len(f.Args()) != 0 {
 		return errors.New("invalid options; run oss-scout --help")
 	}
+	if *stdio && args[0] != "serve" {
+		return errors.New("--stdio applies only to serve")
+	}
+	serve := func(s mcp.Server) error {
+		if *stdio {
+			return s.Stdio(ctx, in, out)
+		}
+		return proxy.Serve(ctx, *listen, s.HTTP())
+	}
 	if args[0] == "serve" && *files != "" {
 		if *barrier < 1 || *barrier > 2000 {
 			return errors.New("barrier must be 1..2000")
 		}
+		if *stdio && *barrier != 1 {
+			return errors.New("stdio file checks require --barrier 1; use HTTP for concurrency benchmarks")
+		}
 		workload := mcp.NewWorkload(*files, *barrier)
 		s := mcp.Server{Tools: []mcp.Tool{{Name: "repository_file", Description: "Hash up to 256 KiB from a real repository file", Schema: map[string]any{"type": "object", "properties": map[string]any{"path": map[string]any{"type": "string"}}, "required": []string{"path"}}}}, Call: workload.Run}
-		return proxy.Serve(ctx, *listen, s.HTTP())
+		return serve(s)
 	}
 	if args[0] == "cloud-plan" {
 		plan, e := cloud.Plan(*cloudName, *executionRole, *modelID)
@@ -300,7 +313,7 @@ func execute(ctx context.Context, args []string, in *os.File, out io.Writer) (re
 			gh.AuditSession = runID
 			notion.AuditSession = runID
 		}
-		return proxy.Serve(ctx, *listen, mcp.Server{Tools: mcp.Tools(), Call: mcp.ProviderCall(gh, notion, p, summary)}.HTTP())
+		return serve(mcp.Server{Tools: mcp.Tools(), Call: mcp.ProviderCall(gh, notion, p, summary)})
 	case "run", "cloud", "bridge":
 		s, e := scout.LoadSummary(*summaryPath)
 		if e != nil {
