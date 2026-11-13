@@ -12,6 +12,7 @@ import (
 	"github.com/Ishitajoshii/stackguard/internal/proxy"
 	"github.com/Ishitajoshii/stackguard/internal/scan"
 	"github.com/Ishitajoshii/stackguard/internal/trace"
+	"github.com/Ishitajoshii/stackguard/internal/verify"
 	"io"
 	"os"
 	"path/filepath"
@@ -72,6 +73,7 @@ func execute(ctx context.Context, args []string, stdin io.ReadCloser) (resultErr
 	}
 	switch args[0] {
 	case "scan":
+		verifyOwned := f.String("verify-owned", "", "opt-in owned fingerprint/environment allowlist JSON")
 		var roots, configs, exclude values
 		f.Var(&roots, "root", "input root; repeatable")
 		f.Var(&configs, "config", "parser=path; repeatable")
@@ -106,6 +108,9 @@ func execute(ctx context.Context, args []string, stdin io.ReadCloser) (resultErr
 		m, e := scan.Run(ctx, scan.Options{Roots: roots, Initial: initial, Output: *out, Temp: *temp, Workers: *workers, Agent: *agent, Exclude: append([]string{".git", ".work", "private", "profiles"}, exclude...)})
 		if e == nil && !m.Complete {
 			return errors.New("scan incomplete; inspect manifest")
+		}
+		if e == nil && *verifyOwned != "" {
+			return verify.Run(ctx, filepath.Join(*out, "inventory.jsonl"), *verifyOwned, *out)
 		}
 		return e
 	case "trace":
