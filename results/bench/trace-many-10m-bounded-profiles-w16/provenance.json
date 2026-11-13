@@ -1,0 +1,590 @@
+{
+  "source_run": "D:\\stackguard-data\\replays\\trace-many-10m-bounded-profiles",
+  "probe_sha256": "624c262a7bcc59e3ab72204cf2c2f5f9a3ec415ae08fa14cc4bc9b4e4ef085da",
+  "runner_recorded_binary_sha256": true,
+  "build_info": "D:\\stackguard-data\\builds\\bounded-profiles\\nhi-probe.exe: go1.26.5\n\tpath\tgithub.com/Ishitajoshii/stackguard/cmd/nhi-probe\n\tmod\tgithub.com/Ishitajoshii/stackguard\tv0.0.0-20261113200814-df5c1eee0ca1\t\n\tdep\tgithub.com/pelletier/go-toml/v2\tv2.4.3\th1:GTRvJQutkOSftxIFD5xw9aepkYNuPWmVJpffdDPYVpY=\n\tbuild\t-buildmode=exe\n\tbuild\t-compiler=gc\n\tbuild\tDefaultGODEBUG=containermaxprocs=0,cryptocustomrand=1,decoratemappings=0,tlssecpmlkem=0,tlssha1=1,updatemaxprocs=0,urlstrictcolons=0,x509sha256skid=0\n\tbuild\tCGO_ENABLED=1\n\tbuild\tCGO_CFLAGS=\n\tbuild\tCGO_CPPFLAGS=\n\tbuild\tCGO_CXXFLAGS=\n\tbuild\tCGO_LDFLAGS=\n\tbuild\tGOARCH=amd64\n\tbuild\tGOOS=windows\n\tbuild\tGOAMD64=v1\n\tbuild\tvcs=git\n\tbuild\tvcs.revision=df5c1eee0ca116afae4a52ba1fc38c07b628c422\n\tbuild\tvcs.time=2026-11-13T20:08:14Z\n\tbuild\tvcs.modified=false\n",
+  "profiles": "both",
+  "merged_cpu_profile": "cpu-w16-merged.pprof",
+  "original_cpu_profiles": [
+    {
+      "file": "cpu-w16.pprof",
+      "bytes": 6488,
+      "sha256": "57d163de47ebcaa15ab93baf175d673a9e484ed907f9b98aae2f923f19e5a585"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000001",
+      "bytes": 46793,
+      "sha256": "5fc4105607693d766872b9c813e154b29c7f17c9c718e9bc2fe4254b721257ab"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000002",
+      "bytes": 38713,
+      "sha256": "79efb6f811a77ff1f50164850dd8ae9845e8ece321fb338950026b881420ae88"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000003",
+      "bytes": 27464,
+      "sha256": "2103ec3878b724269169d6c3f8a7e802c14f14593394d8f530253bb67af282fc"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000004",
+      "bytes": 26072,
+      "sha256": "c12a12666755ab6248323023d3b53b0a9941e66b4017fcf5319f145178f836f6"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000005",
+      "bytes": 25759,
+      "sha256": "292c1ff2cdceca661adaf2df0ff1b75abfd7dc2f57214184d8de761705a45e3d"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000006",
+      "bytes": 26434,
+      "sha256": "f1f64c5a60030de0454aa66b7f1b6f1790fba86341fc4d4ee1e4ee0def9998a7"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000007",
+      "bytes": 26931,
+      "sha256": "9067188a49e7f652ea02f37491302e179492b4c19db65e79c910584d675dc6c5"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000008",
+      "bytes": 27131,
+      "sha256": "b3e0c8f4c9ccf73948ded86f3c3c3a5ce31dc7d6a7ea00f59ae34ced85acf94a"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000009",
+      "bytes": 26959,
+      "sha256": "772ac117aaaa6f162297d5f596a7c4029f0d3a517469a928558243228baf988c"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000010",
+      "bytes": 21904,
+      "sha256": "8140edba9c3336e544f2623643df2d5ad2c12d97703fcf9812a69bd6395dc1a4"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000011",
+      "bytes": 23846,
+      "sha256": "a80c36ea68f5480f3879958f6e527b56a304a316a2c15e52ddca771b0b42e053"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000012",
+      "bytes": 23126,
+      "sha256": "fe4d7abcc4a4fb381a0cd2819053ad62f71bb2b60d6e38014b4048a2652abb5d"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000013",
+      "bytes": 18517,
+      "sha256": "56a1291894ea005acf3d6f61d1fca6e4abf06837efb34b68802556e4e2091c6d"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000014",
+      "bytes": 23545,
+      "sha256": "93fa567c66b21eeee8ef8ef7fec3b9c4da30dfb6a1af4d3d8066390908fc200a"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000015",
+      "bytes": 23755,
+      "sha256": "19eb1d7942a1b4d8a368fef9fa5640f41c7a8ae7831e6453633bc7af30d29e8f"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000016",
+      "bytes": 23832,
+      "sha256": "749b3ae87acd1f281a2a3f1b32abc91e4d1753234f18d464abae73e8a90b8a00"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000017",
+      "bytes": 24311,
+      "sha256": "fff2cdb6eb55939bf58bf9df421b977e4f4ee2d5ececa13e56fb3e3e7629bef4"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000018",
+      "bytes": 28067,
+      "sha256": "53f6cf64ff6f71d91362a1f49bdfcc20cd8453a7853dc5a539ec0449da2c977e"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000019",
+      "bytes": 24673,
+      "sha256": "f8223c7cd0b71da1884d361ca03404206bf6eb56182f675f7560a2a581d0b6d8"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000020",
+      "bytes": 27048,
+      "sha256": "423e8ed0e503c759100d3d981488e42ad9b75f998ae3ccea85dc02fa0d569638"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000021",
+      "bytes": 27722,
+      "sha256": "5a8bfbe994508978a708770d3df29fbd7817eaec70295b8abd945681c8cf6377"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000022",
+      "bytes": 28140,
+      "sha256": "27e85c85da4c211c5f453f1045eab8889159b33e991ba8092bb1a7d91768f24c"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000023",
+      "bytes": 28177,
+      "sha256": "583ce5d1e61a1ee2875e19d0707f84c0ccebc679468e54df32c19b294d0d247e"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000024",
+      "bytes": 28368,
+      "sha256": "c9b104bb545a07b08bef1440a16ab23a74114221b2d6b8008975c7f2423d3ad4"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000025",
+      "bytes": 28707,
+      "sha256": "d8373ff60d48a48bfe19975f871615496f2c7cb828d97507d3d80a54433bf9f5"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000026",
+      "bytes": 25541,
+      "sha256": "0bb8bbe1f920989db8d385e94e0fa154104fb2e0b744e5224d706724ee5935f5"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000027",
+      "bytes": 27797,
+      "sha256": "a0775e4ce7b271159c64ef10bd0b57c91878ab75e6415682eb299b971395c57a"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000028",
+      "bytes": 30573,
+      "sha256": "4c263769094abce6a779679c7acdf6de99b4abf0ff589611106b0ee8880fc133"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000029",
+      "bytes": 27676,
+      "sha256": "9227263e67d091192dd4477e723691b2cd0cb386b919ef5c13020764a93c4dda"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000030",
+      "bytes": 29295,
+      "sha256": "4fa5f2651b7f670905d1346bb4b172287bcfbe04b09768432dc082c369704523"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000031",
+      "bytes": 28158,
+      "sha256": "91437a5533e0849555027120cfeeabe47e0429d90ec68fffe10e57c8f7727884"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000032",
+      "bytes": 26390,
+      "sha256": "b20d92b4681335a9a0e808a97fef1024a2298888e13ad41853f59c1dae48155e"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000033",
+      "bytes": 30093,
+      "sha256": "7914716d04702446da289c5ae1fb780eebd80ea715357bbda10014c7a343bca1"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000034",
+      "bytes": 27762,
+      "sha256": "102fc179d8bdce967c07cb56e548feb9c020bacb50ee9a5bd55e05291257b634"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000035",
+      "bytes": 28435,
+      "sha256": "4043ce2cf7cb8d5bc5a5c9012021dea1dfbc91fb1cfa93873a85dd4ecdf7cc35"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000036",
+      "bytes": 29907,
+      "sha256": "85a0f0b9519d25b142e2c321d8e624e04d7dc72accbb1cd092e63a9f77f4f9e9"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000037",
+      "bytes": 27116,
+      "sha256": "41ec5b911b8265095b7a49555147336d4f58b394806bd2ba778c86394e641500"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000038",
+      "bytes": 28321,
+      "sha256": "ffd4f565b417f971f1b44bd10c54be4bd7c7fdcaa0d0185ad70e03114883f544"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000039",
+      "bytes": 28218,
+      "sha256": "ec292265b1ac0eb16f14aec9e099e282f0a5833fd1998e00ca70fc1628ef2df3"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000040",
+      "bytes": 29458,
+      "sha256": "f5a7048c5cab999165f7bf9ca409d268fff558fb9071b98ec5e6351f3a2cd026"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000041",
+      "bytes": 29028,
+      "sha256": "b653fbf355cd91cafd9d23ee1c9b4efc1ecf54a953b6f513d49e42c5cf5d3131"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000042",
+      "bytes": 20233,
+      "sha256": "f300100dd279368c0f2ad2583ce75d0634ac07b0bcce6ee899e386d9824abf33"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000043",
+      "bytes": 26980,
+      "sha256": "6ae850930174dddfc40f4a1c2a466ef6ce84a98986b58e5f23bb0b073d38c0fb"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000044",
+      "bytes": 27271,
+      "sha256": "3af5c0f10f3da9b30f93458e09c2fb647eb62c5b99c0c325a65ff0b8902dc1bf"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000045",
+      "bytes": 28045,
+      "sha256": "5b260f4fd978e2c4e615e43e04bdf7acbc8a46faa7500876171d62d98436fd86"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000046",
+      "bytes": 23760,
+      "sha256": "b3dd5cf1036f7249343b288d588bedd3dd8a01c6c856e88f9811633479934b24"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000047",
+      "bytes": 27828,
+      "sha256": "10902db49ffadbdc448a7100fe83ef9ed7d903d83700652dea72b1001af96f0e"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000048",
+      "bytes": 28964,
+      "sha256": "b2293dd7ba04af95587c2d121b788e3e32bce7f0a52a1ac37ed09f29b96967c6"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000049",
+      "bytes": 29152,
+      "sha256": "3a79e35faa84d5e2941e367de3d0fa03681247b24aa810bb2cd92915e39a0934"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000050",
+      "bytes": 59662,
+      "sha256": "a0f22c2b69722d2c26d0adefff03b94faaecfcdb15837d1593a375415b4c033e"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000051",
+      "bytes": 58655,
+      "sha256": "ceaa42466995df27b5c22869d781d925bbe630f3ff32c65f299d29abeeab748d"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000052",
+      "bytes": 60365,
+      "sha256": "45660e70b09784270de2de5fe7ea7c6ffed9f17cc2dfb346bd81368db69e1cef"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000053",
+      "bytes": 60263,
+      "sha256": "3ecf3a03360fbf29498d1f3d12fd71c67ed8a621e367ffc5d31d79e6c9b9ab90"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000054",
+      "bytes": 59274,
+      "sha256": "58855b16d72e94917e9a5198bf1a1af3cd8e36ee9628b3b8264b94dd2942649e"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000055",
+      "bytes": 56905,
+      "sha256": "e04e91b89b47cab142a6b1f7ba095e4890feb3def3f1907c3607161f8a154747"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000056",
+      "bytes": 30955,
+      "sha256": "2d593322bc60b5b15eca0c81fc49b7e54d4fe9ecc7fbf6b063f302ba4f6febf9"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000057",
+      "bytes": 36119,
+      "sha256": "1f82447afce473711d56153e16a381e228527ff3037f228ccc952ff243ebaf72"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000058",
+      "bytes": 36373,
+      "sha256": "f51463ae16c6dd5699e4ff903c77193e4aa35aa6ab9b8404acb94afd8dc686e9"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000059",
+      "bytes": 34030,
+      "sha256": "6515dfbfeb6595947cd01852048a629f4769f5a41594fb671f8f51a88c35c2d7"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000060",
+      "bytes": 36545,
+      "sha256": "3757a63d921e5a0bc2f56004c87589280106510aaf655ae9e2095f73f06b8b7b"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000061",
+      "bytes": 38321,
+      "sha256": "3756eacd7513452c33b68b42b9ed2c89eda9ba7af55f1be18428f3d1f94ce090"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000062",
+      "bytes": 39853,
+      "sha256": "29b1160daa38d3ea3c6e561b584a1e8413aa5697f88a66755dcb70ed9b56a562"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000063",
+      "bytes": 37454,
+      "sha256": "ae81300f478204fda8aae8d04edf963fff034d1219480332364ce6bb8de67970"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000064",
+      "bytes": 45791,
+      "sha256": "d77d37dbbc99f383af939efd351e4c1eefdeabe7f65baacc1d7de80e8630847b"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000065",
+      "bytes": 52121,
+      "sha256": "421cedd32ff5d479a0e1c58857cfd1a0c63572990aea5bae867a4e0fd8715c11"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000066",
+      "bytes": 52139,
+      "sha256": "6c7ff70963d06faf32cf27a72556c175c19b1da64a00c885c0044ccc9a710e78"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000067",
+      "bytes": 50501,
+      "sha256": "722ecdd7a40c1e3a157cc85813063e4317e38dced20c2184f1f688c0444fc6dc"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000068",
+      "bytes": 52193,
+      "sha256": "b3749cfe4aaa9cc0299c4839df2087c5ec1e5952e07c8e29db353431285a557d"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000069",
+      "bytes": 48178,
+      "sha256": "5502b57c9536a06cc494b13393d59fff5150ac45cb9130484141dd4648d6b01e"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000070",
+      "bytes": 49055,
+      "sha256": "122553829f3bfd053002624b333447470a56fb6ba76507abbd18c5c19c5bcec4"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000071",
+      "bytes": 49529,
+      "sha256": "59874aa2eed48f2d5ba60114cc2494105aecd2e2bdf050be217557bca617d619"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000072",
+      "bytes": 51093,
+      "sha256": "13ad9642d0f807954f147f99c7bef558ff49664ad0aaaa87bff8816945f80000"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000073",
+      "bytes": 48763,
+      "sha256": "2b1e833026df3d15bc867a8a753b887b3db260923ea5bec5cbae3f882ffa2a46"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000074",
+      "bytes": 50838,
+      "sha256": "dc97f9b7af0e5e7117fe53d4ab09a81c9319926b370783db382e33ecd539fb7c"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000075",
+      "bytes": 49970,
+      "sha256": "83587fe319adbc54f848174e6e352ecbad5270f96c7d58dd14a007b734861b8c"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000076",
+      "bytes": 48339,
+      "sha256": "2814642ebc75db97c976d753fc5b240c0a876b1ba1d10257b54e4e982af9bc0b"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000077",
+      "bytes": 48753,
+      "sha256": "4362ea0bcffaf1a19475e9206784e1344ac8885c87b22c000ff685558cc7b1b5"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000078",
+      "bytes": 47060,
+      "sha256": "5069e13545c7d15369dbfa0c66423ff7a6d497015019210c23e234ac44548f35"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000079",
+      "bytes": 49979,
+      "sha256": "22f0d24be079348135d7c2278f1208be6cf553c9d41de2e553a9e555ea85f0b8"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000080",
+      "bytes": 48304,
+      "sha256": "19a42339981ac2938b3d70e17ea7ba2459066ca972494915f52426e06e991402"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000081",
+      "bytes": 50074,
+      "sha256": "4a061a99d56543e1feb7ed555c6ec92fa0ecbb4ba973c9a4e19df40861a955e8"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000082",
+      "bytes": 49671,
+      "sha256": "d734992e0e32d328afc9855c08222bcf6baa0b5f75390432bea3fe724570faee"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000083",
+      "bytes": 41165,
+      "sha256": "a30c7f6e58dc29bee39d609a2b787f43b0eb0f0bb7d3871c2e3faa6f9d8614c3"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000084",
+      "bytes": 29049,
+      "sha256": "b3be51b2df9c9ca6a766db1ab78bb80ace4b07724d73e58ada092dc733376e97"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000085",
+      "bytes": 39208,
+      "sha256": "482d9830f5a9ce4dff97fb879e2a2b487414f401b92bbea3ea592fefc33095df"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000086",
+      "bytes": 36977,
+      "sha256": "abd9efbbc337e98e81518b8fc062e51870e34e7d32cd7498e09747b2eb684331"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000087",
+      "bytes": 41348,
+      "sha256": "85edac84e77a0ce2e25cfbae05ccfdff7037070b2082f45c4a4bdd1235f30ad5"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000088",
+      "bytes": 39053,
+      "sha256": "45dcd77fb50969545cd14cb4aaaf585e26a2a0cf2e9578318ff85105f82d730e"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000089",
+      "bytes": 39631,
+      "sha256": "61e8662cf629ab1e093d3c0937edc24bb89162e6221db5667216d10ca64f1f9c"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000090",
+      "bytes": 53995,
+      "sha256": "f478df24b255cff147cfcaa26a3c53c385c1ba5ccc914d2e18c255f9e81e7549"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000091",
+      "bytes": 52069,
+      "sha256": "05f2ff3e7a9af9fce1da050e114e653dcbec03f90eab4a2bfbc7095286a830e0"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000092",
+      "bytes": 51878,
+      "sha256": "54796348d6f49d85794678397dedd30845ebb4da08755039fa22eb0296f912e1"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000093",
+      "bytes": 50967,
+      "sha256": "9b3f778a565b022e413ebc97eb48549de13a35a337ad6fefb555f2dec2b41057"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000094",
+      "bytes": 28260,
+      "sha256": "003c7afa68c63e9a2de0ddc834768b08f1824c7549d148766f6b9a066a22b06b"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000095",
+      "bytes": 38575,
+      "sha256": "51a5e0f7b44d6adb6731d2bf935c768384b07470ab16b6b54e493733c2bd58d7"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000096",
+      "bytes": 40408,
+      "sha256": "cf13604dad221a0b3bdd627eda7aff56eef0b66a2896ea86b31d576502868c33"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000097",
+      "bytes": 38634,
+      "sha256": "b36b6139080a2a7ab8cbc65c0a1a1b4174dbf75cd23411ea344e1d39fecfbecd"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000098",
+      "bytes": 40688,
+      "sha256": "effe27c989e37262dfe1d851505d0cec49b711035d9551eb6c841c74988b1c87"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000099",
+      "bytes": 38233,
+      "sha256": "60e815df4d596837759e86c0b24a2c50699620af94bd67a3adf5cefbf48d2a3e"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000100",
+      "bytes": 44546,
+      "sha256": "8e128ea28717b8285e74ab8297c8eff96df7d2d239c7e5f200c18b67cc6a2da5"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000101",
+      "bytes": 66876,
+      "sha256": "dfd23f5c7d4ca0a33efc737a3f37b73209be005b48d056cc9cef1028d8fdb81c"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000102",
+      "bytes": 68053,
+      "sha256": "d918f0cd5e051349e7f23a84719bcfc2e161878fa0163e721888e9fa23dbd7af"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000103",
+      "bytes": 70683,
+      "sha256": "2296adbdaf0ae730c688c0324629153ef371bd4d69f1bd695868fe61e4243ade"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000104",
+      "bytes": 71103,
+      "sha256": "78f2f2e57f7a6cfd5e85b86a6687060b23b5f1f07cb74ccd0d9f4e618b18e22f"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000105",
+      "bytes": 69720,
+      "sha256": "1217c6858fabe1c75a238b6c023a89ec500992204027d5476489987e33234dee"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000106",
+      "bytes": 61949,
+      "sha256": "cc13eef2b635e5ca745baeeb30c69fe0b2a3d4569626bcf0a83bb5479fdc86fd"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000107",
+      "bytes": 43063,
+      "sha256": "32ddffe8c8a8aa50db3da0b8742c3f650d22233c6309e1eddb46e8c4c8688271"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000108",
+      "bytes": 39221,
+      "sha256": "879f093f29a431c2d42994cefa813c3b8b29334793ca1d31654518de9060192a"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000109",
+      "bytes": 42135,
+      "sha256": "b3fc5d87fe0693cd23f593522a3c4a7e949553544cda091570e3abcfb8fc9027"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000110",
+      "bytes": 42195,
+      "sha256": "2233c51357aaeb8a1500566af245ff592cbdebf18fc9ad4b97e8668a0a994b33"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000111",
+      "bytes": 42483,
+      "sha256": "87bd9b5655a49d4de7b9d36919e50b0bc7221f0cd27dd69aa630fcbd6ce94161"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000112",
+      "bytes": 39624,
+      "sha256": "57a37eb1e1fec9c52dde873f3525fe34dc81410fa354560e3843b3bfb1027bb6"
+    },
+    {
+      "file": "cpu-w16.pprof.part-000113",
+      "bytes": 38118,
+      "sha256": "418a613d6eef7aafc80091677feb25ee73ef8ae06bbf81f5feb9d4fd342b0796"
+    }
+  ],
+  "copied_sha256": {
+    "w16/manifest.json": "52fff0de39e077c1315fdafc19cff91f9b137d5d37c168fb252c28fec6e7e418",
+    "w16/edges.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "w16/findings.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "w16/lineage.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "w16/quarantine.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "heap-w16.pprof": "c789d180194643fe8540ce057c6743f9e10cbd666293b10eb1c68df3377c7e71",
+    "cpu-w16-merged.pprof": "a4a525a46ac0884616601edcf5504332f2c4bbdfe5152e782f99473bf613ee1a"
+  },
+  "scope": "Large events.jsonl and any original CPU segments remain in source_run. Output digests were measured by pipeline-check; copied canonical files were rechecked. When profiles=both, gzip framing and Go pprof merging validate the profiles. Throughput replay is not native credential-lineage evidence."
+}
