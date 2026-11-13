@@ -1,0 +1,13 @@
+[
+  {
+    "workers": 8,
+    "seconds": 2262.565774500021,
+    "bytes": 5835736856,
+    "records": 137,
+    "digests": {
+      "inventory.jsonl": "10205e082646c1658842791d2ee1c76741b09a82a0df86121cee06ae1a0f3d1c"
+    },
+    "peak_working_set_bytes": 83472384,
+    "peak_commit_bytes": 82313216
+  }
+]
