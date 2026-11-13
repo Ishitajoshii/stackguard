@@ -1,11 +1,72 @@
 package adapters
 
 import (
+	"crypto/sha256"
 	"encoding/json"
+	"fmt"
 	"os"
+	"path/filepath"
+	"reflect"
 	"strings"
 	"testing"
 )
+
+func TestOriginalCodexFixtureProvenance(t *testing.T) {
+	var provenance struct {
+		Source string `json:"source"`
+		SHA256 string `json:"source_sha256"`
+		Line   int    `json:"source_jsonl_line"`
+	}
+	read := func(path string) []byte {
+		t.Helper()
+		b, err := os.ReadFile(path)
+		if err != nil {
+			t.Fatal(err)
+		}
+		return b
+	}
+	if err := json.Unmarshal(read("testdata/codex-file-tool.provenance.json"), &provenance); err != nil {
+		t.Fatal(err)
+	}
+	source := read(filepath.Join("../..", provenance.Source))
+	if fmt.Sprintf("%x", sha256.Sum256(source)) != provenance.SHA256 {
+		t.Fatal("original capture checksum changed")
+	}
+	lines := strings.Split(string(source), "\n")
+	if provenance.Line < 1 || provenance.Line > len(lines) {
+		t.Fatal("invalid source line")
+	}
+	records := func(b []byte) []any {
+		t.Helper()
+		var envelope struct {
+			Resources []struct {
+				Scopes []struct {
+					Records []any `json:"logRecords"`
+				} `json:"scopeLogs"`
+			} `json:"resourceLogs"`
+		}
+		if err := json.Unmarshal(b, &envelope); err != nil {
+			t.Fatal(err)
+		}
+		var result []any
+		for _, resource := range envelope.Resources {
+			for _, scope := range resource.Scopes {
+				result = append(result, scope.Records...)
+			}
+		}
+		return result
+	}
+	fixture := records(read("testdata/codex-file-tool.otlp.json"))
+	if len(fixture) != 1 {
+		t.Fatal("expected exactly one selected original record")
+	}
+	for _, original := range records([]byte(lines[provenance.Line-1])) {
+		if reflect.DeepEqual(fixture[0], original) {
+			return
+		}
+	}
+	t.Fatal("fixture record is not an unchanged record from the stated source line")
+}
 
 func TestNativeCodexMetadataOnly(t *testing.T) {
 	b := []byte(`{"resourceLogs":[{"scopeLogs":[{"logRecords":[{"attributes":[{"key":"event.name","value":{"stringValue":"codex.tool_result"}},{"key":"event.timestamp","value":{"stringValue":"2026-01-01T00:00:00Z"}},{"key":"conversation.id","value":{"stringValue":"session"}},{"key":"call_id","value":{"stringValue":"call"}},{"key":"tool_name","value":{"stringValue":"read"}},{"key":"success","value":{"boolValue":true}},{"key":"arguments","value":{"stringValue":"PRIVATE_CONTENT"}}]}]}]}]}`)
