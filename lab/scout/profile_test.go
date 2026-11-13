@@ -42,3 +42,16 @@ func TestNoninteractiveAndNotionValidation(t *testing.T) {
 		t.Fatal("accepted foreign host")
 	}
 }
+func TestGitHubProfileLinks(t *testing.T) {
+	for _, input := range []string{"another-user", "https://github.com/another-user/"} {
+		got, e := GitHubHandle(input)
+		if e != nil || got != "another-user" {
+			t.Fatal(got, e)
+		}
+	}
+	for _, input := range []string{"https://evil.example/another-user", "https://github.com/org/repo", "https://user@github.com/profile"} {
+		if _, e := GitHubHandle(input); e == nil {
+			t.Fatal("invalid profile URL accepted")
+		}
+	}
+}

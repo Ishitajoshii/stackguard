@@ -3,7 +3,7 @@
   "execution_role": "arn:aws:iam::000000000000:role/REPLACE_WITH_LAB_ROLE",
   "servers": [
     {
-      "Name": "readonly-tools",
+      "name": "readonly-tools",
       "url": "http://127.0.0.1:8766/mcp",
       "env_vars": ["STACKGUARD_GITHUB_TOKEN", "STACKGUARD_NOTION_TOKEN"]
     }

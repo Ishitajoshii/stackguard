@@ -193,7 +193,10 @@ func execute(ctx context.Context, args []string, in *os.File, out io.Writer) (re
 		return out
 	}
 	if specified["github"] {
-		p.GitHub = *github
+		p.GitHub, e = scout.GitHubHandle(*github)
+		if e != nil {
+			return e
+		}
 	}
 	if specified["resume"] {
 		p.Resume = strings.Trim(*resume, "\"")

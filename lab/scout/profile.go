@@ -44,6 +44,22 @@ func Defaults() Profile {
 var handle = regexp.MustCompile(`^[A-Za-z0-9](?:[A-Za-z0-9-]{0,37}[A-Za-z0-9])?$`)
 var pageID = regexp.MustCompile(`(?i)[a-f0-9]{32}$`)
 
+// GitHubHandle accepts a profile link or handle, never a repository URL.
+func GitHubHandle(s string) (string, error) {
+	s = strings.TrimSpace(s)
+	if strings.HasPrefix(s, "https://") {
+		u, e := url.Parse(s)
+		if e != nil || u.User != nil || (u.Host != "github.com" && u.Host != "www.github.com") {
+			return "", errors.New("use a GitHub profile URL or handle")
+		}
+		s = strings.Trim(u.Path, "/")
+	}
+	if !handle.MatchString(s) {
+		return "", errors.New("use a GitHub profile URL or handle")
+	}
+	return s, nil
+}
+
 func NotionID(s string) (string, error) {
 	if s == "" {
 		return "", nil
@@ -107,6 +123,10 @@ func Load(path string) (Profile, error) {
 	if yaml.Unmarshal(b, &p) != nil {
 		return p, errors.New("invalid YAML profile")
 	}
+	p.GitHub, e = GitHubHandle(p.GitHub)
+	if e != nil {
+		return p, e
+	}
 	var fields map[string]yaml.Node
 	_ = yaml.Unmarshal(b, &fields)
 	p.Present = map[string]bool{}
@@ -152,7 +172,7 @@ func list(s string) []string {
 }
 func Questionnaire(in io.Reader, out io.Writer, p Profile) (Profile, error) {
 	r := bufio.NewReader(in)
-	labels := []string{"GitHub handle", "Resume PDF/text path (skip to omit)", "Interests (comma separated)", "Languages (none for no filter)", "Effort (tiny / meaningful-starter / stretch)", "Notion page link (skip to omit)"}
+	labels := []string{"GitHub profile URL or handle", "Resume PDF/text path (skip to omit)", "Interests (comma separated)", "Languages (none for no filter)", "Effort (tiny / meaningful-starter / stretch)", "Notion page link (skip to omit)"}
 	ask := func(i int) error {
 		values := []string{p.GitHub, p.Resume, strings.Join(p.Interests, ","), strings.Join(p.Languages, ","), p.Effort, p.Notion}
 		fmt.Fprintf(out, "%d. %s [%s]: ", i+1, labels[i], values[i])
@@ -202,6 +222,12 @@ func Questionnaire(in io.Reader, out io.Writer, p Profile) (Profile, error) {
 		}
 		s = strings.TrimSpace(s)
 		if s == "yes" || s == "y" {
+			normalized, err := GitHubHandle(p.GitHub)
+			if err != nil {
+				fmt.Fprintln(out, err)
+				continue
+			}
+			p.GitHub = normalized
 			if e = p.Validate(); e != nil {
 				fmt.Fprintln(out, e)
 				continue

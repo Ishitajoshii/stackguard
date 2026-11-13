@@ -1,14 +1,19 @@
-# Public example only. Keep personal paths and page IDs in an ignored profile.
-version: 1
-github_user: Ishitajoshii
+# Public preferences only; edit your own ignored profile.
+schema_version: 1
+github: Ishitajoshii
+resume: ""
 interests: [ai-agent-tools, backend]
 languages: []
 effort: meaningful-starter
-# Contribution budget, not the assignment deadline.
+notion_page: ""
 hours_budget: 12
-contribution_types: [bugfix, tests, small-feature]
-max_results: 5
 activity_days: 90
-require_open_issue: true
-exclude_repos: []
-draft_comment: true
+candidates: 20
+issues_per_repository: 5
+results: 5
+max_queries: 160
+exclude_repositories: []
+contribution_types: []
+aws_profile: default
+aws_region: ""
+harness_arn: ""
