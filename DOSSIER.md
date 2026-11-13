@@ -1,6 +1,6 @@
 # Credential research dossier
 
-StackGuard inventories credential candidates and reconstructs observed use by agents. This dossier separates documented behavior, implementation contracts and actual measurements. The original workload evidence currently consists of local filesystem MCP calls; it does not prove Codex/AgentCore behavior or usage of three provider credentials. Source review date: **13 November 2026**. The [source index](lab/SOURCES.md) maps claims to primary references and implementation evidence.
+StackGuard inventories credential candidates and reconstructs observed use by agents. This dossier separates documented behavior, implementation contracts and actual measurements. Original evidence includes native Codex calls through both proxy transports and local-file load tests; it does not prove AgentCore behavior or usage of three provider credentials. Updated **14 November 2026**. The [source index](lab/SOURCES.md) maps claims to primary references and implementation evidence.
 
 ## 1. Credential stores and propagation
 
@@ -45,7 +45,7 @@ A proxy call record establishes the observed request, session and supplied crede
 
 Delegated lineage requires explicit parent/span/request mappings. The bridge maps the inbound MCP request to the cloud session and cloud-selected tool-use ID, then to the downstream MCP request. These are supplementary application observations. Native Codex tool events can supply conversation/call identifiers; native cloud OTLP spans can supply trace/span ancestry. A label such as `agentcore-researcher` is a configured assertion until native evidence supports the identity. Timestamp proximity cannot supply a missing parent or prove token transfer.
 
-Adapters validate required fields, quarantine unmappable records with source/line references and preserve checksums. Out-of-order events are joined after disk-backed indexing. Duplicate source IDs must agree; cross-source call aggregation requires explicit shared identifiers. Cycles, missing parents and conflicting parents retain an unresolved reason. Evidence lists are bounded in aggregates, while normalized events preserve individual source references. A supported JSON envelope is not proof that a deployed service emits that exact schema: real Codex and CloudWatch sample validation is still pending.
+Adapters validate required fields, quarantine unmappable records and preserve checksums. Disk indexing resolves late parents; paths retain agents and observed tool targets. Duplicate source IDs must agree. Cycles and conflicting mappings stay unresolved. [Original Codex 0.166.0 captures](lab/NATIVE_LOCAL_PROOF.md) validate native tool-result fields for stdio and HTTP. Native conversation/call IDs differ from proxy IDs; no parent link is invented from timing. CloudWatch schema validation remains pending. Bounded aggregates retain up to 64 evidence references; normalized events retain individual source references.
 
 No observed use within a supplied capture window is not proof that a token is permanently unused. Missing inventory bindings are not proof of unauthorized use. Capture completeness, source selection and the observation interval must accompany each conclusion. Current local-file workload measurements test transport and cancellation only; they contain no provider-secret attribution oracle.
 
@@ -68,8 +68,8 @@ The implemented scanner, adapters, graph and risk rules pass automated contract/
 
 | Evidence | Available artifact | What remains to establish |
 |---|---|---|
-| Real MCP file calls | [Original transport capture and measurement](results/bench/transport-w4-r5/summary.json), with 1,000 simultaneous handlers and zero failed calls in that run. | A real Codex-to-cloud delegation using provider credentials. |
-| Credential candidates | [Go repository scan](results/bench/scan-go-warm-matrix/summary.json); only redacted candidate identities are retained. | Selected machine scope and owned credential bindings. No public-corpus credential verification. |
+| Real MCP file calls | [Native Codex calls](lab/NATIVE_LOCAL_PROOF.md) through both transports; [load test](results/bench/transport-w4-r5/summary.json) reaches 1,000 simultaneous handlers. | Codex-to-cloud delegation using provider credentials and an explicit cross-source mapping. |
+| Credential candidates | [Complete 5.84 GB scan](results/bench/scan-corpus-full-w16/summary.json), redacted candidates and a selected machine configuration scan. | Owned lab credential bindings. No public-corpus credential verification. |
 | Trace load | [100,000-event replay matrix](results/bench/trace-file-100k/summary.json), derived from original file calls. | Largest workload results and a separate native credential-bearing correctness oracle. |
 | Automated correctness | [Validation records](results/validation/windows-race.txt), protocol fixtures, adapter fuzzing and process cancellation measurements. | Live provider schemas, two controlled reproductions and a reviewed recording. |
 
