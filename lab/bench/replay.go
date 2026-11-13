@@ -15,6 +15,15 @@ import (
 )
 
 func Replay(ctx context.Context, input, sourceManifest, destination string, count int64) error {
+	return ReplayWithSessions(ctx, input, sourceManifest, destination, count, "copies")
+}
+
+// ReplayWithSessions uses copies for independent sessions or single for one
+// deliberately merged load-test session. Neither mode creates agent evidence.
+func ReplayWithSessions(ctx context.Context, input, sourceManifest, destination string, count int64, sessions string) error {
+	if sessions != "copies" && sessions != "single" {
+		return errors.New("replay sessions must be copies or single")
+	}
 	if count < 1 || count > 10000000 {
 		return errors.New("replay count must be 1..10000000")
 	}
@@ -44,6 +53,10 @@ func Replay(ctx context.Context, input, sourceManifest, destination string, coun
 	manifest := output.Manifest("throughput_replay")
 	manifest.Sources = []model.Source{source, manifestSource}
 	manifest.Notes = []string{"THROUGHPUT ONLY: derived copies are not new agent behavior or correctness evidence.", "All event/session/span/request identifiers and their parent references are consistently rewritten per copy. NHI identities are preserved.", "Original capture completeness: " + strconv.FormatBool(original.Complete)}
+	if sessions == "single" {
+		manifest.Notes[1] = "Single-session load shape: source sessions are deliberately merged; span/request keys retain their original session namespace and copy number. Parent references use the same mapping. NHI identities are preserved."
+	}
+	manifest.Notes = append(manifest.Notes, "Session mode: "+sessions)
 	var records int64
 	var runErr error
 	for copy := int64(0); records < count; copy++ {
@@ -73,13 +86,35 @@ func Replay(ctx context.Context, input, sourceManifest, destination string, coun
 				return errors.New("replay requires validated normalized original events")
 			}
 			v.ID = rewrite(v.ID)
-			v.Session = rewrite(v.Session)
-			v.Span = rewrite(v.Span)
-			v.Parent = rewrite(v.Parent)
-			v.ParentSession = rewrite(v.ParentSession)
-			v.CallID = rewrite(v.CallID)
-			v.RequestID = rewrite(v.RequestID)
-			v.ParentRequestID = rewrite(v.ParentRequestID)
+			if sessions == "single" {
+				own, parent := v.Session, v.ParentSession
+				if parent == "" {
+					parent = own
+				}
+				namespaced := func(session, id string) string {
+					if id == "" {
+						return ""
+					}
+					return rewrite(session + "\x00" + id)
+				}
+				v.Span = namespaced(own, v.Span)
+				v.Parent = namespaced(parent, v.Parent)
+				v.CallID = namespaced(own, v.CallID)
+				v.RequestID = namespaced(own, v.RequestID)
+				v.ParentRequestID = namespaced(parent, v.ParentRequestID)
+				v.Session = secrets.Fingerprint("single-session:" + source.SHA256)
+				if v.ParentSession != "" {
+					v.ParentSession = v.Session
+				}
+			} else {
+				v.Session = rewrite(v.Session)
+				v.Span = rewrite(v.Span)
+				v.Parent = rewrite(v.Parent)
+				v.ParentSession = rewrite(v.ParentSession)
+				v.CallID = rewrite(v.CallID)
+				v.RequestID = rewrite(v.RequestID)
+				v.ParentRequestID = rewrite(v.ParentRequestID)
+			}
 			if e = w.Write(v); e != nil {
 				return e
 			}
@@ -96,6 +131,7 @@ func Replay(ctx context.Context, input, sourceManifest, destination string, coun
 			break
 		}
 	}
+	runErr = errors.Join(runErr, w.Close())
 	manifest.Records = uint64(records)
 	manifest.Ended = time.Now().UTC()
 	manifest.Complete = runErr == nil

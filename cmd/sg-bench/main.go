@@ -22,13 +22,14 @@ func main() {
 	replay := f.String("replay", "", "normalized original event file; enables throughput replay mode")
 	sourceManifest := f.String("source-manifest", "", "original capture manifest for replay provenance")
 	events := f.Int64("events", 10000000, "throughput replay event count")
+	sessions := f.String("sessions", "copies", "replay session shape: copies or single (throughput only)")
 	f.Parse(os.Args[1:])
 	if *out == "" {
 		fmt.Fprintln(os.Stderr, "--out is required")
 		os.Exit(2)
 	}
 	if *replay != "" {
-		e := bench.Replay(ctx, *replay, *sourceManifest, *out, *events)
+		e := bench.ReplayWithSessions(ctx, *replay, *sourceManifest, *out, *events, *sessions)
 		if ctx.Err() != nil {
 			os.Exit(17)
 		}
