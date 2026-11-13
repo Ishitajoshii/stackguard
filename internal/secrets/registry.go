@@ -34,8 +34,7 @@ func (r *Registry) Detect(text, field string) []Match {
 	for _, name := range names {
 		out = append(out, r.detectors[name].Detect(text, field)...)
 	}
-	sort.Slice(out, func(i, j int) bool { return out[i].Start < out[j].Start })
-	return out
+	return nonoverlap(out)
 }
 
 type providerDetector struct {

@@ -21,5 +21,6 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/sts v1.52.0 // indirect
 	github.com/aws/smithy-go v1.28.9 // indirect
 	github.com/pelletier/go-toml/v2 v2.4.3 // indirect
+	go.uber.org/goleak v1.3.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

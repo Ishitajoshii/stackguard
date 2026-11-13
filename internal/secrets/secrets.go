@@ -93,8 +93,26 @@ func Detect(text, field string) []Match {
 			result = append(result, Match{0, len(text), Provider(field), Fingerprint(value), Mask(value)})
 		}
 	}
-	sort.Slice(result, func(i, j int) bool { return result[i].Start < result[j].Start })
-	return result
+	return nonoverlap(result)
+}
+
+func nonoverlap(result []Match) []Match {
+	sort.SliceStable(result, func(i, j int) bool {
+		if result[i].Start == result[j].Start {
+			return result[i].End > result[j].End
+		}
+		return result[i].Start < result[j].Start
+	})
+	out := result[:0]
+	end := -1
+	for _, m := range result {
+		if m.Start < end {
+			continue
+		}
+		out = append(out, m)
+		end = m.End
+	}
+	return out
 }
 
 func Redact(text string) string {
