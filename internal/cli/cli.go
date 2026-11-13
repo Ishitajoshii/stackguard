@@ -8,6 +8,7 @@ import (
 	"github.com/Ishitajoshii/stackguard/internal/config"
 	"github.com/Ishitajoshii/stackguard/internal/model"
 	"github.com/Ishitajoshii/stackguard/internal/output"
+	"github.com/Ishitajoshii/stackguard/internal/pipeline"
 	"github.com/Ishitajoshii/stackguard/internal/proxy"
 	"github.com/Ishitajoshii/stackguard/internal/scan"
 	"github.com/Ishitajoshii/stackguard/internal/trace"
@@ -47,12 +48,28 @@ func safeError(err error) string {
 		return "check command options, input schema, permissions and output destination; no raw provider diagnostics are logged"
 	}
 }
-func execute(ctx context.Context, args []string, stdin io.ReadCloser) error {
+func execute(ctx context.Context, args []string, stdin io.ReadCloser) (resultErr error) {
 	f := flag.NewFlagSet(args[0], flag.ContinueOnError)
 	f.SetOutput(io.Discard)
 	out := f.String("out", "", "new output directory")
 	temp := f.String("temp", "", "temporary/spill directory (defaults to OS TEMP)")
 	workers := f.Int("workers", 4, "bounded worker count")
+	cpu := f.String("cpu-profile", "", "new CPU profile file")
+	heap := f.String("heap-profile", "", "new heap profile file; skipped on interruption")
+	var profileFinish func() error
+	defer func() {
+		if profileFinish != nil {
+			resultErr = errors.Join(resultErr, profileFinish())
+		}
+	}()
+	startProfiles := func() error {
+		finish, e := pipeline.Profiles(ctx, *cpu, *heap)
+		if e != nil {
+			return e
+		}
+		profileFinish = finish
+		return nil
+	}
 	switch args[0] {
 	case "scan":
 		var roots, configs, exclude values
@@ -67,6 +84,9 @@ func execute(ctx context.Context, args []string, stdin io.ReadCloser) error {
 			return errors.New("output required")
 		}
 		var initial []model.Identity
+		if e := startProfiles(); e != nil {
+			return e
+		}
 		for _, entry := range configs {
 			name, path, ok := strings.Cut(entry, "=")
 			parser := config.DefaultRegistry()[name]
@@ -100,6 +120,9 @@ func execute(ctx context.Context, args []string, stdin io.ReadCloser) error {
 			return errors.New("output required")
 		}
 		var source []trace.Input
+		if e := startProfiles(); e != nil {
+			return e
+		}
 		for _, entry := range inputs {
 			kind, path, ok := strings.Cut(entry, "=")
 			if !ok {
@@ -131,6 +154,12 @@ func execute(ctx context.Context, args []string, stdin io.ReadCloser) error {
 			return errors.New("output required")
 		}
 		w, e := output.New(filepath.Join(*out, "proxy.jsonl"))
+		if profileErr := startProfiles(); profileErr != nil {
+			if w != nil {
+				w.Close()
+			}
+			return profileErr
+		}
 		if e != nil {
 			return e
 		}

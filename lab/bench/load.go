@@ -67,7 +67,11 @@ func Load(ctx context.Context, o LoadOptions) (map[string]any, error) {
 				}
 				mu.Lock()
 				durations = append(durations, elapsed)
-				if e := writer.Write(map[string]any{"request": index, "elapsed_ns": elapsed.Nanoseconds(), "success": err == nil}); e != nil && writeErr == nil {
+				reason := ""
+				if err != nil {
+					reason = err.Error()
+				}
+				if e := writer.Write(map[string]any{"request": index, "elapsed_ns": elapsed.Nanoseconds(), "success": err == nil, "error": reason}); e != nil && writeErr == nil {
 					writeErr = e
 				}
 				mu.Unlock()
