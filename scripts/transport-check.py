@@ -8,6 +8,7 @@ import socket
 import subprocess
 import threading
 import time
+from bench_budget import check_memory
 
 
 class Counters(ctypes.Structure):
@@ -152,6 +153,7 @@ def main():
         raise RuntimeError("interrupted manifest does not describe valid partial evidence")
     summary["call_count"] = calls
     summary["completion_count"] = completions
+    check_memory(summary["proxied_memory"])
     (args.out / "summary.json").write_text(json.dumps(summary, indent=2) + "\n")
     print(json.dumps(summary))
 

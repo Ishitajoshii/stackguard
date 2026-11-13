@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 import threading
 import time
+from bench_budget import check_memory
 
 spec = importlib.util.spec_from_file_location("transport", Path(__file__).with_name("transport-check.py"))
 transport = importlib.util.module_from_spec(spec)
@@ -58,8 +59,7 @@ def main():
         expected = digests
         report = dict(workers=workers, seconds=elapsed, bytes=manifest.get("bytes", 0),
                       records=manifest["records"], digests=digests, **memory)
-        if memory.get("peak_working_set_bytes", 1 << 30) >= 512 * 1024 * 1024:
-            raise RuntimeError("512 MiB working-set budget exceeded")
+        check_memory(memory)
         reports.append(report)
         (a.out / "summary.json").write_text(json.dumps(reports, indent=2)+"\n")
         print(json.dumps(report), flush=True)
