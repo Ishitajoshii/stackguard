@@ -70,6 +70,14 @@ func Run(ctx context.Context, o Options) (m model.Manifest, err error) {
 		return m, err
 	}
 	defer func() { err = errors.Join(err, coverage.Close()) }()
+	observations, err := output.New(filepath.Join(o.Output, "observations.jsonl"))
+	if err != nil {
+		return m, err
+	}
+	defer func() {
+		err = errors.Join(err, observations.Close())
+		m.Notes = append(m.Notes, fmt.Sprintf("Redacted candidate observations retained during scanning: %d. These are not deduplicated identities or verified credentials.", observations.Records))
+	}()
 	dir, err := os.MkdirTemp(o.Temp, "stackguard-scan-*")
 	if err != nil {
 		return m, err
@@ -81,6 +89,9 @@ func Run(ctx context.Context, o Options) (m model.Manifest, err error) {
 	}
 	defer spool.Close()
 	emit := func(id model.Identity) error {
+		if e := observations.Write(id); e != nil {
+			return e
+		}
 		b, e := json.Marshal(id)
 		if e != nil {
 			return e
