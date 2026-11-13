@@ -1,0 +1,9 @@
+{
+  "source_commit": "df5c1eee0ca116afae4a52ba1fc38c07b628c422",
+  "build_vcs_modified": false,
+  "probe_sha256": "624c262a7bcc59e3ab72204cf2c2f5f9a3ec415ae08fa14cc4bc9b4e4ef085da",
+  "baseline": "results/bench/trace-file-100k/summary.json",
+  "identical_output_hashes": true,
+  "completed_cpu_segments": 5,
+  "scope": "100k original-file-capture throughput replay; no credentials/edges. Overlapped two 10M traces, full-corpus scan and partial-output validation. No timing speedup claim or 10M memory claim."
+}
