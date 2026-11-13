@@ -77,7 +77,7 @@ func Kind(m Match) string {
 // Detect returns candidates, not proof that a provider issued/accepted a key.
 // Azure and other formatless keys require a sensitive provider-labelled field.
 func Detect(text, field string) []Match {
-	var result []Match
+	result := contextualAzure(text)
 	for _, sig := range signatures {
 		for _, pos := range sig.re.FindAllStringIndex(text, -1) {
 			value := text[pos[0]:pos[1]]
@@ -101,6 +101,9 @@ func Redact(text string) string {
 	matches := Detect(text, "")
 	for i := len(matches) - 1; i >= 0; i-- {
 		m := matches[i]
+		if m.End > len(text) || m.Start > m.End {
+			continue
+		}
 		text = text[:m.Start] + "[credential:" + m.ID[:12] + "]" + text[m.End:]
 	}
 	return text
