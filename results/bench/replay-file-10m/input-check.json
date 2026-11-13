@@ -1,0 +1,7 @@
+{
+  "events": 10000000,
+  "bytes": 5984000000,
+  "sha256": "d442c11891d510917087b12a9bf092a4ae2a41f922cdd77ed3dee90dbb8e7af4",
+  "path": "D:\\stackguard-data\\replays\\file-10m\\replay.jsonl",
+  "scope": "Throughput-only copies of the original local repository-file MCP capture. No new agent behavior or credential-bearing correctness evidence."
+}
