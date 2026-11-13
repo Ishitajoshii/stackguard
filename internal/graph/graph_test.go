@@ -36,3 +36,21 @@ func TestLateParentsCyclesAndAmbiguity(t *testing.T) {
 		}
 	}
 }
+
+func TestAgentAndToolWithSameLabelRemainDistinct(t *testing.T) {
+	d := t.TempDir()
+	p := filepath.Join(d, "nodes")
+	e := model.Event{Session: "s", Span: "call", Agent: "read", Kind: "tool_call", Target: "read"}
+	if err := os.WriteFile(p, []byte(NodeRecord(e)), 0600); err != nil {
+		t.Fatal(err)
+	}
+	table, err := Index(context.Background(), p, d)
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer table.Close()
+	path, why, err := Path(context.Background(), table, e)
+	if err != nil || why != "" || len(path) != 2 || path[0] != "read" || path[1] != "read" {
+		t.Fatal("agent and tool are separate observed steps", path, why, err)
+	}
+}

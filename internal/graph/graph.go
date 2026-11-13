@@ -140,9 +140,8 @@ func Path(ctx context.Context, table *pipeline.Table, e model.Event) ([]string, 
 			// Walk leaf-to-root: reversal places each observed tool after its
 			// calling agent, including intermediate delegation tools.
 			if n.Target != "" {
-				path = append(path, n.Target)
-			}
-			if len(path) == 0 || path[len(path)-1] != n.Agent {
+				path = append(path, n.Target, n.Agent)
+			} else if len(path) == 0 || path[len(path)-1] != n.Agent {
 				path = append(path, n.Agent)
 			}
 		}
