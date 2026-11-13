@@ -1,0 +1,11 @@
+{
+  "before_seconds": 224.68671000003815,
+  "after_seconds": 342.27181639999617,
+  "identical_output_hashes": true,
+  "source_commit": "f9c501c",
+  "notes": [
+    "Includes tool-target preservation and bounded private-spill buffering.",
+    "Both timings overlap other workloads; the new run overlapped a full-corpus scan and a ten-million-event trace. The newer run is slower; no speedup is claimed.",
+    "No credential observations in this source, so identical empty edge outputs do not validate the corrected credential-bearing path behavior. Algorithm regression tests cover that behavior; native credential-bearing proof remains pending."
+  ]
+}
