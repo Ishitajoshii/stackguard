@@ -32,7 +32,7 @@ func Tools() []Tool {
 	}
 	str := map[string]any{"type": "string"}
 	num := map[string]any{"type": "integer", "minimum": 1}
-	return []Tool{{"github_search", "Search public repositories; bounded by configured budget", schema(map[string]any{"interest": str}, []string{"interest"})}, {"github_repo", "Read public repository metadata", schema(map[string]any{"repository": str}, []string{"repository"})}, {"github_issues", "Read candidate open unassigned issues", schema(map[string]any{"repository": str}, []string{"repository"})}, {"github_issue", "Read one issue and check active linked pull requests", schema(map[string]any{"repository": str, "number": num}, []string{"repository", "number"})}, {"notion_notes", "Read only the configured dedicated Notion page subtree", schema(map[string]any{}, nil)}}
+	return []Tool{{"github_profile", "Read public repositories for the configured user", schema(map[string]any{}, nil)}, {"github_shortlist", "Build scored recommendations with fresh issue and repository checks for the configured profile", schema(map[string]any{}, nil)}, {"github_search", "Search public repositories; bounded by configured budget", schema(map[string]any{"interest": str}, []string{"interest"})}, {"github_repo", "Read public repository metadata", schema(map[string]any{"repository": str}, []string{"repository"})}, {"github_issues", "Read candidate open unassigned issues", schema(map[string]any{"repository": str}, []string{"repository"})}, {"github_issue", "Read one issue and check active linked pull requests", schema(map[string]any{"repository": str, "number": num}, []string{"repository", "number"})}, {"notion_notes", "Read only the configured dedicated Notion page subtree", schema(map[string]any{}, nil)}}
 }
 
 type Call func(context.Context, string, json.RawMessage) (any, error)
@@ -163,7 +163,7 @@ func (s Server) Stdio(ctx context.Context, in io.Reader, out io.Writer) error {
 	}
 	return reader.Err()
 }
-func ProviderCall(gh, notion *scout.API, p scout.Profile) Call {
+func ProviderCall(gh, notion *scout.API, p scout.Profile, summaries ...scout.Summary) Call {
 	return func(ctx context.Context, name string, args json.RawMessage) (any, error) {
 		var a struct {
 			Interest   string `json:"interest"`
@@ -179,6 +179,38 @@ func ProviderCall(gh, notion *scout.API, p scout.Profile) Call {
 			return nil, errors.New("invalid tool arguments")
 		}
 		switch name {
+		case "github_profile":
+			if a.Interest != "" || a.Repository != "" || a.Number != 0 {
+				return nil, errors.New("profile tool accepts no overrides")
+			}
+			return gh.UserRepos(ctx, p.GitHub)
+		case "github_shortlist":
+			if a.Interest != "" || a.Repository != "" || a.Number != 0 {
+				return nil, errors.New("shortlist tool accepts no overrides")
+			}
+			if len(summaries) != 1 || !summaries[0].Reviewed {
+				return nil, errors.New("prepare and review the local skill summary first")
+			}
+			effective := p
+			if p.Notion != "" {
+				notes, err := notion.Notes(ctx, p.Notion)
+				if err != nil {
+					return nil, err
+				}
+				effective = scout.ApplyNotes(p, notes, p.Present)
+			}
+			summary := summaries[0]
+			summary.Skills = append([]scout.SkillEvidence(nil), summary.Skills...)
+			repos, err := gh.UserRepos(ctx, p.GitHub)
+			if err != nil {
+				return nil, err
+			}
+			for _, repo := range repos {
+				if !repo.Private && !repo.Fork && repo.Language != "" {
+					summary.Skills = append(summary.Skills, scout.SkillEvidence{Skill: repo.Language, Kind: "repository_language_observation", Sources: []string{"https://github.com/" + repo.Name}})
+				}
+			}
+			return scout.Discover(ctx, effective, summary, gh, false)
 		case "github_search":
 			return gh.Search(ctx, a.Interest, p.Candidates)
 		case "github_repo":

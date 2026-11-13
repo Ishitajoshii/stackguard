@@ -19,7 +19,7 @@ func TestFragmentedInlineTool(t *testing.T) {
 		t.Fatal(r)
 	}
 	tools, allowed := Definitions()
-	if len(tools) != 5 || len(allowed) != 5 {
+	if len(tools) != 7 || len(allowed) != 7 {
 		t.Fatal("unbounded tool set")
 	}
 	for _, s := range allowed {

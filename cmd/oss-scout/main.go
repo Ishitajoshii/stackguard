@@ -17,6 +17,7 @@ import (
 	"os/signal"
 	"path/filepath"
 	"strings"
+	"time"
 )
 
 const usage = `oss-scout: customizable OSS contribution research
@@ -64,7 +65,7 @@ func run(ctx context.Context, args []string, in *os.File, out, diagnostics io.Wr
 	fmt.Fprintln(diagnostics, "oss-scout:", e)
 	return 2
 }
-func execute(ctx context.Context, args []string, in *os.File, out io.Writer) error {
+func execute(ctx context.Context, args []string, in *os.File, out io.Writer) (resultErr error) {
 	f := flag.NewFlagSet(args[0], flag.ContinueOnError)
 	f.SetOutput(io.Discard)
 	profilePath := f.String("profile", "profiles/default.yaml", "profile")
@@ -261,19 +262,34 @@ func execute(ctx context.Context, args []string, in *os.File, out io.Writer) err
 		fmt.Fprintln(out, "Summary saved locally. Review skills and source references, then set reviewed: true in the JSON before research.")
 		return nil
 	case "serve":
+		summary, e := scout.LoadSummary(*summaryPath)
+		if e != nil {
+			return e
+		}
 		if *destination != "" {
 			w, e := output.New(filepath.Join(*destination, "tool-events.jsonl"))
 			if e != nil {
 				return errors.New("tool capture destination unavailable")
 			}
-			defer w.Close()
-			runID := output.Manifest("tools").RunID
+			manifest := output.Manifest("tools")
+			defer func() {
+				resultErr = errors.Join(resultErr, w.Close())
+				manifest.Ended = time.Now().UTC()
+				manifest.Records = w.Records
+				manifest.Complete = resultErr == nil
+				if resultErr != nil {
+					manifest.Errors = 1
+				}
+				manifest.Notes = []string{"Actual provider-boundary credential presence, not proof of successful authorization. Ctrl-C deliberately marks the capture incomplete."}
+				resultErr = errors.Join(resultErr, output.Publish(filepath.Join(*destination, "manifest.json"), manifest))
+			}()
+			runID := manifest.RunID
 			gh.Audit = w.Write
 			notion.Audit = w.Write
 			gh.AuditSession = runID
 			notion.AuditSession = runID
 		}
-		return proxy.Serve(ctx, *listen, mcp.Server{Tools: mcp.Tools(), Call: mcp.ProviderCall(gh, notion, p)}.HTTP())
+		return proxy.Serve(ctx, *listen, mcp.Server{Tools: mcp.Tools(), Call: mcp.ProviderCall(gh, notion, p, summary)}.HTTP())
 	case "run", "cloud", "bridge":
 		s, e := scout.LoadSummary(*summaryPath)
 		if e != nil {
