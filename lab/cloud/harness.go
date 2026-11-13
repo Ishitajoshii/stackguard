@@ -37,6 +37,18 @@ type Round struct {
 	Text  strings.Builder
 	Tools map[int32]*ToolRequest
 	Stop  string
+	Usage []Usage
+}
+
+// Usage retains provider-reported metadata without guessing billing rates or
+// treating missing metadata as zero usage. Each entry is one stream event.
+type Usage struct {
+	Input      int32  `json:"input_tokens"`
+	Output     int32  `json:"output_tokens"`
+	Total      int32  `json:"total_tokens"`
+	CacheRead  *int32 `json:"cache_read_input_tokens,omitempty"`
+	CacheWrite *int32 `json:"cache_write_input_tokens,omitempty"`
+	LatencyMS  int64  `json:"latency_ms"`
 }
 
 func (r *Round) Consume(event types.InvokeHarnessStreamOutput) error {
@@ -44,6 +56,15 @@ func (r *Round) Consume(event types.InvokeHarnessStreamOutput) error {
 		r.Tools = map[int32]*ToolRequest{}
 	}
 	switch v := event.(type) {
+	case *types.InvokeHarnessStreamOutputMemberMetadata:
+		u, m := v.Value.Usage, v.Value.Metrics
+		if u == nil || m == nil || u.InputTokens == nil || u.OutputTokens == nil || u.TotalTokens == nil || m.LatencyMs == nil {
+			return errors.New("cloud usage metadata lacks required fields")
+		}
+		if *u.InputTokens < 0 || *u.OutputTokens < 0 || *u.TotalTokens < 0 || aws.ToInt32(u.CacheReadInputTokens) < 0 || aws.ToInt32(u.CacheWriteInputTokens) < 0 || *m.LatencyMs < 0 || len(r.Usage) >= 64 {
+			return errors.New("cloud usage metadata is invalid or exceeds limit")
+		}
+		r.Usage = append(r.Usage, Usage{Input: *u.InputTokens, Output: *u.OutputTokens, Total: *u.TotalTokens, CacheRead: u.CacheReadInputTokens, CacheWrite: u.CacheWriteInputTokens, LatencyMS: *m.LatencyMs})
 	case *types.InvokeHarnessStreamOutputMemberContentBlockStart:
 		if t, ok := v.Value.Start.(*types.HarnessContentBlockStartMemberToolUse); ok {
 			if len(r.Tools) >= 8 {
@@ -160,7 +181,7 @@ func Run(ctx context.Context, o Options, prompt string) (string, error) {
 		}
 		final.WriteString(round.Text.String())
 		if o.Audit != nil {
-			if e = o.Audit(map[string]any{"source": "agentcore-sdk", "session": o.Session, "round": n, "stop_reason": round.Stop, "tool_requests": len(round.Tools), "checked_at": time.Now().UTC()}); e != nil {
+			if e = o.Audit(map[string]any{"source": "agentcore-sdk", "session": o.Session, "round": n, "stop_reason": round.Stop, "tool_requests": len(round.Tools), "usage_available": len(round.Usage) > 0, "usage_events": round.Usage, "checked_at": time.Now().UTC()}); e != nil {
 				return final.String(), e
 			}
 		}

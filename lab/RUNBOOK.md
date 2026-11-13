@@ -10,6 +10,8 @@ Do not launch EC2 or persistent storage as an implicit fallback. Use the local m
 
 No cloud resources have been deployed or paid invocations performed by this project yet. Default-profile login and account identity are verified. The current login is root; establish a restricted lab role and validate regional model access before running agents. Successful STS authentication is not proof of Bedrock or AgentCore availability.
 
+Each completed Harness round records the provider's metadata events in the ignored audit log: input, output and total tokens, optional cache read/write counts, and latency. `usage_available=false` means missing telemetry, not zero cost. Preserve individual metadata events rather than assuming repeated events are additive. Failed streams may have incurred charges without returning usage. These counters are not a bill: apply the selected model/region's checked rates, and separately include runtime, logs and storage. The live cost-accounting gate remains open until that reconciliation is performed.
+
 ## Identity setup and cleanup checklist
 
 The code can prepare a plan without credentials. For a live run, supply a regional model ID and an execution-role ARN following the current [Harness execution-role guidance](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/harness-security.html). The caller needs both Harness and corresponding Runtime permissions; provisioning additionally needs its documented control-plane permissions and permission to pass the selected role. Use a separately assumed restricted caller profile. Do not broaden IAM to work around an unexplained failure.

@@ -28,3 +28,27 @@ func TestFragmentedInlineTool(t *testing.T) {
 		}
 	}
 }
+
+func TestUsageMetadataRetainsReportedCountsAndAbsence(t *testing.T) {
+	r := Round{}
+	if len(r.Usage) != 0 {
+		t.Fatal("missing usage became zero-valued evidence")
+	}
+	event := &types.InvokeHarnessStreamOutputMemberMetadata{Value: types.HarnessMetadataEvent{
+		Usage:   &types.HarnessTokenUsage{InputTokens: aws.Int32(120), OutputTokens: aws.Int32(20), TotalTokens: aws.Int32(140), CacheReadInputTokens: aws.Int32(100)},
+		Metrics: &types.HarnessStreamMetrics{LatencyMs: aws.Int64(250)},
+	}}
+	if err := r.Consume(event); err != nil {
+		t.Fatal(err)
+	}
+	if len(r.Usage) != 1 || r.Usage[0].Total != 140 || r.Usage[0].CacheRead == nil || *r.Usage[0].CacheRead != 100 || r.Usage[0].CacheWrite != nil || r.Usage[0].LatencyMS != 250 {
+		t.Fatal("reported usage changed")
+	}
+	event.Value.Usage.InputTokens = aws.Int32(-1)
+	if err := r.Consume(event); err == nil {
+		t.Fatal("negative usage accepted")
+	}
+	if err := r.Consume(&types.InvokeHarnessStreamOutputMemberMetadata{}); err == nil {
+		t.Fatal("missing required usage fields accepted")
+	}
+}
