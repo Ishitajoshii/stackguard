@@ -28,7 +28,7 @@ func Run(ctx context.Context, args []string, stdin io.ReadCloser, stdout, stderr
 	if len(args) == 0 {
 		return 2
 	}
-	err := execute(ctx, args, stdin)
+	err := execute(ctx, args, stdin, stdout)
 	if err == nil {
 		return 0
 	}
@@ -49,7 +49,7 @@ func safeError(err error) string {
 		return "check command options, input schema, permissions and output destination; no raw provider diagnostics are logged"
 	}
 }
-func execute(ctx context.Context, args []string, stdin io.ReadCloser) (resultErr error) {
+func execute(ctx context.Context, args []string, stdin io.ReadCloser, stdout io.Writer) (resultErr error) {
 	f := flag.NewFlagSet(args[0], flag.ContinueOnError)
 	f.SetOutput(io.Discard)
 	out := f.String("out", "", "new output directory")
@@ -117,7 +117,7 @@ func execute(ctx context.Context, args []string, stdin io.ReadCloser) (resultErr
 		var inputs values
 		f.Var(&inputs, "input", "adapter=path; repeatable")
 		inventory := f.String("inventory", "", "inventory JSONL snapshot")
-		lineage := f.Bool("lineage", false, "write deterministic lineage paths")
+		lineage := f.Bool("lineage", false, "print deterministic lineage trees and save lineage.txt")
 		if e := f.Parse(args[1:]); e != nil {
 			return e
 		}
@@ -141,6 +141,9 @@ func execute(ctx context.Context, args []string, stdin io.ReadCloser) (resultErr
 		}
 		if !m.Complete {
 			return errors.New("trace contains quarantined records")
+		}
+		if *lineage {
+			return printLineage(ctx, filepath.Join(*out, "lineage.txt"), stdout)
 		}
 		return nil
 	case "proxy":
@@ -178,7 +181,7 @@ func execute(ctx context.Context, args []string, stdin io.ReadCloser) (resultErr
 			if len(command) == 0 {
 				e = errors.New("upstream command required")
 			} else {
-				e = proxy.Stdio(ctx, proxy.StdioOptions{Command: command[0], Args: command[1:], Env: os.Environ(), Input: stdin, Output: os.Stdout, Observer: observer, Session: m.RunID})
+				e = proxy.Stdio(ctx, proxy.StdioOptions{Command: command[0], Args: command[1:], Env: os.Environ(), Input: stdin, Output: stdout, Observer: observer, Session: m.RunID})
 			}
 		} else if *mode == "http" {
 			handler, handlerErr := proxy.HTTP(*upstream, observer)
