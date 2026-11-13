@@ -1,3 +1,14 @@
 # Public example only. Keep personal paths and page IDs in an ignored profile.
 version: 1
 github_user: Ishitajoshii
+interests: [ai-agent-tools, backend]
+languages: []
+effort: meaningful-starter
+# Contribution budget, not the assignment deadline.
+hours_budget: 12
+contribution_types: [bugfix, tests, small-feature]
+max_results: 5
+activity_days: 90
+require_open_issue: true
+exclude_repos: []
+draft_comment: true
