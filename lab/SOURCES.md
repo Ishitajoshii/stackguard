@@ -5,8 +5,8 @@ Reviewed 2026-11-13. Links support documented behavior; none establishes that a 
 | Primary source | Claim supported | Matching implementation/evidence |
 |---|---|---|
 | [MCP transports, revision 2025-06-18](https://modelcontextprotocol.io/specification/2025-06-18/basic/transports) | stdio framing, Streamable HTTP, session and Origin handling | internal/proxy; real file transport captures in results/bench |
-| [Codex configuration](https://learn.chatgpt.com/docs/config-file/config-reference) | MCP environment/header references and OTLP JSON export | internal/config; lab/examples/codex.toml; native capture pending |
-| [Codex security](https://learn.chatgpt.com/docs/agent-approvals-security) | Opt-in telemetry and prompt-content controls | Metadata-only collector; native validation pending |
+| [Codex configuration](https://learn.chatgpt.com/docs/config-file/config-reference) | MCP environment/header references and OTLP JSON export | internal/config; lab/examples/codex.toml; [original local capture](NATIVE_LOCAL_PROOF.md) |
+| [Codex security](https://learn.chatgpt.com/docs/agent-approvals-security) | Opt-in telemetry and prompt-content controls | Metadata-only collector verified on native Codex 0.166.0 tool results; cloud validation pending |
 | [Codex tool event source](https://github.com/openai/codex/blob/main/codex-rs/otel/src/tool_result.rs) | Tool-result identifiers and event fields | Source blob 7f9c3ca1419d1bb3f56a7c6854c152dc81f6aa8b inspected; codex-otlp adapter |
 | [AgentCore inline tools](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/harness-tools.html) | Streamed handoff and matching tool-result continuation | lab/cloud; contract tests, no live invocation |
 | [InvokeHarness API](https://docs.aws.amazon.com/bedrock-agentcore/latest/APIReference/API_InvokeHarness.html) | Runtime session and invocation limits | SDK v1.58.0, compiled bridge |

@@ -5,11 +5,11 @@ Updated 13 November 2026. Local core and protocol feasibility is demonstrated; c
 | Area | Demonstrated | Remaining |
 |---|---|---|
 | Build and local tooling | Native Windows builds; Go race suite, vet, leak checks and four local PDF tests pass. Version inventory: [TOOLCHAIN.md](TOOLCHAIN.md). | Reproduce the real cloud lab from a clean checkout after access is configured. |
-| MCP transports | Real repository-file workload: 2,000 calls, 1,000 simultaneous server handlers, zero failures, matching call/completion counts. Stdio child-process tests cover control/data/error/cancellation frames. | Original Codex call through stdio and cloud-selected downstream calls through HTTP. |
+| MCP transports | Real repository-file workload: 2,000 calls, 1,000 simultaneous server handlers, zero failures. Original Codex calls pass through both transports with verified file hashes. [Native proof](NATIVE_LOCAL_PROOF.md). | Cloud-selected downstream calls and three owned lab credentials in the real scout workflow. |
 | Scale input | A complete sixteen-worker scan covered 5,835,736,856 repository bytes with zero errors and 104.13 MiB peak working set. A replay contains exactly 10,000,000 records and 5,984,000,000 bytes, with a checked SHA-256. | Remaining full-corpus scan workers are running; the optimized 10M trace is queued. Generation is not proof of trace throughput. |
 | Machine scope | An explicit Codex configuration scan completed with zero errors; private binding details remain local. | Owned lab token registration and valid-provider checks after tokens are supplied. |
 | AWS API shape | Official Go SDK v1.58.0 supports the required Harness stream/inline continuation contract. [API check](AGENTCORE_API_CHECK.md). | Assumed caller role, execution role, permitted regional model, ready deployment and actual streamed continuation. |
-| Native evidence | Adapters/collector compile and pass contract tests. | Capture installed Codex telemetry and an actual CloudWatch export, inspect identifiers and compare the expected chain. |
+| Native evidence | Installed Codex 0.166.0 emitted original tool-result telemetry for both transports; the adapter passes a fixture cut from that capture. | Actual CloudWatch export, explicit native/proxy/cloud correlation and the credential-bearing expected chain. |
 | Scout usefulness | Anonymous public API smoke calls and bounded selection/reporting logic. | Authenticated useful shortlist with suitable rechecked issues, Notion preferences and a human-reviewed local skill summary. |
 
 Reproduce the newest transport observation with:
