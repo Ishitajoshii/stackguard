@@ -11,6 +11,7 @@ import json
 from pathlib import Path
 import subprocess
 import time
+from profile_artifacts import profile_files
 
 spec = importlib.util.spec_from_file_location("transport", Path(__file__).with_name("transport-check.py"))
 transport = importlib.util.module_from_spec(spec)
@@ -72,7 +73,11 @@ def main():
     p.add_argument("--minimum-events-bytes", type=int, default=6_800_000_000)
     p.add_argument("--minimum-spill-bytes", type=int, default=10_000_000_000)
     p.add_argument("--timeout", type=int, default=3600)
+    p.add_argument("--cpu-profile", type=Path)
+    p.add_argument("--minimum-profile-segments", type=int, default=0)
     a = p.parse_args()
+    if a.minimum_profile_segments < 0 or (a.minimum_profile_segments and not a.cpu_profile):
+        raise RuntimeError('A positive segment threshold requires --cpu-profile')
     if a.report.exists() or not a.workspace.is_dir() or not a.workspace.name.startswith("stackguard-trace-"):
         raise RuntimeError("Choose an existing trace workspace and a fresh report path")
     process = RunningProbe(a.pid)
@@ -84,8 +89,14 @@ def main():
                 raise RuntimeError("Probe exited before the requested interruption phase")
             events = live_size(a.output/"events.jsonl")
             spills = sum(live_size(f) for f in a.workspace.rglob("*") if f.is_file())
-            if events >= a.minimum_events_bytes and spills >= a.minimum_spill_bytes:
-                report.update(events_bytes_before_interrupt=events, spill_bytes_before_interrupt=spills)
+            segments = 0
+            if a.cpu_profile:
+                index = Path(str(a.cpu_profile)+'.segments.jsonl')
+                if index.exists():
+                    segments = index.read_bytes().count(b'\n')
+            if events >= a.minimum_events_bytes and spills >= a.minimum_spill_bytes and segments >= a.minimum_profile_segments:
+                report.update(events_bytes_before_interrupt=events, spill_bytes_before_interrupt=spills,
+                              finalized_cpu_segments_before_interrupt=segments)
                 break
             if time.monotonic() >= deadline:
                 raise RuntimeError("Requested large-spill phase was not reached before timeout")
@@ -106,6 +117,8 @@ def main():
             counts[artifact.name] = count
         if counts.get("events.jsonl") != manifest["records"]:
             raise RuntimeError("Manifest record count differs from complete partial events")
+        if a.cpu_profile:
+            report['cpu_profile_files'] = [p.name for p in profile_files(a.cpu_profile)]
         report.update(complete=True, valid_partial_records=counts, manifest_records=manifest["records"],
                       spill_bytes_retained=sum(live_size(f) for f in a.workspace.rglob("*") if f.is_file()))
     except Exception as exc:

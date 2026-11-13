@@ -1,0 +1,6 @@
+{
+  "source_commit": "df5c1eee0ca116afae4a52ba1fc38c07b628c422",
+  "scope": "Actual Ctrl-C after two finalized CPU-profile windows and 100k published events from the original-file throughput replay. Three finalized gzip profiles validate. Incomplete trace, not a full 10M throughput or memory result.",
+  "large_rerun_pending": true,
+  "profile_aggregation_check": "go tool pprof -top successfully aggregated the five completed CPU segments from the separate 100k smoke run."
+}

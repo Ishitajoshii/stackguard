@@ -1,0 +1,25 @@
+{
+  "pid": 38932,
+  "operation": "trace",
+  "output": "D:\\stackguard-data\\replays\\profile-rotation-cancel\\trace",
+  "workspace": "D:\\stackguard-data\\temp\\stackguard-trace-179214502",
+  "complete": true,
+  "events_bytes_before_interrupt": 68328895,
+  "spill_bytes_before_interrupt": 280757790,
+  "finalized_cpu_segments_before_interrupt": 2,
+  "shutdown": {
+    "exit_code": 17,
+    "elapsed_seconds": 0.3369603000464849
+  },
+  "cpu_profile_files": [
+    "cpu.pprof",
+    "cpu.pprof.part-000001",
+    "cpu.pprof.part-000002"
+  ],
+  "valid_partial_records": {
+    "events.jsonl": 100000,
+    "quarantine.jsonl": 0
+  },
+  "manifest_records": 100000,
+  "spill_bytes_retained": 280757790
+}
