@@ -1,0 +1,8 @@
+{
+  "history_blobs_checked": 363,
+  "pattern_match_object_ids": [],
+  "private_paths_tracked": [],
+  "planning_files_ignored": true,
+  "valid_tracked_jsonl_records": 56024,
+  "scope": "Seven provider prefix families across reachable history blobs; private-path exclusions; tracked JSONL syntax. Formatless secrets and private prose require separate review. No provider verification."
+}
