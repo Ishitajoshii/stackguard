@@ -6,6 +6,8 @@ All twelve required matrix rows are complete: **5.84 GB scans**, **10,000,000-ev
 
 Executable provenance varies: the ordinary trace runner recorded its binary hash at launch for every row. Scan 1/4 bundles record collector-side hashes and build information; legacy scan 8/16 bundles do not include an independent executable-hash record. Do not interpret this matrix as proof for every later build.
 
+After completion, the exact measured scanner was preserved locally at `D:/stackguard-data/builds/scan-matrix-preserved/nhi-probe.exe` (SHA-256 `3b010964dad603d1730729e29abe74b68db93daa383ee06f3724d5f2df254aa3`). Use that binary when inspecting these scan profiles; ordinary `bin/` links now point to refreshed ready executables. The corrected trace binary remains at the path recorded in its bundles.
+
 Recheck the selected committed bundles with `python scripts/verify-scale-evidence.py --out .work/scale-verification-new.json`, using a fresh report destination. This checks the saved evidence without repeating the large workloads. Large event streams remain on D:; their hashes were measured by the original matrix runner.
 
 ## Real MCP transport
