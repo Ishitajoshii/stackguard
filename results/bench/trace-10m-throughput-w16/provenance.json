@@ -1,0 +1,17 @@
+{
+  "source_run": "D:\\stackguard-data\\replays\\trace-10m-throughput",
+  "probe_sha256": "624c262a7bcc59e3ab72204cf2c2f5f9a3ec415ae08fa14cc4bc9b4e4ef085da",
+  "runner_recorded_binary_sha256": true,
+  "build_info": "D:\\stackguard-data\\builds\\bounded-profiles\\nhi-probe.exe: go1.26.5\n\tpath\tgithub.com/Ishitajoshii/stackguard/cmd/nhi-probe\n\tmod\tgithub.com/Ishitajoshii/stackguard\tv0.0.0-20261113200814-df5c1eee0ca1\t\n\tdep\tgithub.com/pelletier/go-toml/v2\tv2.4.3\th1:GTRvJQutkOSftxIFD5xw9aepkYNuPWmVJpffdDPYVpY=\n\tbuild\t-buildmode=exe\n\tbuild\t-compiler=gc\n\tbuild\tDefaultGODEBUG=containermaxprocs=0,cryptocustomrand=1,decoratemappings=0,tlssecpmlkem=0,tlssha1=1,updatemaxprocs=0,urlstrictcolons=0,x509sha256skid=0\n\tbuild\tCGO_ENABLED=1\n\tbuild\tCGO_CFLAGS=\n\tbuild\tCGO_CPPFLAGS=\n\tbuild\tCGO_CXXFLAGS=\n\tbuild\tCGO_LDFLAGS=\n\tbuild\tGOARCH=amd64\n\tbuild\tGOOS=windows\n\tbuild\tGOAMD64=v1\n\tbuild\tvcs=git\n\tbuild\tvcs.revision=df5c1eee0ca116afae4a52ba1fc38c07b628c422\n\tbuild\tvcs.time=2026-11-13T20:08:14Z\n\tbuild\tvcs.modified=false\n",
+  "profiles": "none",
+  "merged_cpu_profile": null,
+  "original_cpu_profiles": [],
+  "copied_sha256": {
+    "w16/manifest.json": "a7a0bc24cc7c5e09d6bab2dea7a997e2b797552e30b31b4cb5b682e8b6348753",
+    "w16/edges.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "w16/findings.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "w16/lineage.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "w16/quarantine.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "scope": "Large events.jsonl and any original CPU segments remain in source_run. Output digests were measured by pipeline-check; copied canonical files were rechecked. When profiles=both, gzip framing and Go pprof merging validate the profiles. Throughput replay is not native credential-lineage evidence."
+}
