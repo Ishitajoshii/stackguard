@@ -47,7 +47,7 @@ Delegated lineage requires explicit parent/span/request mappings. The bridge map
 
 Adapters validate required fields, quarantine unmappable records and preserve checksums. Disk indexing resolves late parents; paths retain agents and observed tool targets. Duplicate source IDs must agree. Cycles and conflicting mappings stay unresolved. [Original Codex 0.166.0 captures](lab/NATIVE_LOCAL_PROOF.md) validate native tool-result fields for stdio and HTTP. Native conversation/call IDs differ from proxy IDs; no parent link is invented from timing. CloudWatch schema validation remains pending. Bounded aggregates retain up to 64 evidence references; normalized events retain individual source references.
 
-No observed use within a supplied capture window is not proof that a token is permanently unused. Missing inventory bindings are not proof of unauthorized use. Capture completeness, source selection and the observation interval must accompany each conclusion. Current local-file workload measurements test transport and cancellation only; they contain no provider-secret attribution oracle.
+No observed use within a supplied capture window is not proof that a token is permanently unused. Missing inventory bindings are not proof of unauthorized use. Capture completeness, source selection and the observation interval must accompany each conclusion. Local-file measurements test transport, replay scale, bounded memory and cancellation; they contain no provider-secret attribution oracle.
 
 ## 5. Six misconfigurations and controlled reproduction plan
 
