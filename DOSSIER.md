@@ -70,7 +70,7 @@ The implemented scanner, adapters, graph and risk rules pass automated contract/
 |---|---|---|
 | Real MCP file calls | [Native Codex calls](lab/NATIVE_LOCAL_PROOF.md) through both transports; [load test](results/bench/transport-w4-r5/summary.json) reaches 1,000 simultaneous handlers. | Codex-to-cloud delegation using provider credentials and an explicit cross-source mapping. |
 | Credential candidates | [Complete 5.84 GB scan](results/bench/scan-corpus-full-w16/summary.json), redacted candidates and a selected machine configuration scan. | Owned lab credential bindings. No public-corpus credential verification. |
-| Trace load | [100,000-event replay matrix](results/bench/trace-file-100k/summary.json), derived from original file calls. | Largest workload results and a separate native credential-bearing correctness oracle. |
+| Trace load | [10-million-event profiled replay](results/bench/trace-10m-bounded-profiles-w4/summary.json), plus one-session and 10-million-session shapes; [worker results and scope](SCALING.md). | Native credential-bearing correctness oracle. Replays test volume and bounded memory; paused/shared-disk timings do not establish worker speedups. |
 | Automated correctness | [Validation records](results/validation/windows-race.txt), protocol fixtures, adapter fuzzing and process cancellation measurements. | Live provider schemas, two controlled reproductions and a reviewed recording. |
 
 The [runbook](lab/RUNBOOK.md) records cost and cleanup requirements. Cloud metadata can report usage without proving the final bill; missing usage is never assumed free. The [demo script](lab/DEMO.md) is a plan, not a recording. Public repository findings are not valid lab credentials and must never be tested against providers.
