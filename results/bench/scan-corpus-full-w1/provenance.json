@@ -1,0 +1,24 @@
+{
+  "source_run": "D:\\stackguard-data\\replays\\scan-corpus-current",
+  "probe_sha256": "3b010964dad603d1730729e29abe74b68db93daa383ee06f3724d5f2df254aa3",
+  "runner_recorded_binary_sha256": false,
+  "build_info": "bin\\nhi-probe.exe: go1.26.5\n\tpath\tgithub.com/Ishitajoshii/stackguard/cmd/nhi-probe\n\tmod\tgithub.com/Ishitajoshii/stackguard\tv0.0.0-20261113153123-ea798f49bf31\t\n\tdep\tgithub.com/pelletier/go-toml/v2\tv2.4.3\th1:GTRvJQutkOSftxIFD5xw9aepkYNuPWmVJpffdDPYVpY=\n\tbuild\t-buildmode=exe\n\tbuild\t-compiler=gc\n\tbuild\tDefaultGODEBUG=containermaxprocs=0,cryptocustomrand=1,decoratemappings=0,tlssecpmlkem=0,tlssha1=1,updatemaxprocs=0,urlstrictcolons=0,x509sha256skid=0\n\tbuild\tCGO_ENABLED=1\n\tbuild\tCGO_CFLAGS=\n\tbuild\tCGO_CPPFLAGS=\n\tbuild\tCGO_CXXFLAGS=\n\tbuild\tCGO_LDFLAGS=\n\tbuild\tGOARCH=amd64\n\tbuild\tGOOS=windows\n\tbuild\tGOAMD64=v1\n\tbuild\tvcs=git\n\tbuild\tvcs.revision=ea798f49bf31688b1a0ef0e83b40e9df4639ffab\n\tbuild\tvcs.time=2026-11-13T15:31:23Z\n\tbuild\tvcs.modified=false\n",
+  "profiles": "both",
+  "merged_cpu_profile": "cpu-w1-merged.pprof",
+  "original_cpu_profiles": [
+    {
+      "file": "cpu-w1.pprof",
+      "bytes": 126953,
+      "sha256": "00e7bc94b19a61b8144950a1058aa258cbce61d91a8cbfdbf306b12c82840266"
+    }
+  ],
+  "copied_sha256": {
+    "w1/manifest.json": "d4764dc13edf07b182776483d596613f1a6826f11d155aef4254d937cd8a24a1",
+    "w1/inventory.jsonl": "10205e082646c1658842791d2ee1c76741b09a82a0df86121cee06ae1a0f3d1c",
+    "w1/observations.jsonl": "d2b9861f132583d3768fea1fc7cd8fe1334987fb4c668aee027b0754b0bb14c5",
+    "w1/coverage.jsonl": "659347cf02ff5f53ca5283f637b064e040fd30828fc093d6bfd148bb319f4f7f",
+    "heap-w1.pprof": "3d900d7f4efe0bee00aec353ef0186b282ed7d8c5911132e848c826a6f18412a",
+    "cpu-w1-merged.pprof": "58e5d38b3570c592a3e27ac5d8905672becaf65e14b6f4052ec13c8215ec1f35"
+  },
+  "scope": "Large events.jsonl and any original CPU segments remain in source_run. Output digests were measured by pipeline-check; copied canonical files were rechecked. When profiles=both, gzip framing and Go pprof merging validate the profiles. Throughput replay is not native credential-lineage evidence."
+}
