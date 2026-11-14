@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 import socket
 import subprocess
+import sys
 import threading
 import time
 from bench_budget import check_memory
@@ -31,24 +32,37 @@ def start(args):
 def stop(process):
     if process.poll() is not None:
         return {"exit_code": process.returncode, "elapsed_seconds": 0}
-    kernel = ctypes.WinDLL("kernel32", use_last_error=True)
     began = time.monotonic()
-    kernel.FreeConsole()
-    if not kernel.AttachConsole(process.pid):
-        process.kill()
-        process.wait()
-        raise RuntimeError("could not attach to hidden child console for Ctrl-C")
-    kernel.SetConsoleCtrlHandler(None, True)
-    sent = kernel.GenerateConsoleCtrlEvent(0, 0)
+    # Attaching/detaching changes Windows standard handles. Doing it in the
+    # runner can give a later child invalid inherited stdout and Python exit
+    # 120 even after its test report was written successfully. Isolate console
+    # ownership in a short-lived helper with explicit null streams.
+    signal_code = """import ctypes, sys, time
+k = ctypes.WinDLL('kernel32', use_last_error=True)
+k.FreeConsole()
+if not k.AttachConsole(int(sys.argv[1])): sys.exit(3)
+try:
+    if not k.SetConsoleCtrlHandler(None, True): sys.exit(4)
+    if not k.GenerateConsoleCtrlEvent(0, 0): sys.exit(5)
     time.sleep(0.05)
-    kernel.FreeConsole()
-    kernel.SetConsoleCtrlHandler(None, False)
-    if not sent:
+finally:
+    k.FreeConsole()
+"""
+    try:
+        signal = subprocess.run([sys.executable, '-c', signal_code, str(process.pid)],
+                                stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL,
+                                stderr=subprocess.DEVNULL,
+                                creationflags=subprocess.CREATE_NO_WINDOW, timeout=2)
+    except subprocess.TimeoutExpired:
         process.kill()
         process.wait()
-        raise RuntimeError("could not send Ctrl-C")
+        raise RuntimeError("Ctrl-C signalling exceeded two seconds")
+    if signal.returncode != 0:
+        process.kill()
+        process.wait()
+        raise RuntimeError("could not attach/send Ctrl-C from the hidden helper")
     try:
-        process.wait(timeout=2)
+        process.wait(timeout=max(0, 2-(time.monotonic()-began)))
     except subprocess.TimeoutExpired:
         process.kill()
         process.wait()

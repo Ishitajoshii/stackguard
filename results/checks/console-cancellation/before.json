@@ -1,0 +1,31 @@
+[
+  {
+    "mode": "parent_detach",
+    "shutdown": {
+      "exit_code": 17,
+      "elapsed_seconds": 0.05282680003438145
+    }
+  },
+  {
+    "mode": "inherit",
+    "helper_returncode": 120,
+    "complete": true,
+    "shutdown": {
+      "exit_code": 17,
+      "elapsed_seconds": 0.058833800023421645
+    },
+    "stdout": null,
+    "stderr": null
+  },
+  {
+    "mode": "capture",
+    "helper_returncode": 0,
+    "complete": true,
+    "shutdown": {
+      "exit_code": 17,
+      "elapsed_seconds": 0.05946430005133152
+    },
+    "stdout": "{\"pid\": 64196, \"operation\": \"trace\", \"output\": \"D:\\\\stackguard-data\\\\checkouts\\\\interruption-controller-stdio\\\\capture\\\\trace\", \"workspace\": \"D:\\\\stackguard-data\\\\checkouts\\\\interruption-controller-stdio\\\\capture\\\\temp\\\\stackguard-trace-1497209737\", \"complete\": true, \"events_bytes_before_interrupt\": 0, \"spill_bytes_before_interrupt\": 0, \"finalized_cpu_segments_before_interrupt\": 0, \"shutdown\": {\"exit_code\": 17, \"elapsed_seconds\": 0.05946430005133152}, \"valid_partial_records\": {\"events.jsonl\": 0, \"quarantine.jsonl\": 0}, \"manifest_records\": 0, \"spill_bytes_retained\": 0}\n",
+    "stderr": ""
+  }
+]

@@ -1,0 +1,1 @@
+{"schema_version":1,"operation":"trace","run_id":"23edbc11d854fc10e305dee01b41ed98","started_at":"2026-11-14T06:36:39.701102Z","ended_at":"2026-11-14T06:36:39.9954963Z","complete":false,"records":0,"bytes":0,"errors":0,"skipped":0,"notes":["Interrupted temporary workspace retained for explicit cleanup: D:/stackguard-data/temp\\stackguard-trace-3372147864"]}
