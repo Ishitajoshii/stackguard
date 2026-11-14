@@ -1,0 +1,131 @@
+{
+  "passed": true,
+  "memory_limit_bytes": 512000000,
+  "rows": [
+    {
+      "operation": "scan",
+      "workers": 1,
+      "source": "results/bench/scan-corpus-full-w1",
+      "records": 137,
+      "bytes": 5835736856,
+      "binary_hash_recorded": true,
+      "peak_working_set_bytes": 60043264,
+      "peak_commit_bytes": 65101824,
+      "binary_hash_provenance": "collected_after_run"
+    },
+    {
+      "operation": "scan",
+      "workers": 4,
+      "source": "results/bench/scan-corpus-full-w4",
+      "records": 137,
+      "bytes": 5835736856,
+      "binary_hash_recorded": true,
+      "peak_working_set_bytes": 47443968,
+      "peak_commit_bytes": 93663232,
+      "binary_hash_provenance": "collected_after_run"
+    },
+    {
+      "operation": "scan",
+      "workers": 8,
+      "source": "results/bench/scan-corpus-full-w8",
+      "records": 137,
+      "bytes": 5835736856,
+      "binary_hash_recorded": false,
+      "peak_working_set_bytes": 83472384,
+      "peak_commit_bytes": 82313216,
+      "binary_hash_provenance": "not_recorded"
+    },
+    {
+      "operation": "scan",
+      "workers": 16,
+      "source": "results/bench/scan-corpus-full-w16",
+      "records": 137,
+      "bytes": 5835736856,
+      "binary_hash_recorded": false,
+      "peak_working_set_bytes": 109191168,
+      "peak_commit_bytes": 114012160,
+      "binary_hash_provenance": "not_recorded"
+    },
+    {
+      "operation": "trace",
+      "workers": 1,
+      "source": "results/bench/trace-10m-throughput-w1",
+      "records": 10000000,
+      "bytes": 5984000000,
+      "binary_hash_recorded": true,
+      "peak_working_set_bytes": 91152384,
+      "peak_commit_bytes": 130392064,
+      "binary_hash_provenance": "runner_recorded"
+    },
+    {
+      "operation": "trace",
+      "workers": 4,
+      "source": "results/bench/trace-10m-throughput-w4",
+      "records": 10000000,
+      "bytes": 5984000000,
+      "binary_hash_recorded": true,
+      "peak_working_set_bytes": 95649792,
+      "peak_commit_bytes": 93835264,
+      "binary_hash_provenance": "runner_recorded"
+    },
+    {
+      "operation": "trace",
+      "workers": 8,
+      "source": "results/bench/trace-10m-throughput-w8",
+      "records": 10000000,
+      "bytes": 5984000000,
+      "binary_hash_recorded": true,
+      "peak_working_set_bytes": 85475328,
+      "peak_commit_bytes": 124571648,
+      "binary_hash_provenance": "runner_recorded"
+    },
+    {
+      "operation": "trace",
+      "workers": 16,
+      "source": "results/bench/trace-10m-throughput-w16",
+      "records": 10000000,
+      "bytes": 5984000000,
+      "binary_hash_recorded": true,
+      "peak_working_set_bytes": 119296000,
+      "peak_commit_bytes": 159322112,
+      "binary_hash_provenance": "runner_recorded"
+    },
+    {
+      "operation": "proxy",
+      "workers": 1,
+      "source": "results/bench/transport-w1-final",
+      "successful_requests": 2000,
+      "server_peak_inflight": 1000,
+      "peak_working_set_bytes": 125116416,
+      "peak_commit_bytes": 170082304
+    },
+    {
+      "operation": "proxy",
+      "workers": 4,
+      "source": "results/bench/transport-w4-r5",
+      "successful_requests": 2000,
+      "server_peak_inflight": 1000,
+      "peak_working_set_bytes": 130957312,
+      "peak_commit_bytes": 178266112
+    },
+    {
+      "operation": "proxy",
+      "workers": 8,
+      "source": "results/bench/transport-w8-final",
+      "successful_requests": 2000,
+      "server_peak_inflight": 1000,
+      "peak_working_set_bytes": 128831488,
+      "peak_commit_bytes": 178032640
+    },
+    {
+      "operation": "proxy",
+      "workers": 16,
+      "source": "results/bench/transport-w16-final",
+      "successful_requests": 2000,
+      "server_peak_inflight": 1000,
+      "peak_working_set_bytes": 131190784,
+      "peak_commit_bytes": 178184192
+    }
+  ],
+  "scope": "All twelve selected full-size matrix rows. Both probe OS memory peaks are below the decimal limit. Canonical scan/trace hashes agree across workers; available canonical files and provenance-listed bundle artifacts were rehashed. Earlier failures remain failures. Binary hashes agree within scan/trace rows where recorded; legacy scan 8/16 bundles lack an independent binary-hash record. Paused/shared-resource wall times are not isolated speedups. File replays are not credential-bearing native graph evidence. Scan 1/4 hashes were collected after the run; only the trace runner recorded executable hashes at launch. Scan 8/16 have no independent executable-hash record."
+}

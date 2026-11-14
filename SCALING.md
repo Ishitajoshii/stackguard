@@ -2,6 +2,12 @@
 
 Measured on 13-14 November 2026 on native Windows 11, Intel Core Ultra 5 125H (14 cores / 18 logical processors), Go 1.26.5, with repository/cache/replay data on D:. Hardware and toolchain snapshots are in [lab/ENVIRONMENT.md](lab/ENVIRONMENT.md) and [lab/TOOLCHAIN.md](lab/TOOLCHAIN.md). These are local measurements, not estimates of cloud behavior.
 
+All twelve required matrix rows are complete: **5.84 GB scans**, **10,000,000-event traces**, and **2,000 real MCP requests with 1,000 simultaneous handlers**, each at **1/4/8/16 workers**. The [cross-row verification](results/checks/full-scale-matrices.json) checks counts, canonical scan/trace hashes, copied artifact hashes and both probe memory peaks against **512,000,000 bytes**. The largest matrix peak was 131,190,784 bytes working set and 178,266,112 bytes commit; these maxima came from different proxy rows. Separate profiled/extreme-shape runs are scoped below. Historical failures remain failures, and paused/shared-disk timings do not establish worker speedups.
+
+Executable provenance varies: the ordinary trace runner recorded its binary hash at launch for every row. Scan 1/4 bundles record collector-side hashes and build information; legacy scan 8/16 bundles do not include an independent executable-hash record. Do not interpret this matrix as proof for every later build.
+
+Recheck the selected committed bundles with `python scripts/verify-scale-evidence.py --out .work/scale-verification-new.json`, using a fresh report destination. This checks the saved evidence without repeating the large workloads. Large event streams remain on D:; their hashes were measured by the original matrix runner.
+
 ## Real MCP transport
 
 Each row uses 2,000 real calls per mode reading the fetched Go repository README. A server-side barrier proves 1,000 simultaneous handler calls before release; client concurrency alone is not the proof. The driver staggers initial connections by 1 ms to avoid a Windows connection burst, then all 1,000 calls meet the barrier. Separate baseline and proxied server processes use the same workload. Every passing row has zero failures, 2,000 call events and 2,000 separate completion events.
@@ -103,16 +109,15 @@ Use `scripts/collect-pipeline-result.py` to bundle a completed row. Supply `--so
 
 `pipeline-check.py --profiles both` is the default and records CPU/heap evidence. Use `--profiles none` for ordinary CLI throughput; the summary explicitly records the mode and the collector does not invent profiles for that run. Retain a separate complete profiled largest-size case. The [100k unprofiled smoke](results/bench/trace-100k-unprofiled/summary.json) completed with the same canonical hashes as the profiled run: 147.896 s, 67,817,472 bytes peak working set and 107,188,224 bytes peak commit. Different competing loads make these timings unsuitable for estimating profiler overhead or claiming a speedup. Both collection modes have been exercised with actual completed runs.
 
-## Unmet scale gates
+## Historical failures and remaining evidence limits
 
 - An earlier [long-running 10M attempt](results/bench/trace-10m-memory-failure/observation.json) exceeded the memory budget before completion: peak working set 496,435,200 bytes and peak commit 539,484,160 bytes. Deliberate interruption then missed two seconds; an incomplete data manifest exists but the CPU profile is truncated. Neither measurement is a pass. The corrected build has separate passing completion and large late-interruption results documented here; these do not turn the earlier failure into a passing run.
 - The older [ten-million-session attempt](results/bench/trace-many-10m-memory-failure/observation.json) also crossed the limit: peak working set 644,505,600 bytes and peak commit 691,257,344 bytes. Its interruption exceeded two seconds and produced no final manifest; the exact shutdown stall is unresolved. Its derived scratch was removed only after the process stopped, with original replay and failed partial outputs retained. The corrected many-session run described above has passed memory and completion checks; that does not establish late-interruption latency.
 
   Later inspection found an [encoded but unpublished temporary manifest](results/bench/trace-many-10m-memory-failure/publication-observation.json). Publication had begun but had not completed before forced termination; the exact blocking OS operation remains unknown. Its reported 10M count has not been independently checked against that failed partial event stream. This is not a valid completed run or evidence that profiling caused this particular shutdown failure.
 
-- All full 5.84 GB scan worker rows and the selected machine configuration scan are complete. Inventory hashes agree at 1/4/8/16 workers; this establishes consistency for the recorded corpus, not validity of the detected candidate credentials.
 - Evidence representative of a credential-bearing delegated graph. The ten-million-event file-replay matrix is complete at 1/4/8/16 workers with matching output hashes and both memory peaks below the limit; this does not establish native credential-graph correctness.
-- Peak-memory proof for every remaining worker-matrix row. The two extreme 10M session shapes have passed for their recorded binaries; the single-session result predates the runtime/profiling changes. Current measurements prove only the stated inputs and versions.
+- Current measurements prove only the recorded inputs and versions. All selected matrix rows and both extreme 10M session shapes passed the memory ceiling; the single-session result predates the runtime/profiling changes. Public-corpus matches remain unverified credential candidates.
 - Native agent correctness and a recorded live demo. Local-file workload evidence cannot establish either.
 
 ## Profile-guided optimization
