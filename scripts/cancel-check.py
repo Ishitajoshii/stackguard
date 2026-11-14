@@ -19,6 +19,7 @@ def main():
     p.add_argument("--temp", required=True)
     p.add_argument("--out", type=Path, required=True)
     p.add_argument("--probe", type=Path, default=Path("bin/nhi-probe.exe"))
+    p.add_argument('--nested-child', action='store_true', help=argparse.SUPPRESS)
     a = p.parse_args()
     a.out.mkdir(parents=True, exist_ok=False)
     records = []
@@ -38,21 +39,30 @@ def main():
         manifest = json.loads((dest/"manifest.json").read_text())
         if result["exit_code"] != 17 or manifest["complete"]:
             raise RuntimeError("interruption contract failed")
-        # Process-control regression, not agent data: a follow-up Python child
-        # must retain usable inherited streams after the caller sends Ctrl-C.
-        child = subprocess.run([sys.executable, '-c',
-                                "import sys; print('stdout-ok', flush=True); print('stderr-ok', file=sys.stderr, flush=True)"],
-                               stdin=subprocess.DEVNULL, timeout=5)
-        if child.returncode != 0:
-            raise RuntimeError('Ctrl-C control damaged a subsequent child\'s inherited streams')
         count = 0
         for artifact in dest.glob("*.jsonl"):
             with artifact.open(encoding="utf-8") as source:
                 for line in source:
                     json.loads(line)
                     count += 1
-        records.append(dict(operation=name, valid_partial_jsonl_records=count,
-                            inherited_stream_child_exit_code=child.returncode, **result))
+        records.append(dict(operation=name, valid_partial_jsonl_records=count, **result))
+    if not a.nested_child:
+        # The nested child must itself send Ctrl-C before printing its result.
+        # Intentionally inherit ALL streams: redirecting even stdin causes
+        # Python to set STARTF_USESTDHANDLES and masks the original Windows bug.
+        # This is a real process-control check, not simulated agent activity.
+        child_out = a.out/'inherited-child'
+        child = subprocess.run([sys.executable, str(Path(__file__).resolve()),
+                                '--repo', a.repo, '--events', a.events,
+                                '--temp', a.temp, '--out', str(child_out),
+                                '--probe', str(a.probe.resolve()), '--nested-child'], timeout=60)
+        status = dict(exit_code=child.returncode,
+                      child_report_present=(child_out/'summary.json').exists())
+        (a.out/'inherited-child-status.json').write_text(json.dumps(status, indent=2)+'\n')
+        if child.returncode != 0 or not status['child_report_present']:
+            raise RuntimeError('nested Ctrl-C helper failed with inherited standard streams')
+        for record in records:
+            record['inherited_stream_child_exit_code'] = child.returncode
     (a.out/"summary.json").write_text(json.dumps(records, indent=2)+"\n")
     print(json.dumps(records))
 

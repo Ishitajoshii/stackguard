@@ -1,0 +1,9 @@
+{
+  "before_transport_source": "7ca1559:scripts/transport-check.py",
+  "parent_exit_code": 1,
+  "nested_child": {
+    "exit_code": 120,
+    "child_report_present": true
+  },
+  "scope": "The maintained process regression fails with the old console-control code even though the nested child writes its passing early-interruption report. No simulated agent events are used."
+}

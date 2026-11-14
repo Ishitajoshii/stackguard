@@ -34,8 +34,8 @@ def stop(process):
         return {"exit_code": process.returncode, "elapsed_seconds": 0}
     began = time.monotonic()
     # Attaching/detaching changes Windows standard handles. Doing it in the
-    # runner can give a later child invalid inherited stdout and Python exit
-    # 120 even after its test report was written successfully. Isolate console
+    # nested runner with inherited streams can return Python exit 120 even
+    # after its test report was written successfully. Isolate console
     # ownership in a short-lived helper with explicit null streams.
     signal_code = """import ctypes, sys, time
 k = ctypes.WinDLL('kernel32', use_last_error=True)

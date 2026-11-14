@@ -1,0 +1,16 @@
+[
+  {
+    "operation": "scan",
+    "valid_partial_jsonl_records": 1,
+    "exit_code": 17,
+    "elapsed_seconds": 0.1637177000520751,
+    "inherited_stream_child_exit_code": 0
+  },
+  {
+    "operation": "trace",
+    "valid_partial_jsonl_records": 0,
+    "exit_code": 17,
+    "elapsed_seconds": 0.16377899999497458,
+    "inherited_stream_child_exit_code": 0
+  }
+]
