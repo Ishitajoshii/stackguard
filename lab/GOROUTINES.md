@@ -30,6 +30,19 @@ In [stdio.go](mcp/stdio.go), the input loop keeps reading control messages while
 
 In [transform.go](../internal/pipeline/transform.go), a producer hashes the session key and sends each record to one of N queues, each with capacity two. Workers return results through an N-slot queue. The producer closes the worker queues, a waiter closes results, and the caller owns the output writer. A first error cancels the pipeline while the caller drains its remaining results so workers can finish.
 
+```mermaid
+flowchart LR
+    P["Producer"] -->|"hash session; send records; close queues on exit"| Q["N queues<br/>2 slots each"]
+    Q --> W["N workers"]
+    W -->|"send results"| R["Results queue<br/>N slots"]
+    R --> C["Caller<br/>owns output and drains results"]
+    J["Waiter<br/>joins producer and workers"] -.->|"closes after all senders exit"| R
+    X["ctx.Done()"] -.->|"unblocks sends"| P
+    X -.->|"unblocks receives and sends"| W
+```
+
+Walk through a full queue: the producer waits, so it cannot keep allocating records ahead of the workers. On Ctrl-C, its blocked send can select `ctx.Done()` and return. The producer closes its queues; workers finish or select cancellation; the waiter joins every sender before closing results. The caller's range loop then ends. That ordering prevents a worker from sending to a channel another worker has closed.
+
 Many records from one session route to one worker. This preserves per-session ownership but can reduce parallelism; increasing `--workers` does not guarantee a speedup. Crucially, that worker does not retain the session's full history. The immutable graph index, event spool and sort runs stay on disk. External sort uses 8 MiB chunks and an eight-way merge. Stable sorting after parallel work provides deterministic final output.
 
 The bounds come from data structures, not just a Go GC memory target:
