@@ -52,12 +52,13 @@ A [ten-million-event single-session run](results/bench/trace-single-10m-w16/summ
 
 The corrected build also completed [10,000,000 events in 10,000,000 distinct sessions](results/bench/trace-many-10m-bounded-profiles-w16/summary.json): **6,320,000,000 input bytes**, sixteen workers, zero errors, **69,210,112 bytes peak working set** and **109,359,104 bytes peak commit**. The independently checked input shape and capture provenance are retained [here](results/bench/replay-extreme-10m/file-many-10m); all 114 CPU segments and the heap profile parsed successfully. Source revision `df5c1ee` and the runner-recorded executable hash are in the bundle. Elapsed time was **3,423.294 s** under overlapping disk work and changing power conditions, so this is a memory/volume pass, not an isolated performance comparison. Both extreme shapes have passing measurements for the specifically recorded binaries; the single-session pass is from the older build. The structural queue, chunk and disk-index bounds are documented in [the ownership walkthrough](lab/GOROUTINES.md).
 
-The ordinary CLI matrix uses `--profiles none`, the same corrected executable and the same **10,000,000-event / 5,984,000,000-byte** input for each worker count. Completed rows are listed below; eight and sixteen workers remain in progress. Each completed row has zero errors. All four canonical output hashes in the completed rows match the completed profiled four-worker run, including event hash `6043884603f4d8271d5f1b179213a8ff59b59ffcee483ba4ffe3c11b77a9166a`.
+The ordinary CLI matrix uses `--profiles none`, the same corrected executable and the same **10,000,000-event / 5,984,000,000-byte** input for each worker count. Completed rows are listed below; only sixteen workers remain in progress. Each completed row has zero errors. All four canonical output hashes in the completed rows match the completed profiled four-worker run, including event hash `6043884603f4d8271d5f1b179213a8ff59b59ffcee483ba4ffe3c11b77a9166a`.
 
 | Workers | Recorded elapsed seconds | Peak working set bytes | Peak commit bytes | Timing scope |
 |---|---:|---:|---:|---|
 | [1](results/bench/trace-10m-throughput-w1/summary.json) | 32,569.190 | 91,152,384 | 130,392,064 | Includes overnight host pause; not uninterrupted throughput |
 | [4](results/bench/trace-10m-throughput-w4/summary.json) | 3,028.005 | 95,649,792 | 93,835,264 | Overlaps the full-corpus scan; no isolated worker-speedup claim |
+| [8](results/bench/trace-10m-throughput-w8/summary.json) | 4,849.510 | 85,475,328 | 124,571,648 | Overlaps the full-corpus scan; no isolated worker-speedup claim |
 
 The one-worker row establishes completion, canonical-output consistency and the measured memory ceiling. Its elapsed time must not be used to estimate uninterrupted worker scaling or a profiling speedup.
 
