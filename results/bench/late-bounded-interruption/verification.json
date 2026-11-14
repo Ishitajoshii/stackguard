@@ -1,0 +1,140 @@
+{
+  "probe_contract_pass": true,
+  "binary_sha256": "624c262a7bcc59e3ab72204cf2c2f5f9a3ec415ae08fa14cc4bc9b4e4ef085da",
+  "source_commit": "df5c1eee0ca116afae4a52ba1fc38c07b628c422",
+  "partial_files": {
+    "events.jsonl": {
+      "records": 9937372,
+      "bytes": 6809959677,
+      "sha256": "fa8e06797824c27beeddb80c5b24a232a2d1e2aa20302620144a1d17bf8b7db5"
+    },
+    "quarantine.jsonl": {
+      "records": 0,
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "cpu_segments": [
+    {
+      "file": "cpu.pprof",
+      "sha256": "bf4440b251f2c2a7c59e8a2044fa46902c7ed41704b7bd5f8e8499ed55e3c85b"
+    },
+    {
+      "file": "cpu.pprof.part-000001",
+      "sha256": "8d7e44712a860f2cea7f2b82b37c70f468a72ed3b40d362fd1b404963e6f077a"
+    },
+    {
+      "file": "cpu.pprof.part-000002",
+      "sha256": "886a1d8f59c3e1348f9c8b4d91e6b4ca9fcadcb10e3271cb8e096b828cdaabdd"
+    },
+    {
+      "file": "cpu.pprof.part-000003",
+      "sha256": "16882517613198fe5d207d5f4761f480a30617af3a2e39db6cf77c7e9d69e697"
+    },
+    {
+      "file": "cpu.pprof.part-000004",
+      "sha256": "71fed6d69befc75d28e80575665ad0d266a5f4cb22644aec76598ad118266b92"
+    },
+    {
+      "file": "cpu.pprof.part-000005",
+      "sha256": "62e84f4e47f39cd52128fd06aaffcbc09254faa31be048496b1907f8f48eb3d7"
+    },
+    {
+      "file": "cpu.pprof.part-000006",
+      "sha256": "1d4f6d760f913da19d7af56d56557a0490dcc462087f67364e261f779bc879bf"
+    },
+    {
+      "file": "cpu.pprof.part-000007",
+      "sha256": "87541e8f35c7cc5271ec4dcdf61bd3b93dd254cf56c2b58cbfaae556661b3186"
+    },
+    {
+      "file": "cpu.pprof.part-000008",
+      "sha256": "c6bf1f9eeb9299ea035d12a7a315c102d3e4a35590d7360e34b98aed022bb7f1"
+    },
+    {
+      "file": "cpu.pprof.part-000009",
+      "sha256": "e0976220ebb71bab247b9842e36827a7c20cde9d600482758a66d44c52bae36b"
+    },
+    {
+      "file": "cpu.pprof.part-000010",
+      "sha256": "8c262665ab39e19e8314eb94b612033dd029cc1b230dc0dc2e2550b8ed3a0425"
+    },
+    {
+      "file": "cpu.pprof.part-000011",
+      "sha256": "b010574aeaceb4517da3402443c24f0bb2e6ace796233af8e3886eaf7fd8750e"
+    },
+    {
+      "file": "cpu.pprof.part-000012",
+      "sha256": "55a62c50b99bafaae83dea03ba0a18ba2d148636f9d97ec33178a5314a7553f7"
+    },
+    {
+      "file": "cpu.pprof.part-000013",
+      "sha256": "a4888cf5cf3964bf45e5d95cbb1a7359c5369e7178948f307b1211090f07f0d8"
+    },
+    {
+      "file": "cpu.pprof.part-000014",
+      "sha256": "bcfe49c6b5b4d63b320f95b0a12833dea6a840158fee4d0db7d1acb3ad6bbe9f"
+    },
+    {
+      "file": "cpu.pprof.part-000015",
+      "sha256": "8129980426ccd93f3d415ea24a1084f185096ba2e074c715246ecc24b123c0c0"
+    },
+    {
+      "file": "cpu.pprof.part-000016",
+      "sha256": "121eea2aff50f887cf963babd1e81af6fd0e05f35109b30ea563b5137695570f"
+    },
+    {
+      "file": "cpu.pprof.part-000017",
+      "sha256": "4c166d31de498ff507b1f10a0d93f77a84b77d6c40a1147b80b46409323dc537"
+    },
+    {
+      "file": "cpu.pprof.part-000018",
+      "sha256": "087199d879bbc79bae0e8c1a404c6c698b29278df973d7e56a9eb17424bc6112"
+    },
+    {
+      "file": "cpu.pprof.part-000019",
+      "sha256": "0b5473400885dc55a638aa3f87d17377dd72633560b57779f76c8ea07509eb93"
+    },
+    {
+      "file": "cpu.pprof.part-000020",
+      "sha256": "afbcc631fd2de11b8d313118ef03db474d02576baf732ac20f5ef6fae32fa2da"
+    },
+    {
+      "file": "cpu.pprof.part-000021",
+      "sha256": "5196f2e6736fb63b3fe44755e96a4327aea89243d0c43b77d931a6a8272cd5d1"
+    },
+    {
+      "file": "cpu.pprof.part-000022",
+      "sha256": "8b8f2ee32784cdf422fef777f05630a79ff207f6aa0af64bcc5ea01cae7c19e3"
+    },
+    {
+      "file": "cpu.pprof.part-000023",
+      "sha256": "2358e8e078e68fc75f059d26925ce27f3a9e7e07c0fbcf6a85fdff95fc526d01"
+    },
+    {
+      "file": "cpu.pprof.part-000024",
+      "sha256": "67633ea0b6e55596f5b4f4d2399224331fa89d5bb467a0bfd2c1bd4c526a1ac9"
+    },
+    {
+      "file": "cpu.pprof.part-000025",
+      "sha256": "90d9e2e131bff6d39bd3318732194080cbc00d8309bb0b7356517115d93f7c49"
+    },
+    {
+      "file": "cpu.pprof.part-000026",
+      "sha256": "4762ef21edff42ac33394e31d409d5aae683eb585cca8497dcd5885de2cc6ecf"
+    },
+    {
+      "file": "cpu.pprof.part-000027",
+      "sha256": "5ff7c8e81180f4454a0d9863259f3491aea2b28e97f746df05b9fe944ba09a37"
+    },
+    {
+      "file": "cpu.pprof.part-000028",
+      "sha256": "51cc91d7d9d060ad4012ed4c26639401ac17036c82124c60e618272f492f2ba3"
+    }
+  ],
+  "peak_working_set_bytes": 40644608,
+  "peak_commit_bytes": 79745024,
+  "outer_wrapper_pass": false,
+  "original_wrapper_exit_code_retained": false,
+  "note": "The original wrapper marked failure after the helper had written its passing report. Independent revalidation confirmed all partial JSONL, exact counts, input identity, profiles and process memory. The same nested console-control sequence separately reproduced Python exit 120 with inherited stdout and exit 0 with captured stdout; isolated signalling fixed that regression. The original wrapper return code was not retained, so its exact code is not asserted. Raw outer-driver-state is preserved unchanged. The measured 0.153s large shutdown used the prior in-process signal helper; the new helper has separate successful real-process checks."
+}

@@ -1,0 +1,11 @@
+{
+  "cleaned_at_utc": "2026-11-14T06:42:38.7829605Z",
+  "workspace": "D:\\stackguard-data\\temp\\late-bounded-regression\\stackguard-trace-2314791068",
+  "output_retained": "D:/stackguard-data/replays/trace-10m-late-bounded",
+  "partial_records_independently_validated": 9937372,
+  "scope": "Only the stopped, validated probe scratch workspace was removed; original replay, partial outputs and profiles are retained.",
+  "probe_exit_verified": true,
+  "reparse_points_found": 0,
+  "bytes_removed": 18071420802.0,
+  "files_removed": 3
+}

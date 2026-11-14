@@ -1,0 +1,9 @@
+{
+  "pid": 54756,
+  "probe_sha256": "624c262a7bcc59e3ab72204cf2c2f5f9a3ec415ae08fa14cc4bc9b4e4ef085da",
+  "source_commit": "df5c1eee0ca116afae4a52ba1fc38c07b628c422",
+  "passed": false,
+  "failure": "Large corrected-build interruption regression failed; retain all artifacts",
+  "peak_working_set_bytes": 40644608,
+  "peak_commit_bytes": 79745024
+}

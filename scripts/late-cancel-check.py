@@ -88,7 +88,11 @@ def main():
             if process.poll() is not None:
                 raise RuntimeError("Probe exited before the requested interruption phase")
             events = live_size(a.output/"events.jsonl")
-            spills = sum(live_size(f) for f in a.workspace.rglob("*") if f.is_file())
+            # Do not repeatedly walk thousands of spill files while the event
+            # threshold is still unmet. These checks must not become another
+            # full metadata scan competing with the workload being measured.
+            spills = (sum(live_size(f) for f in a.workspace.rglob("*") if f.is_file())
+                      if events >= a.minimum_events_bytes else 0)
             segments = 0
             if a.cpu_profile:
                 index = Path(str(a.cpu_profile)+'.segments.jsonl')

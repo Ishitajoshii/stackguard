@@ -1,0 +1,51 @@
+{
+  "pid": 54756,
+  "operation": "trace",
+  "output": "D:\\stackguard-data\\replays\\trace-10m-late-bounded\\trace",
+  "workspace": "D:\\stackguard-data\\temp\\late-bounded-regression\\stackguard-trace-2314791068",
+  "complete": true,
+  "events_bytes_before_interrupt": 6809211756,
+  "spill_bytes_before_interrupt": 18071224194,
+  "finalized_cpu_segments_before_interrupt": 28,
+  "shutdown": {
+    "exit_code": 17,
+    "elapsed_seconds": 0.15348189999349415
+  },
+  "cpu_profile_files": [
+    "cpu.pprof",
+    "cpu.pprof.part-000001",
+    "cpu.pprof.part-000002",
+    "cpu.pprof.part-000003",
+    "cpu.pprof.part-000004",
+    "cpu.pprof.part-000005",
+    "cpu.pprof.part-000006",
+    "cpu.pprof.part-000007",
+    "cpu.pprof.part-000008",
+    "cpu.pprof.part-000009",
+    "cpu.pprof.part-000010",
+    "cpu.pprof.part-000011",
+    "cpu.pprof.part-000012",
+    "cpu.pprof.part-000013",
+    "cpu.pprof.part-000014",
+    "cpu.pprof.part-000015",
+    "cpu.pprof.part-000016",
+    "cpu.pprof.part-000017",
+    "cpu.pprof.part-000018",
+    "cpu.pprof.part-000019",
+    "cpu.pprof.part-000020",
+    "cpu.pprof.part-000021",
+    "cpu.pprof.part-000022",
+    "cpu.pprof.part-000023",
+    "cpu.pprof.part-000024",
+    "cpu.pprof.part-000025",
+    "cpu.pprof.part-000026",
+    "cpu.pprof.part-000027",
+    "cpu.pprof.part-000028"
+  ],
+  "valid_partial_records": {
+    "events.jsonl": 9937372,
+    "quarantine.jsonl": 0
+  },
+  "manifest_records": 9937372,
+  "spill_bytes_retained": 18071420802
+}
