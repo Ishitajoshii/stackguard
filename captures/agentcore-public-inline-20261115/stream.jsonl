@@ -1,0 +1,152 @@
+{"scope":"Public repository metadata only; no resume, Notion, or provider tokens supplied","session":"stackguard-public-f98b06e05bbc701c9df31cafc4954b43","started_at":"2026-11-15T14:58:06.0364552Z"}
+{"event":{"Value":{"Role":"assistant"}},"event_type":"*types.InvokeHarnessStreamOutputMemberMessageStart","round":0}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":"\u003cthinking"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":0}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":"\u003e"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":0}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" To"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":0}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" fulfill"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":0}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" the"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":0}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" User"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":0}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":"'"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":0}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":"s"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":0}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" request"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":0}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":","}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":0}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" I"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":0}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" need"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":0}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" to"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":0}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" call"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":0}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" the"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":0}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" `"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":0}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":"github"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":0}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":"_"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":0}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":"repo"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":0}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":"`"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":0}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" tool"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":0}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" with"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":0}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" the"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":0}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" repository"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":0}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" name"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":0}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" \""}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":0}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":"golang"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":0}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":"/"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":0}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":"go"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":0}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":"\"."}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":0}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" After"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":0}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" retrieving"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":0}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" the"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":0}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" metadata"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":0}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":","}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":0}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" I"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":0}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" will"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":0}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" extract"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":0}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" and"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":0}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" present"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":0}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" the"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":0}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" repository"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":0}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" name"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":0}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" and"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":0}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" license"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":0}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" along"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":0}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" with"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":0}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" its"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":0}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" GitHub"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":0}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" URL"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":0}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":"."}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":0}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" \u003c/"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":0}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":"thinking"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":0}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":"\u003e\n"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":0}
+{"event":{"Value":{"ContentBlockIndex":0}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockStop","round":0}
+{"event":{"Value":{"ContentBlockIndex":1,"Start":{"Value":{"Name":"github_repo","ToolUseId":"tooluse_8c0dv6tCpoYXwzEA4VSbut","ServerName":null,"Type":""}}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockStart","round":0}
+{"event":{"Value":{"ContentBlockIndex":1,"Delta":{"Value":{"Input":"{\"repository\":\"golang/go\"}"}}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":0}
+{"event":{"Value":{"ContentBlockIndex":1}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockStop","round":0}
+{"event":{"Value":{"StopReason":"tool_use"}},"event_type":"*types.InvokeHarnessStreamOutputMemberMessageStop","round":0}
+{"event":{"Value":{"Metrics":{"LatencyMs":681},"Usage":{"InputTokens":498,"OutputTokens":73,"TotalTokens":571,"CacheReadInputTokens":null,"CacheWriteInputTokens":null}}},"event_type":"*types.InvokeHarnessStreamOutputMemberMetadata","round":0}
+{"round":0,"stop_reason":"tool_use","usage":[{"input_tokens":498,"output_tokens":73,"total_tokens":571,"latency_ms":681}]}
+{"public_api_read_succeeded":true,"repository":"golang/go","tool":"github_repo","tool_use_id":"tooluse_8c0dv6tCpoYXwzEA4VSbut"}
+{"event":{"Value":{"Role":"user"}},"event_type":"*types.InvokeHarnessStreamOutputMemberMessageStart","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Start":{"Value":{"ToolUseId":"tooluse_8c0dv6tCpoYXwzEA4VSbut","Status":"success"}}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockStart","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":[{"Value":"{\"full_name\":\"golang/go\",\"html_url\":\"https://github.com/golang/go\",\"description\":\"The Go programming language\",\"language\":\"Go\",\"topics\":[\"go\",\"golang\",\"language\",\"programming-language\"],\"private\":false,\"archived\":false,\"fork\":false,\"license\":{\"spdx_id\":\"BSD-3-Clause\"},\"pushed_at\":\"2026-11-15T14:57:17Z\",\"updated_at\":\"2026-11-15T14:50:09Z\",\"default_branch\":\"master\"}"}]}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockStop","round":1}
+{"event":{"Value":{"StopReason":"tool_result"}},"event_type":"*types.InvokeHarnessStreamOutputMemberMessageStop","round":1}
+{"event":{"Value":{"Role":"assistant"}},"event_type":"*types.InvokeHarnessStreamOutputMemberMessageStart","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":"The"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" repository"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" \""}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":"golang"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":"/"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":"go"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":"\""}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" has"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" been"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" successfully"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" retrieved"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":"."}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" Here"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" are"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" its"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" details"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":":\n\n"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":"-"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" **"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":"Repository"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" Name"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":":**"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":""}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" golang"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":"/"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":"go"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":""}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":"\n-"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" **"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":"License"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":":**"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":""}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" BSD"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":"-"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":"3"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":"-"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":"Clause"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":""}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":"\n-"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" **"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":"GitHub"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" URL"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":":**"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":""}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" ["}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":"https"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":"://"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":"github"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":"."}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":"com"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":"/"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":"golang"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":"/"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":"go"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":"]"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":"("}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":"https"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":"://"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":"github"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":"."}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":"com"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":"/"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":"golang"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":"/"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":"go"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":")\n\n"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":"This"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" repository"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" is"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" public"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" and"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" contains"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" the"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" Go"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" programming"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":" language"}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":"."}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0,"Delta":{"Value":""}}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockDelta","round":1}
+{"event":{"Value":{"ContentBlockIndex":0}},"event_type":"*types.InvokeHarnessStreamOutputMemberContentBlockStop","round":1}
+{"event":{"Value":{"StopReason":"end_turn"}},"event_type":"*types.InvokeHarnessStreamOutputMemberMessageStop","round":1}
+{"event":{"Value":{"Metrics":{"LatencyMs":645},"Usage":{"InputTokens":726,"OutputTokens":78,"TotalTokens":804,"CacheReadInputTokens":null,"CacheWriteInputTokens":null}}},"event_type":"*types.InvokeHarnessStreamOutputMemberMetadata","round":1}
+{"round":1,"stop_reason":"end_turn","usage":[{"input_tokens":726,"output_tokens":78,"total_tokens":804,"latency_ms":645}]}

@@ -104,7 +104,8 @@ func Definitions() ([]types.HarnessTool, []string) {
 	var allowed []string
 	for _, t := range mcp.Tools() {
 		out = append(out, types.HarnessTool{Type: types.HarnessToolTypeInlineFunction, Name: aws.String(t.Name), Config: &types.HarnessToolConfigurationMemberInlineFunction{Value: types.HarnessInlineFunctionConfig{Description: aws.String(t.Description), InputSchema: document.NewLazyDocument(t.Schema)}}})
-		allowed = append(allowed, t.Name)
+		// Plain selectors match built-ins. Inline tools need their @name selector.
+		allowed = append(allowed, "@"+t.Name)
 	}
 	return out, allowed
 }
@@ -204,8 +205,8 @@ func Run(ctx context.Context, o Options, prompt string) (string, error) {
 			}
 			seen[tool.ID] = true
 			known := false
-			for _, name := range allowed {
-				if name == tool.Name {
+			for _, definition := range definitions {
+				if aws.ToString(definition.Name) == tool.Name {
 					known = true
 				}
 			}

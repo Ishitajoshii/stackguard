@@ -22,9 +22,9 @@ func TestFragmentedInlineTool(t *testing.T) {
 	if len(tools) != 7 || len(allowed) != 7 {
 		t.Fatal("unbounded tool set")
 	}
-	for _, s := range allowed {
-		if s == "*" || s == "shell" {
-			t.Fatal("unsafe default")
+	for i, s := range allowed {
+		if s != "@"+aws.ToString(tools[i].Name) {
+			t.Fatal("inline tool selector must be @name")
 		}
 	}
 }

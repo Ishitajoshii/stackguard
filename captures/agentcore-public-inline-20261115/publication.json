@@ -1,0 +1,9 @@
+{
+  "source": "Original AWS SDK InvokeHarness stream and actual anonymous public GitHub read",
+  "scope": "Public golang/go metadata only; no resume, Notion content, or provider tokens",
+  "files": {
+    "stream.jsonl": "414b28ce296f667a5f97a3a8978efc79b739bd3b9b7ba6323f717e58ffd24e6c",
+    "summary.json": "f4df0e0dbca4d69e09f6f8a042a5631cfc4cc5d2120cac41f8fbcf689f322f1a"
+  },
+  "limits": "Native SDK events; not a CloudWatch export or Codex delegation. Attempt 5; earlier failed attempts retained privately."
+}
