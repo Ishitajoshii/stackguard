@@ -1,0 +1,9 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [{
+    "Sid": "ManagedHarnessSessionMemory",
+    "Effect": "Allow",
+    "Action": ["bedrock-agentcore:ListEvents", "bedrock-agentcore:GetEvent", "bedrock-agentcore:CreateEvent"],
+    "Resource": "${MemoryArn}"
+  }]
+}

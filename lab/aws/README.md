@@ -115,3 +115,11 @@ All [21 checks passed again](../../results/checks/aws-roles/exact-resources.json
 When verifying these tightened policies, also pass `--harness-arn` and
 `--runtime-arn` with the observed deployed ARNs. Without those arguments, the
 verifier exercises the earlier bootstrap name/tag scope instead.
+
+The first live invoke revealed two additional service requirements. Execution
+trust must include the backing runtime's endpoint/version suffixes: scope
+`aws:SourceArn` to the observed runtime ARN plus `*`, retaining the source-account
+condition. The bare runtime ARN passed static validation but service assumption
+failed. Also attach `memory-policy.json` after substituting the actual managed
+memory ARN from `GetHarness`: even the default managed-memory configuration reads
+and writes session events. Never grant these actions against all memory resources.
