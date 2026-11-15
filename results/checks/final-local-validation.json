@@ -1,0 +1,64 @@
+{
+  "source_code_commit": "37e138b",
+  "checks": [
+    {
+      "command": [
+        "go",
+        "test",
+        "-race",
+        "./..."
+      ],
+      "exit_code": 0,
+      "seconds": 13.294
+    },
+    {
+      "command": [
+        "go",
+        "vet",
+        "./..."
+      ],
+      "exit_code": 0,
+      "seconds": 3.042
+    },
+    {
+      "command": [
+        "python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "lab",
+        "-p",
+        "test_*.py"
+      ],
+      "exit_code": 0,
+      "seconds": 1.16
+    },
+    {
+      "command": [
+        "python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts",
+        "-p",
+        "test_*.py"
+      ],
+      "exit_code": 0,
+      "seconds": 1.732
+    },
+    {
+      "command": [
+        "go",
+        "build",
+        "-o",
+        "D:/stackguard-data/builds/native-final-37e138b/",
+        "./cmd/..."
+      ],
+      "exit_code": 0,
+      "seconds": 4.152
+    }
+  ],
+  "private_diagnostics_excluded_by_nested_module": true
+}
