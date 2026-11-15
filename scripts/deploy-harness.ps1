@@ -15,13 +15,14 @@ if (-not $plan.model -or -not $plan.executionRoleArn -or $plan.maxTokens -lt 1 -
 # command; it is not called by setup, doctor, tests or profile preparation.
 $createdText = & aws bedrock-agentcore-control create-harness --profile $Profile --region $Region --cli-input-json ('file://' + (Resolve-Path -LiteralPath $InputFile).Path) --output json 2>($OutputFile+'.error.txt')
 if ($LASTEXITCODE -ne 0) { throw 'CreateHarness failed; check role/model/region permissions in AWS.' }
-$created = $createdText | ConvertFrom-Json
+$created = ($createdText | ConvertFrom-Json).harness
 $createdText | Set-Content -LiteralPath ($OutputFile+'.created.json')
+if (-not $created.harnessId) { throw 'CreateHarness returned no harness.harnessId; retain the private creation response.' }
 $deadline = [DateTime]::UtcNow.AddMinutes(5)
 while ([DateTime]::UtcNow -lt $deadline) {
  $stateText = & aws bedrock-agentcore-control get-harness --profile $Profile --region $Region --harness-id $created.harnessId --output json 2>$null
  if ($LASTEXITCODE -ne 0) { throw 'GetHarness failed; the created resource may need cleanup.' }
- $state = $stateText | ConvertFrom-Json
+ $state = ($stateText | ConvertFrom-Json).harness
  if ($state.status -eq 'READY') {
   $stateText | Set-Content -LiteralPath $OutputFile
   Write-Output 'Harness READY. Configure its ARN locally, then run the explicit cloud smoke test.'
