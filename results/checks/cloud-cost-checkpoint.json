@@ -1,0 +1,57 @@
+{
+  "checked_at": "2026-11-15T15:03:06.071235+00:00",
+  "attempts": [
+    {
+      "run": "public-cloud-001",
+      "original_stream_sha256": "e8d87af81b2fd23c116988c217012980f418704687ba366c27817d0f5c782de1",
+      "passed": false,
+      "reported_metadata_events": 0,
+      "reported_input_tokens": null,
+      "reported_output_tokens": null,
+      "reported_model_estimate_usd": null
+    },
+    {
+      "run": "public-cloud-002",
+      "original_stream_sha256": "37e5e603f9de84000259634cce6248f7f6efb76eb0dbfa5e1a31781c577d7538",
+      "passed": false,
+      "reported_metadata_events": 0,
+      "reported_input_tokens": null,
+      "reported_output_tokens": null,
+      "reported_model_estimate_usd": null
+    },
+    {
+      "run": "public-cloud-003",
+      "original_stream_sha256": "262f0eac463c849aed8d40a41a216a5e52349cc492b8aabbb86e828ac58598b3",
+      "passed": false,
+      "reported_metadata_events": 0,
+      "reported_input_tokens": null,
+      "reported_output_tokens": null,
+      "reported_model_estimate_usd": null
+    },
+    {
+      "run": "public-cloud-004",
+      "original_stream_sha256": "33af8f734f77f5acccfd088bcaa81ebf49a52a1fee0a9a39110715a60a817416",
+      "passed": false,
+      "reported_metadata_events": 1,
+      "reported_input_tokens": 89,
+      "reported_output_tokens": 264,
+      "reported_model_estimate_usd": "0.0000469450"
+    },
+    {
+      "run": "public-cloud-005",
+      "original_stream_sha256": "414b28ce296f667a5f97a3a8978efc79b739bd3b9b7ba6323f717e58ffd24e6c",
+      "passed": true,
+      "reported_metadata_events": 2,
+      "reported_input_tokens": 1224,
+      "reported_output_tokens": 151,
+      "reported_model_estimate_usd": "0.0000749480"
+    }
+  ],
+  "attempt_count": 5,
+  "known_reported_model_estimate_usd": "0.0001218930",
+  "all_attempts_scenario_plus_reserve_usd": "2.665462613333333333333333334",
+  "initial_attempt_limit": 8,
+  "remaining_attempts_before_replanning": 3,
+  "final_bill_reconciled": false,
+  "limits": "Estimates using the checked regional rates, not the final bill. Null usage is unknown, not free. The conservative runtime/model scenario is applied to every attempt including failures; actual runtime shape, logs, memory and other service charges still require reconciliation."
+}
