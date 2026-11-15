@@ -4,6 +4,8 @@ package cloud
 
 import (
 	"context"
+	"crypto/rand"
+	"encoding/hex"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -49,6 +51,18 @@ type Usage struct {
 	CacheRead  *int32 `json:"cache_read_input_tokens,omitempty"`
 	CacheWrite *int32 `json:"cache_write_input_tokens,omitempty"`
 	LatencyMS  int64  `json:"latency_ms"`
+}
+
+// Each SDK invocation carries a fresh W3C context. Persisting the exact sent
+// parent provides an explicit join to native cloud spans without time matching.
+func traceContext() (trace, parent, header string, err error) {
+	var raw [24]byte
+	if _, err = rand.Read(raw[:]); err != nil {
+		return
+	}
+	trace, parent = hex.EncodeToString(raw[:16]), hex.EncodeToString(raw[16:])
+	header = "00-" + trace + "-" + parent + "-01"
+	return
 }
 
 func (r *Round) Consume(event types.InvokeHarnessStreamOutput) error {
@@ -143,6 +157,10 @@ func Run(ctx context.Context, o Options, prompt string) (string, error) {
 	seen := map[string]bool{}
 	var final strings.Builder
 	for n := 0; n < o.MaxRounds; n++ {
+		traceID, traceParent, traceHeader, e := traceContext()
+		if e != nil {
+			return final.String(), errors.New("cannot generate native trace context")
+		}
 		if o.Events != nil {
 			credentials, e := cfg.Credentials.Retrieve(ctx)
 			if e != nil {
@@ -153,8 +171,11 @@ func Run(ctx context.Context, o Options, prompt string) (string, error) {
 			if e = o.Events(model.Event{Version: 1, ID: span, TS: time.Now().UTC(), Source: "bridge", Session: o.Session, Span: span, ParentSession: o.ParentSession, ParentRequestID: o.ParentRequestID, Agent: "local-bridge", Client: "aws-sdk", Kind: "tool_call", Target: "AgentCore.InvokeHarness", Status: "attempted", Credentials: []model.CredentialUse{{ID: credentialID, Attribution: "implicit"}, {ID: "aws_role:" + aws.ToString(identity.Arn), Attribution: "implicit"}}, Evidence: []string{"aws-sdk-credential-provider", "sts:GetCallerIdentity"}}); e != nil {
 				return final.String(), e
 			}
+			if e = o.Events(model.Event{Version: 1, ID: traceID + ":" + traceParent, TS: time.Now().UTC(), Source: "bridge-trace-context", Session: traceID, Span: traceParent, ParentSession: o.Session, Parent: span, Agent: "local-bridge", Client: "aws-sdk", Kind: "span", Evidence: []string{"InvokeHarness.TraceParent:" + traceHeader}}); e != nil {
+				return final.String(), e
+			}
 		}
-		response, e := client.InvokeHarness(ctx, &bedrockagentcore.InvokeHarnessInput{HarnessArn: aws.String(o.Harness), RuntimeSessionId: aws.String(o.Session), Messages: messages, Tools: definitions, AllowedTools: allowed, MaxIterations: aws.Int32(6), MaxTokens: aws.Int32(2048), TimeoutSeconds: aws.Int32(60)})
+		response, e := client.InvokeHarness(ctx, &bedrockagentcore.InvokeHarnessInput{HarnessArn: aws.String(o.Harness), RuntimeSessionId: aws.String(o.Session), TraceParent: aws.String(traceHeader), Messages: messages, Tools: definitions, AllowedTools: allowed, MaxIterations: aws.Int32(6), MaxTokens: aws.Int32(2048), TimeoutSeconds: aws.Int32(60)})
 		if e != nil {
 			if ctx.Err() != nil {
 				return final.String(), ctx.Err()

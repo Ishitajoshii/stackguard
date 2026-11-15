@@ -1,10 +1,25 @@
 package cloud
 
 import (
+	"encoding/hex"
 	"github.com/aws/aws-sdk-go-v2/aws"
 	"github.com/aws/aws-sdk-go-v2/service/bedrockagentcore/types"
 	"testing"
 )
+
+func TestNativeTraceContext(t *testing.T) {
+	trace, parent, header, err := traceContext()
+	if err != nil || len(trace) != 32 || len(parent) != 16 || header != "00-"+trace+"-"+parent+"-01" {
+		t.Fatal("invalid W3C trace context", err)
+	}
+	if _, err := hex.DecodeString(trace + parent); err != nil {
+		t.Fatal(err)
+	}
+	other, _, _, err := traceContext()
+	if err != nil || trace == other {
+		t.Fatal("invocations must not reuse trace roots")
+	}
+}
 
 // Wire-structure tests use algorithm inputs, not fabricated cloud-run evidence.
 func TestFragmentedInlineTool(t *testing.T) {
