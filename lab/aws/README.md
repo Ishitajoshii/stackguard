@@ -125,3 +125,10 @@ memory ARN from `GetHarness`: even the default managed-memory configuration read
 and writes session events. The full native run also exposed the documented
 `RetrieveMemoryRecords` requirement; the scoped fix passes a fresh native follow-up
 with no error spans. Never grant these actions against all memory resources.
+
+Keep `idleRuntimeSessionTimeout` and `maxLifetime` at 300 seconds for this lab.
+Inline functions execute on the local machine between cloud invocations. A
+60-second idle limit shut down the runtime while a real shortlist was still
+running, so its successful result could not resume the cloud turn. The five-minute
+idle setting preserves that pending state without increasing the existing
+five-minute maximum lifetime. The per-invocation timeout remains 60 seconds.

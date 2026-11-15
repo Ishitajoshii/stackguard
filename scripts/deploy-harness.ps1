@@ -10,7 +10,7 @@ foreach ($path in @($OutputFile, ($OutputFile+'.created.json'), ($OutputFile+'.e
 }
 $plan = Get-Content -LiteralPath $InputFile -Raw | ConvertFrom-Json
 $lifecycle = $plan.environment.agentCoreRuntimeEnvironment.lifecycleConfiguration
-if (-not $plan.model -or -not $plan.executionRoleArn -or $plan.maxTokens -lt 1 -or $plan.maxTokens -gt 2048 -or $plan.maxIterations -lt 1 -or $plan.maxIterations -gt 6 -or $plan.timeoutSeconds -lt 1 -or $plan.timeoutSeconds -gt 60 -or -not $plan.allowedTools -or $plan.allowedTools -contains '*' -or $lifecycle.idleRuntimeSessionTimeout -ne 60 -or $lifecycle.maxLifetime -ne 300) { throw 'Review explicit model, role, allowlist and bounded invocation/session limits first.' }
+if (-not $plan.model -or -not $plan.executionRoleArn -or $plan.maxTokens -lt 1 -or $plan.maxTokens -gt 2048 -or $plan.maxIterations -lt 1 -or $plan.maxIterations -gt 6 -or $plan.timeoutSeconds -lt 1 -or $plan.timeoutSeconds -gt 60 -or -not $plan.allowedTools -or $plan.allowedTools -contains '*' -or $lifecycle.idleRuntimeSessionTimeout -ne 300 -or $lifecycle.maxLifetime -ne 300) { throw 'Review explicit model, role, allowlist and bounded invocation/session limits first.' }
 # No credentials or provider content are printed. This is an explicit deployment
 # command; it is not called by setup, doctor, tests or profile preparation.
 $createdText = & aws bedrock-agentcore-control create-harness --profile $Profile --region $Region --cli-input-json ('file://' + (Resolve-Path -LiteralPath $InputFile).Path) --output json 2>($OutputFile+'.error.txt')

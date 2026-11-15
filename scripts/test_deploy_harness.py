@@ -16,7 +16,7 @@ class DeploymentResponseTests(unittest.TestCase):
                     'executionRoleArn': 'arn:aws:iam::000000000000:role/test',
                     'maxTokens': 2048, 'maxIterations': 6, 'timeoutSeconds': 60,
                     'allowedTools': ['test_read'], 'environment': {'agentCoreRuntimeEnvironment': {
-                        'lifecycleConfiguration': {'idleRuntimeSessionTimeout': 60, 'maxLifetime': 300}}}}
+                        'lifecycleConfiguration': {'idleRuntimeSessionTimeout': 300, 'maxLifetime': 300}}}}
             (root/'plan.json').write_text(json.dumps(plan))
             quote = lambda path: "'"+str(path).replace("'", "''")+"'"
             wrapper = """function global:aws {
