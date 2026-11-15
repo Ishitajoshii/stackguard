@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-11-15T16:22:39.093330+00:00",
+  "checked_at": "2026-11-15T16:25:16.393983+00:00",
   "passed": true,
   "normalized_events": 277,
   "provider_calls": {
@@ -23,15 +23,15 @@
   "source_hashes": {
     "bridge-audit.jsonl": "4680bff605794160dc6f90583dea2ab5f54a293dac371656e640fb3f6109d46e",
     "bridge-events.jsonl": "16f0966841f1394decfefe997f35237924d283f3e67b1e91ca8357d1b93a8568",
-    "capture-status.json": "5b07f768644e1737dc43f66276feb579d7c192bb963484123a78017c00ea1d5b",
-    "cloudwatch.json": "70c3b19e6e9ae7b6d7fd282bc35f41eedeb3a2c78caaab3dbc2c3cf9015a02fd",
+    "capture-status.json": "f5471c6129c9065ff47abc224421ca150eb72293e930f5f77985cfd718f16f12",
+    "cloudwatch.json": "c4dbc429a131eca8187113352dc42dee98c9e11f8de60079add0f4194be108ff",
     "codex-native.jsonl": "da519fe6bec9c15cab97e0d6ac2268aa8271e464d91ac3ba58938811be2337f4",
-    "codex-result-link.json": "0c5a5f8703642dc5ef3b126f7b576f44d06dac077e20832cc6c0161df1b3af86",
-    "correlation.jsonl": "c925b81dd5b1e0a0b0d9fa50cb93f3d86b7646209a950e803747655c29c25ef6",
+    "codex-result-link.json": "3452a9e5aea3126ada3e57f02750b8edd6ce19106f66e38b1effd29879e6c14b",
+    "correlation.jsonl": "fbfd843802f813a2802ac5c468c5de43fe4b8a30a503438b8c9e8ba53ef9fcb4",
     "http.jsonl": "ff665439652ce520ae8efb6746d7a8598883f110147bb424b0142c2636e78277",
-    "inventory.jsonl": "dbf3e10561353b581974fd2a574b9485f4352ee921443d2ad12df567767a13b2",
+    "inventory.jsonl": "d9e83dac815e23a2c60c4b7cce7f6e05b4cf8de3bfad3ce9e8151eb18f48bc1b",
     "providers.jsonl": "e13f3ac6223027c58c3916ce126a299682aad893a9ac0b7d93ff1d7b350d8d8e",
-    "publication.json": "7592a323d206676b35f2769249cbba8a671ccdb5d402b3ba8cc018fdc45121fb",
+    "publication.json": "38e5ef7ad3dd617ad3e2eaad566b45b00e9643c522d3417d428fbc3cb9b70ef9",
     "stdio.jsonl": "59177eef73f82eba4ff8a525d0fe83e69ef365f5a2aef67e071d84388bce22b0"
   },
   "limits": "Direct/implicit describe credential presence; delegated paths describe operations, not credential transfer. Native/proxy duplicate observations remain visible. Three AWS ingress spans are absent; no missing native parents were fabricated. Two optional memory-read errors are retained from this run; later remediation is separate evidence."

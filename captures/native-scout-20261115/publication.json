@@ -27,11 +27,12 @@
       "transformation": "none"
     },
     "capture-status.json": {
-      "sha256": "5b07f768644e1737dc43f66276feb579d7c192bb963484123a78017c00ea1d5b",
-      "transformation": "none"
+      "sha256": "f5471c6129c9065ff47abc224421ca150eb72293e930f5f77985cfd718f16f12",
+      "transformation": "CRLF normalized to LF for portable evidence hashes; all field values unchanged.",
+      "original_sha256": "5b07f768644e1737dc43f66276feb579d7c192bb963484123a78017c00ea1d5b"
     },
     "cloudwatch.json": {
-      "sha256": "70c3b19e6e9ae7b6d7fd282bc35f41eedeb3a2c78caaab3dbc2c3cf9015a02fd",
+      "sha256": "c4dbc429a131eca8187113352dc42dee98c9e11f8de60079add0f4194be108ff",
       "original_sha256": "765ae1927a0479c6282309fd9ca39716b8293c628fff1e33f5a9e07f144cce74",
       "transformation": "Metadata allowlist; discard auth/account/resource attributes, tool arguments/results/schemas/descriptions and model content. Original IDs, parent IDs, timestamps and selected attributes retained unchanged."
     },
