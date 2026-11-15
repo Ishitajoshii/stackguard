@@ -135,7 +135,7 @@ func Run(ctx context.Context, o Options, prompt string) (string, error) {
 	}
 	ctx, cancel := context.WithTimeout(ctx, 5*time.Minute)
 	defer cancel()
-	cfg, e := config.LoadDefaultConfig(ctx, config.WithSharedConfigProfile(o.Profile), config.WithRegion(o.Region), config.WithRetryMaxAttempts(1))
+	cfg, e := config.LoadDefaultConfig(ctx, config.WithSharedConfigProfile(o.Profile), config.WithRegion(o.Region), config.WithRetryMaxAttempts(1), config.WithCredentialsProvider(profileCredentials(o.Profile)))
 	if e != nil {
 		return "", errors.New("AWS configuration unavailable; configure a restricted profile")
 	}
