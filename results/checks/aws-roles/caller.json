@@ -1,0 +1,64 @@
+{
+  "checked_at": "2026-11-15T12:26:18.647998+00:00",
+  "scope": "caller",
+  "region": "ap-south-1",
+  "passed": true,
+  "caller_sts_verified": true,
+  "checks": [
+    {
+      "name": "named_harness_allowed",
+      "expected": "allowed",
+      "decision": "allowed",
+      "passed": true
+    },
+    {
+      "name": "other_harness_denied",
+      "expected": "denied",
+      "decision": "implicitDeny",
+      "passed": true
+    },
+    {
+      "name": "tagged_runtime_allowed",
+      "expected": "allowed",
+      "decision": "allowed",
+      "passed": true
+    },
+    {
+      "name": "untagged_runtime_denied",
+      "expected": "denied",
+      "decision": "implicitDeny",
+      "passed": true
+    },
+    {
+      "name": "other_project_runtime_denied",
+      "expected": "denied",
+      "decision": "implicitDeny",
+      "passed": true
+    },
+    {
+      "name": "runtime_commands_denied",
+      "expected": "denied",
+      "decision": "implicitDeny",
+      "passed": true
+    },
+    {
+      "name": "caller_s3_denied",
+      "expected": "denied",
+      "decision": "implicitDeny",
+      "passed": true
+    },
+    {
+      "name": "caller_iam_admin_denied",
+      "expected": "denied",
+      "decision": "implicitDeny",
+      "passed": true
+    },
+    {
+      "name": "caller_direct_model_denied",
+      "expected": "denied",
+      "decision": "implicitDeny",
+      "passed": true
+    }
+  ],
+  "limits": "IAM simulation and STS only; no live Harness/model invocation or service-role assumption."
+}

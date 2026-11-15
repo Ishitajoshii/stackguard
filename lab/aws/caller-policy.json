@@ -1,0 +1,24 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "InvokeStackGuardHarness",
+      "Effect": "Allow",
+      "Action": ["bedrock-agentcore:InvokeHarness", "bedrock-agentcore:InvokeAgentRuntime"],
+      "Resource": "arn:aws:bedrock-agentcore:${Region}:${AccountId}:harness/${HarnessName}-*"
+    },
+    {
+      "Sid": "InvokeTaggedBackingRuntime",
+      "Effect": "Allow",
+      "Action": "bedrock-agentcore:InvokeAgentRuntime",
+      "Resource": "arn:aws:bedrock-agentcore:${Region}:${AccountId}:runtime/*",
+      "Condition": {"StringEquals": {"aws:ResourceTag/Project": "StackGuard"}}
+    },
+    {
+      "Sid": "IdentifySession",
+      "Effect": "Allow",
+      "Action": "sts:GetCallerIdentity",
+      "Resource": "*"
+    }
+  ]
+}
