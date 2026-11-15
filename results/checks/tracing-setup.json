@@ -1,0 +1,40 @@
+{
+  "checked_at": "2026-11-15T15:47:29.074177+00:00",
+  "region": "ap-south-1",
+  "user_approved": true,
+  "key_count_created": 1,
+  "key_enabled": true,
+  "log_groups": [
+    {
+      "kind": "/aws/application-signals/data",
+      "retention_days": 7,
+      "uses_lab_key": true
+    },
+    {
+      "kind": "runtime",
+      "retention_days": 7,
+      "uses_lab_key": true
+    },
+    {
+      "kind": "aws/spans",
+      "retention_days": 7,
+      "uses_lab_key": true
+    }
+  ],
+  "destination": {
+    "Destination": "CloudWatchLogs",
+    "Status": "ACTIVE"
+  },
+  "previous_destination": {
+    "Destination": "XRay",
+    "Status": "ACTIVE"
+  },
+  "kms_scope_log_group_count": 3,
+  "kms_storage_rate_usd_per_month": "1.00",
+  "kms_source": "https://aws.amazon.com/kms/pricing/",
+  "kms_cost_note": "Prorated hourly; request charges additional. Reserve one dollar separately from the existing logging reserve until cleanup is checked.",
+  "eight_attempt_scenario_with_separate_key_reserve_usd": "4.664740181333333333333333334",
+  "cleanup_complete": false,
+  "limits": "ACTIVE verified by a separate readback before native capture. Prior settings and created IDs retained privately for cleanup; the final bill is not reconciled.",
+  "active_verified_at": "2026-11-15T15:48:39.573986+00:00"
+}
