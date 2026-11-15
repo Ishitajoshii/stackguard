@@ -75,4 +75,4 @@ The complete [native research run](lab/NATIVE_SCOUT_PROOF.md) returned three rec
 
 The [cost record](results/checks/cloud-cost-final-estimate.json) includes all attempts, unknown-usage reserves, runtime assumptions and the retained KMS key. Its conservative scenario is below USD 5; same-day billing remains estimated. [Cleanup](lab/RUNBOOK.md) follows the recording, with exact resource receipts preserved privately. No further paid test is scheduled.
 
-Before submission, record and review the [five-minute demo](lab/DEMO.md), rehearse the goroutine/channel explanation, and confirm that the evaluator accepts AgentCore in place of the assignment's named cloud option. The repository contains the reviewed source captures, oracle, results and research. Final delayed billing and post-recording cleanup remain open.
+The repository contains the reviewed source captures, oracle, results and research. The required demo recording and evaluator acceptance of AgentCore in place of the assignment's named cloud option remain outstanding. Final delayed billing and post-recording cleanup remain open.

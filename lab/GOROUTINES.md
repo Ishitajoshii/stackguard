@@ -1,6 +1,6 @@
-# Explaining the concurrency
+# Concurrency design
 
-Use this alongside the code during rehearsal. It describes the implementation; it does not claim that the human explanation or live demo has happened.
+Channel ownership, backpressure and shutdown behavior in the implementation.
 
 ## Scan: bounded work, one coordinator
 
@@ -73,4 +73,4 @@ The later [large-spill interruption](../results/bench/late-spill-interruption/su
 
 A subsequent [long-profile run](../results/bench/trace-10m-memory-failure/interruption.json) missed the deadline after its incomplete data manifest had been written; the CPU profile was still incomplete when the harness terminated the process. Windowed profiling passes rotation/cancellation/race/leak unit tests and a [100k-event process check](../results/bench/profile-rotation-cancellation/summary.json): exit 17 in 0.337 s after two complete profile windows, with all partial events and finalized profiles valid. A [completed corrected-build 10M run](../results/bench/trace-10m-bounded-profiles-w4/summary.json) also stayed below the memory limit and finalized all 151 CPU windows. The separate [large late-interruption proof](../results/bench/late-bounded-interruption/verification.json) now verifies exit 17 in 0.153 s, 9,937,372 independently parsed partial records and 29 valid CPU segments. Its outer wrapper's console-stream failure is retained and explained separately in SCALING.md; the probe's measured outcome was independently revalidated.
 
-For rehearsal, trace one path aloud: Ctrl-C cancels the CLI context; the producer stops; worker sends choose cancellation; the waiter joins workers; the coordinator drains and closes output; the manifest says incomplete; the process returns 17. Then explain why closing a channel from an arbitrary receiver could panic another sender, and why explicit ownership avoids that race.
+Shutdown sequence: Ctrl-C cancels the CLI context; the producer stops; worker sends choose cancellation; the waiter joins workers; the coordinator drains and closes output; the manifest says incomplete; the process returns 17. Explicit channel ownership prevents a receiver from closing a channel while another goroutine is sending.

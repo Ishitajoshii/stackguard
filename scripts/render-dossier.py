@@ -14,7 +14,7 @@ from reportlab.lib.units import mm
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, PageBreak
 
 ROOT = Path(__file__).resolve().parents[1]
-DEST = ROOT / "output/pdf/stackguard-dossier-draft.pdf"
+DEST = ROOT / "output/pdf/stackguard-dossier.pdf"
 REPO = "https://github.com/Ishitajoshii/stackguard/blob/main/"
 INK = colors.HexColor("#172D42")
 MUTED = colors.HexColor("#526573")
