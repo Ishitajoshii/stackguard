@@ -1,0 +1,23 @@
+{
+  "started_at": "2026-11-15T15:55:49.095248+00:00",
+  "source_commit": "a2bf869e5ac206a3f2d955c2b7365330a57c39b2",
+  "binary_sha256": {
+    "oss-scout.exe": "393bd8794548bfbc2aa3f508c2f0a52a8b6a17788419d4d8b0f182491aa06081",
+    "nhi-probe.exe": "d609a331d3988de5f8a629fcba97dd89d1d69032b31d6b8eba0da9982aaf5438",
+    "sg-collect.exe": "39aac947906d5528019bf67422097fabb182d93395bfc263275ac87db7156025"
+  },
+  "codex_exit": 0,
+  "http_shutdown": {
+    "exit_code": 17,
+    "elapsed_seconds": 0.2775316000006569
+  },
+  "tools_shutdown": {
+    "exit_code": 17,
+    "elapsed_seconds": 0.2156262999997125
+  },
+  "collector_shutdown": {
+    "exit_code": 17,
+    "elapsed_seconds": 0.19289980000030482
+  },
+  "ended_at": "2026-11-15T15:57:23.006076+00:00"
+}

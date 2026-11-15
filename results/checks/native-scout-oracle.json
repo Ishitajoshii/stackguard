@@ -1,0 +1,38 @@
+{
+  "checked_at": "2026-11-15T16:22:39.093330+00:00",
+  "passed": true,
+  "normalized_events": 277,
+  "provider_calls": {
+    "github": 101,
+    "notion": 1
+  },
+  "sdk_invocations": 3,
+  "cloud_selected_tools": {
+    "github_profile": 1,
+    "github_search": 2,
+    "github_shortlist": 1
+  },
+  "secret_credential_identities": 3,
+  "additional_typed_role_principals": 1,
+  "native_cloud_spans": 44,
+  "explicit_native_cloud_tool_id_matches": 4,
+  "explicit_native_trace_id_matches": 3,
+  "credential_paths_resolved": true,
+  "native_ingress_parents_missing": 3,
+  "retained_native_optional_memory_errors": 2,
+  "source_hashes": {
+    "bridge-audit.jsonl": "4680bff605794160dc6f90583dea2ab5f54a293dac371656e640fb3f6109d46e",
+    "bridge-events.jsonl": "16f0966841f1394decfefe997f35237924d283f3e67b1e91ca8357d1b93a8568",
+    "capture-status.json": "5b07f768644e1737dc43f66276feb579d7c192bb963484123a78017c00ea1d5b",
+    "cloudwatch.json": "70c3b19e6e9ae7b6d7fd282bc35f41eedeb3a2c78caaab3dbc2c3cf9015a02fd",
+    "codex-native.jsonl": "da519fe6bec9c15cab97e0d6ac2268aa8271e464d91ac3ba58938811be2337f4",
+    "codex-result-link.json": "0c5a5f8703642dc5ef3b126f7b576f44d06dac077e20832cc6c0161df1b3af86",
+    "correlation.jsonl": "c925b81dd5b1e0a0b0d9fa50cb93f3d86b7646209a950e803747655c29c25ef6",
+    "http.jsonl": "ff665439652ce520ae8efb6746d7a8598883f110147bb424b0142c2636e78277",
+    "inventory.jsonl": "dbf3e10561353b581974fd2a574b9485f4352ee921443d2ad12df567767a13b2",
+    "providers.jsonl": "e13f3ac6223027c58c3916ce126a299682aad893a9ac0b7d93ff1d7b350d8d8e",
+    "publication.json": "7592a323d206676b35f2769249cbba8a671ccdb5d402b3ba8cc018fdc45121fb",
+    "stdio.jsonl": "59177eef73f82eba4ff8a525d0fe83e69ef365f5a2aef67e071d84388bce22b0"
+  },
+  "limits": "Direct/implicit describe credential presence; delegated paths describe operations, not credential transfer. Native/proxy duplicate observations remain visible. Three AWS ingress spans are absent; no missing native parents were fabricated. Two optional memory-read errors are retained from this run; later remediation is separate evidence."
+}

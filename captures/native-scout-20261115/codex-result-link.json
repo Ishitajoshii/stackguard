@@ -1,0 +1,24 @@
+{
+  "timestamp": "2026-11-15T15:57:14.621Z",
+  "type": "event_msg",
+  "payload": {
+    "type": "item_completed",
+    "thread_id": "01a1dfec-0a89-71c3-b9f0-9d5a30504271",
+    "turn_id": "01a1dfec-0d35-7182-9c03-0bf087152ecf",
+    "item": {
+      "type": "McpToolCall",
+      "id": "exec-55e7a26b-b4cc-4491-a557-54b761d5c79b",
+      "server": "stackguard",
+      "tool": "scout_research",
+      "status": "completed",
+      "result": {
+        "content": [
+          {
+            "type": "text",
+            "text": "{\"session\": \"809514b86f9920e8006d1615d06891f9-scout\"}"
+          }
+        ]
+      }
+    }
+  }
+}

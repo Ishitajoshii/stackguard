@@ -1,0 +1,55 @@
+{
+  "source": "Original native Codex, provider-boundary, proxy, bridge and CloudWatch captures from one completed real research run",
+  "cloud_session": "809514b86f9920e8006d1615d06891f9-scout",
+  "files": {
+    "codex-native.jsonl": {
+      "sha256": "da519fe6bec9c15cab97e0d6ac2268aa8271e464d91ac3ba58938811be2337f4",
+      "transformation": "none"
+    },
+    "stdio.jsonl": {
+      "sha256": "59177eef73f82eba4ff8a525d0fe83e69ef365f5a2aef67e071d84388bce22b0",
+      "transformation": "none"
+    },
+    "http.jsonl": {
+      "sha256": "ff665439652ce520ae8efb6746d7a8598883f110147bb424b0142c2636e78277",
+      "transformation": "none"
+    },
+    "providers.jsonl": {
+      "sha256": "e13f3ac6223027c58c3916ce126a299682aad893a9ac0b7d93ff1d7b350d8d8e",
+      "transformation": "none"
+    },
+    "bridge-events.jsonl": {
+      "sha256": "16f0966841f1394decfefe997f35237924d283f3e67b1e91ca8357d1b93a8568",
+      "transformation": "none"
+    },
+    "bridge-audit.jsonl": {
+      "sha256": "4680bff605794160dc6f90583dea2ab5f54a293dac371656e640fb3f6109d46e",
+      "transformation": "none"
+    },
+    "capture-status.json": {
+      "sha256": "5b07f768644e1737dc43f66276feb579d7c192bb963484123a78017c00ea1d5b",
+      "transformation": "none"
+    },
+    "cloudwatch.json": {
+      "sha256": "70c3b19e6e9ae7b6d7fd282bc35f41eedeb3a2c78caaab3dbc2c3cf9015a02fd",
+      "original_sha256": "765ae1927a0479c6282309fd9ca39716b8293c628fff1e33f5a9e07f144cce74",
+      "transformation": "Metadata allowlist; discard auth/account/resource attributes, tool arguments/results/schemas/descriptions and model content. Original IDs, parent IDs, timestamps and selected attributes retained unchanged."
+    },
+    "codex-result-link.json": {
+      "original_rollout_sha256": "09b37e15b6d65526e2a8033952bb8bdfbd48e6a3f225be47985eb03d2d12df6a",
+      "original_line": 46,
+      "transformation": "Keep original native completed-item IDs and returned session; remove model prose, arguments and duration fields."
+    }
+  },
+  "correlation": "The native completed-item ID equals the OTLP call ID; its returned session equals the bridge session; the bridge explicitly records the incoming proxy session/request hash. correlation.jsonl is a derived, evidence-backed link, not an agent-emitted event.",
+  "limits": [
+    "AWS inserts ingress parent spans absent from the 44-span export; sent trace IDs match but direct native parents do not. Preserve these gaps.",
+    "Service shutdown uses Ctrl-C; completed request pairs are checked separately from incomplete service manifests.",
+    "Cloud commentary is not recommendation validation; recommendations.json is the canonical local checked report.",
+    "Two optional RetrieveMemoryRecords calls returned 403 in this completed research run; their native ERROR status codes are retained. The scoped permission is being corrected separately."
+  ],
+  "inventory_sources": {
+    "providers": "Actual .env token scan, secret masks removed and path replaced. Agent bindings mapped to the active server implementation: provider github -> github-tool, notion -> notion-tool.",
+    "aws": "Runtime SDK credential-set fingerprint and separately typed STS role; explicit observed binding metadata, not a static-file credential discovery."
+  }
+}
