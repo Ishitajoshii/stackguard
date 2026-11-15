@@ -1,6 +1,6 @@
 # Credential research dossier
 
-StackGuard inventories credential candidates and reconstructs observed use by agents. This dossier separates documented behavior, implementation contracts and actual measurements. Original evidence includes native Codex calls through both proxy transports, authenticated GitHub/Notion checks, a real shortlist, two controlled inventory findings and local-file load tests. The full native cloud delegation and three-credential oracle remain open. Updated **15 November 2026**. The [source index](lab/SOURCES.md) maps claims to primary references and implementation evidence.
+StackGuard inventories credential candidates and reconstructs observed use by agents. This dossier separates documented behavior, implementation contracts and measurements. Original evidence includes native Codex-to-AgentCore research through both proxies, three credential fingerprints, a checked shortlist, two controlled inventory findings and local-file load tests. The [native proof](lab/NATIVE_SCOUT_PROOF.md) records explicit source links and remaining trace gaps. Updated **15 November 2026**. The [source index](lab/SOURCES.md) maps claims to primary references and implementation evidence.
 
 ## 1. Credential stores and propagation
 
@@ -45,11 +45,11 @@ A proxy call record establishes the observed request, session and supplied crede
 
 Delegated lineage requires explicit parent/span/request mappings. The bridge maps the inbound MCP request to the cloud session and cloud-selected tool-use ID, then to the downstream MCP request. These are supplementary application observations. Native Codex tool events can supply conversation/call identifiers; native cloud OTLP spans can supply trace/span ancestry. A label such as `agentcore-researcher` is a configured assertion until native evidence supports the identity. Timestamp proximity cannot supply a missing parent or prove token transfer.
 
-Adapters validate required fields, quarantine unmappable records and preserve checksums. Disk indexing resolves late parents; paths retain agents and observed tool targets. Duplicate source IDs must agree. Cycles and conflicting mappings stay unresolved. [Original Codex 0.166.0 captures](lab/NATIVE_LOCAL_PROOF.md) validate native tool-result fields for stdio and HTTP. Native conversation/call IDs differ from proxy IDs; no parent link is invented from timing. CloudWatch schema validation remains pending. Bounded aggregates retain up to 64 evidence references; normalized events retain individual source references.
+Adapters validate required fields, quarantine unmappable records and preserve checksums. Disk indexing resolves late parents; paths retain agents and tool targets. Duplicate source IDs must agree. The [native oracle](results/checks/native-scout-oracle.json) validates 277 events, the flat CloudWatch span schema, the Codex result/session link and four cloud tool-use IDs. Three AWS ingress-parent spans are absent; no substitute parents are invented. Native auth attributes and payloads are removed before publication. Bounded aggregates retain up to 64 evidence references; individual references remain in normalized events.
 
 No observed use within a supplied capture window is not proof that a token is permanently unused. Missing inventory bindings are not proof of unauthorized use. Capture completeness, source selection and the observation interval must accompany each conclusion. Local-file measurements test transport, replay scale, bounded memory and cancellation; they contain no provider-secret attribution oracle.
 
-## 5. Six misconfigurations and controlled reproduction plan
+## 5. Six misconfigurations and controlled reproductions
 
 | Misconfiguration | Severity and reasoning | Evidence/remediation |
 |---|---|---|
@@ -64,15 +64,15 @@ The [two controlled demonstrations](lab/CONTROLLED_RISKS.md) use owned credentia
 
 ## 6. Evidence status and delivery limit
 
-The scanner, adapters, graph and risk rules pass automated checks. The 1,000-in-flight MCP workload is a real local-file experiment linked from [SCALING.md](SCALING.md). [Two controlled inventory findings](lab/CONTROLLED_RISKS.md) reproduce over one authenticated GitHub read. [GitHub and Notion reads](results/checks/provider-access-retry.json) pass; the [local scout](results/scout/authenticated-local-001/report.md) returned three rechecked issues. The READY Harness completed a [public tool handoff](lab/CLOUD_HANDOFF_PROOF.md). Native cloud telemetry, the full cross-agent oracle and the three-credential trace remain open. This Markdown is the source for the six-page draft PDF.
+The complete [native research run](lab/NATIVE_SCOUT_PROOF.md) returned three rechecked issues after 101 GitHub reads, one Notion read and three AWS invocations. The oracle validates three secret-credential fingerprints plus a separately typed role, explicit source links and complete credential paths. Two nonfatal memory-read errors remain in the original capture; a scoped correction passed a fresh native follow-up with zero errors. [Two controlled inventory findings](lab/CONTROLLED_RISKS.md) have separate owned-token evidence.
 
 | Evidence | Available artifact | What remains to establish |
 |---|---|---|
-| Real MCP file calls | [Native Codex calls](lab/NATIVE_LOCAL_PROOF.md) through both transports; [load test](results/bench/transport-w4-r5/summary.json) reaches 1,000 simultaneous handlers. | Codex-to-cloud delegation using provider credentials and an explicit cross-source mapping. |
-| Credential candidates | [Complete 5.84 GB scan](results/bench/scan-corpus-full-w16/summary.json), redacted candidates and a selected machine configuration scan. | Two owned provider fingerprints are verified; cloud credential lineage remains open. No public-corpus credential verification. |
-| Trace load | [10-million-event profiled replay](results/bench/trace-10m-bounded-profiles-w4/summary.json), plus one-session and 10-million-session shapes; [worker results and scope](SCALING.md). | Native credential-bearing correctness oracle. Replays test volume and bounded memory; paused/shared-disk timings do not establish worker speedups. |
-| Automated correctness | [Validation records](results/validation/windows-race.txt), protocol fixtures, adapter fuzzing and process cancellation measurements. | Native cloud schema/correlation and a reviewed recording; two controlled findings now have original evidence. |
+| Real MCP calls | [Native research](lab/NATIVE_SCOUT_PROOF.md) exercises both transports; [load test](results/bench/transport-w4-r5/summary.json) reaches 1,000 simultaneous handlers. | Human recording/rehearsal; duplicate source observations stay visible. |
+| Credential candidates | [Complete 5.84 GB scan](results/bench/scan-corpus-full-w16/summary.json); [three-credential oracle](results/checks/native-scout-oracle.json). | Public-corpus candidates are never verified against providers; temporary AWS bindings are observed at runtime. |
+| Trace load | [10-million-event replay](results/bench/trace-10m-bounded-profiles-w4/summary.json), extreme session shapes and [worker results](SCALING.md). | Paused/shared-disk timings do not establish worker speedups. Scale replay and native correctness are separate evidence. |
+| Automated correctness | Race/leak/fuzz checks, cancellation measurements and original native-schema fixtures. | Three cloud ingress-parent spans are absent; recording and evaluator acceptance remain external. |
 
-The [runbook](lab/RUNBOOK.md) records cost and cleanup requirements. Cloud metadata can report usage without proving the final bill; missing usage is never assumed free. The [demo script](lab/DEMO.md) is a plan, not a recording. Public repository findings are not valid lab credentials and must never be tested against providers.
+The [cost record](results/checks/cloud-cost-final-estimate.json) includes all attempts, unknown-usage reserves, runtime assumptions and the retained KMS key. Its conservative scenario is below USD 5; same-day billing remains estimated. [Cleanup](lab/RUNBOOK.md) follows the recording, with exact resource receipts preserved privately. No further paid test is scheduled.
 
-Before submission, attach the original redacted captures and their checksums, inspect the expected delegation chain, reconcile cost, review the two owned-only findings, and review the final five-minute recording. The user must confirm the evaluator accepts AgentCore in place of the assignment's named cloud option. None of these pending gates is satisfied by a successful local algorithm test.
+Before submission, record and review the [five-minute demo](lab/DEMO.md), rehearse the goroutine/channel explanation, and confirm that the evaluator accepts AgentCore in place of the assignment's named cloud option. The repository contains the reviewed source captures, oracle, results and research. Final delayed billing and post-recording cleanup remain open.

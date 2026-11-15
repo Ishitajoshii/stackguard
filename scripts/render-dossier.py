@@ -89,7 +89,7 @@ def render():
         canvas.line(18*mm, A4[1]-15*mm, A4[0]-18*mm, A4[1]-15*mm)
         canvas.setFillColor(MUTED)
         canvas.setFont("Helvetica", 8)
-        canvas.drawString(18*mm, A4[1]-12*mm, "STACKGUARD / RESEARCH DRAFT")
+        canvas.drawString(18*mm, A4[1]-12*mm, "STACKGUARD / RESEARCH DOSSIER")
         canvas.drawString(18*mm, 12*mm, "See page 6 for observed evidence and remaining validation gates")
         canvas.drawRightString(A4[0]-18*mm, 12*mm, f"{doc.page}")
         canvas.restoreState()
