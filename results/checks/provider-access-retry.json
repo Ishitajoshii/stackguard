@@ -1,0 +1,53 @@
+{
+  "checked_at": "2026-11-15T12:46:09.068521+00:00",
+  "passed": true,
+  "checks": [
+    {
+      "check": "github_identity",
+      "status": 200,
+      "passed": true,
+      "expected_user_matches": true,
+      "reported_oauth_scopes": ""
+    },
+    {
+      "check": "github_public_repositories",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "check": "github_issue_search",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "check": "notion_identity",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "check": "notion_dedicated_page",
+      "status": 200,
+      "passed": true
+    },
+    {
+      "check": "notion_dedicated_children",
+      "status": 200,
+      "passed": true,
+      "block_count_first_page": 6,
+      "has_more": false
+    }
+  ],
+  "credentials": [
+    {
+      "provider": "github",
+      "fingerprint": "a23f7d325cd1f5cc3403524ab58fcb2c26bd1b69f546babc1e582c5d681bb67d",
+      "binding": "STACKGUARD_GITHUB_TOKEN"
+    },
+    {
+      "provider": "notion",
+      "fingerprint": "1395ce75e03c535c8f5929c1c74d8d79285b6efe49f1fd3fb01daa419c02982c",
+      "binding": "STACKGUARD_NOTION_TOKEN"
+    }
+  ],
+  "limits": "Successful reads do not establish that tokens lack write access or access to other pages. No write operations were tested."
+}
