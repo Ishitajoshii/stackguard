@@ -1,0 +1,77 @@
+{
+  "checked_at": "2026-11-15T16:28:49.623630+00:00",
+  "cloud_sessions_attempted": 7,
+  "pre_invocation_authentication_failure_runs": 1,
+  "runs": [
+    {
+      "run": "public-cloud-001",
+      "model_metadata_events": 0,
+      "reported_model_estimate_usd": null,
+      "input_tokens": null,
+      "output_tokens": null
+    },
+    {
+      "run": "public-cloud-002",
+      "model_metadata_events": 0,
+      "reported_model_estimate_usd": null,
+      "input_tokens": null,
+      "output_tokens": null
+    },
+    {
+      "run": "public-cloud-003",
+      "model_metadata_events": 0,
+      "reported_model_estimate_usd": null,
+      "input_tokens": null,
+      "output_tokens": null
+    },
+    {
+      "run": "public-cloud-004",
+      "model_metadata_events": 1,
+      "reported_model_estimate_usd": "0.0000469450",
+      "input_tokens": 89,
+      "output_tokens": 264
+    },
+    {
+      "run": "public-cloud-005",
+      "model_metadata_events": 2,
+      "reported_model_estimate_usd": "0.0000749480",
+      "input_tokens": 1224,
+      "output_tokens": 151
+    },
+    {
+      "run": "public-cloud-006",
+      "model_metadata_events": 2,
+      "reported_model_estimate_usd": "0.0000989330",
+      "input_tokens": 1537,
+      "output_tokens": 219
+    },
+    {
+      "run": "native-scout-002",
+      "model_metadata_events": 3,
+      "reported_model_estimate_usd": "0.0013841600",
+      "input_tokens": 30552,
+      "output_tokens": 802
+    }
+  ],
+  "reported_model_estimate_usd": "0.0016049860",
+  "unknown_usage_sessions": 3,
+  "runtime_scenario_usd": "0.4554666666666666666666666667",
+  "unknown_model_scenario_usd": "0.8040775680000",
+  "kms_key_reserve_usd": "1.00",
+  "logs_memory_storage_reserve_usd": "1.00",
+  "cost_explorer_query_usd": "0.01",
+  "remaining_total_scenario_usd": "3.271149220666666666666666667",
+  "budget_usd": "5.00",
+  "within_planning_scenario": true,
+  "billing_api_checked": true,
+  "billing_data_estimated": true,
+  "final_lab_bill_reconciled": false,
+  "resources_retained_for_recording": [
+    "Harness and managed memory",
+    "Scoped roles",
+    "One KMS key",
+    "Three seven-day encrypted log groups",
+    "CloudWatch trace destination and scoped ingestion policy"
+  ],
+  "limits": "Scenario, not a spending cap or final bill. Runtime uses the earlier 4-vCPU/16-GB/300-second assumption per attempted session; missing usage is not free. Same-day Cost Explorer is estimated and mixes account resources, so it cannot establish the final lab bill. No further paid run is scheduled. KMS storage accrues at USD 1/month prorated hourly until cleanup."
+}

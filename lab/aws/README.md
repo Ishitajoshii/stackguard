@@ -122,4 +122,6 @@ trust must include the backing runtime's endpoint/version suffixes: scope
 condition. The bare runtime ARN passed static validation but service assumption
 failed. Also attach `memory-policy.json` after substituting the actual managed
 memory ARN from `GetHarness`: even the default managed-memory configuration reads
-and writes session events. Never grant these actions against all memory resources.
+and writes session events. The full native run also exposed the documented
+`RetrieveMemoryRecords` requirement; the scoped fix passes a fresh native follow-up
+with no error spans. Never grant these actions against all memory resources.
