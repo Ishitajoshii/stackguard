@@ -1,6 +1,8 @@
 # Five-minute live demo and handoff
 
-This is a rehearsal script, not a recording or evidence that the cloud flow has run.
+This is a rehearsal script, not a recording. The [completed native research capture](NATIVE_SCOUT_PROOF.md) separately proves the cloud flow and its three rechecked issues.
+
+Before spending on a fresh recording run, rehearse offline with `python scripts/verify-native-scout.py --out private/demo-verification.json` (choose a fresh output filename), then open `results/native-scout-20261115/lineage.txt`, `results/scout/native-cloud-20261115/report.md` and `SCALING.md`. These are saved evidence, not a new live run. For the live portion, use [the verified native runner](NATIVE_SCOUT_CAPTURE.md); keep its private raw outputs off screen. Explain the three missing AWS ingress-parent spans and the separately corrected optional memory reads rather than hiding them.
 
 | Time | Show | Explain |
 |---|---|---|

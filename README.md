@@ -1,6 +1,6 @@
 # StackGuard
 
-A Go credential-inventory and trace-analysis CLI, with a customizable OSS contribution scout as its lab application. The core commands, both MCP proxy transports, local research workflow, cloud SDK bridge, profiling and benchmark runners are implemented. Live Codex → AgentCore acceptance remains unverified until dedicated credentials and cloud configuration are supplied.
+A Go credential-inventory and trace-analysis CLI, with a customizable OSS contribution scout as its lab application. The complete native Codex → AgentCore → GitHub/Notion workflow is verified, including both MCP proxy transports, three credential fingerprints and a checked contribution shortlist. See [the native proof and its limits](lab/NATIVE_SCOUT_PROOF.md); evaluator acceptance of AgentCore remains unresolved.
 
 ## Build and check
 
@@ -44,8 +44,8 @@ A report contains scored projects with open, unassigned, unlocked issues, licens
 
 Browser CLI login and both restricted AWS roles are configured for the local lab.
 The assumed profile is `stackguard` in `ap-south-1`; [role templates and checks](lab/aws/README.md)
-include 21 passing IAM permission cases. This establishes identity/policy readiness;
-Harness deployment, model access and native cloud evidence remain unverified.
+include 21 passing IAM permission cases. Harness deployment, model access and the
+complete native cloud workflow are verified in [the recorded lab](lab/NATIVE_SCOUT_PROOF.md).
 
 Read [the runbook](lab/RUNBOOK.md) before a paid run. Choose an available region/model, an assumed caller role and a separate execution role. Set `aws_profile`, `aws_region`, and `harness_arn` in the personal YAML; no account, model or role is hard-coded. Root and long-term IAM-user callers are rejected by the bridge. Deployment input can be prepared offline:
 
@@ -72,7 +72,7 @@ Use separate terminals at the repository root (fresh capture directories each ru
 
 For Codex delegation, run `./scripts/configure-lab.ps1 -Profile profiles/default.yaml -Summary profiles/summary.json -RunName run-001` to generate an isolated configuration with your actual paths. This prepares files only. Alternatively, copy [the Codex template](lab/examples/codex.toml) to an isolated `CODEX_HOME`, replace its absolute paths and fresh run directory, and authenticate Codex using your own account. The template wraps `oss-scout bridge` in `nhi-probe proxy --mode stdio`. Ask Codex to call `scout_research`. Configure its OTLP/HTTP exporter with `protocol = "json"`; the collector rejects protobuf and discards prompt/output/account fields. An isolated home does not inherit your existing login. Never copy general credential stores into captures.
 
-The cloud chooses actual inline function calls. The bridge sends their results back with matching tool-use IDs and the same AWS session. `github_shortlist` produces the independently checked report; an agent response without that result fails instead of publishing an unchecked shortlist. Model commentary is saved separately. Native cloud export and validation against real Codex/AgentCore records remain acceptance steps; bridge records are supplementary, not replacements.
+The cloud chooses actual inline function calls. The bridge sends their results back with matching tool-use IDs and the same AWS session. `github_shortlist` produces the independently checked report; an agent response without that result fails instead of publishing an unchecked shortlist. Model commentary is saved separately. The [completed native workflow](lab/NATIVE_SCOUT_PROOF.md) includes Codex, CloudWatch, both proxies and provider-boundary evidence. The AWS CLI must be on PATH: the bridge exports its configured profile through a noninteractive, bounded credential helper, keeping MCP stdin private to the protocol.
 
 ## Probe commands
 
@@ -81,7 +81,7 @@ The cloud chooses actual inline function calls. The bridge sends their results b
 .\bin\nhi-probe.exe trace --input proxy=captures/run-001/http/proxy.jsonl --input bridge=captures/run-001/bridge/SESSION/bridge-events.jsonl --input normalized=captures/run-001/tools/tool-events.jsonl --input codex-otlp=captures/run-001/native-local/native-otlp.jsonl --inventory results/scan/run-001/inventory.jsonl --lineage --workers 4 --temp D:/stackguard-data/temp --out results/trace/run-001
 ```
 
-Replace `SESSION` with the generated cloud directory. Supported adapters: `normalized`, `proxy`, `bridge`, `otlp-json`, `codex-otlp`, `cloud-otlp`, `cloudwatch-export`. Supply only existing original inputs. A CloudWatch export must contain supported OTLP span envelopes or normalized records; arbitrary service log text is quarantined rather than guessed.
+Replace `SESSION` with the generated cloud directory. Supported adapters: `normalized`, `proxy`, `bridge`, `otlp-json`, `codex-otlp`, `cloud-otlp`, `cloudwatch-export`. Supply only existing original inputs. CloudWatch exports support OTLP span envelopes, normalized records and the observed flat AgentCore span schema; unsupported service log text is quarantined rather than guessed.
 
 Scan emits candidate fingerprints and binding locations, not valid-key claims. It skips symlinks/special files, scans binary files as bytes and does not decode UTF-16. Configs/JSONL records are bounded to 1 MiB. Full SHA-256 identifiers drive deduplication; shortened masks are display-only. An AWS access/secret/session tuple is one credential, while a role ARN is a separate typed principal. Optional `--verify-owned private/owned.json` accepts an explicit fingerprint/provider/environment allowlist, currently for GitHub and Notion; it never validates credentials found in public repositories.
 
@@ -111,6 +111,6 @@ Original Codex CLI calls now pass through both stdio and HTTP proxies, with nati
 
 Live GitHub and Notion reads now pass, both scoped AWS roles are configured, and the deployed Harness completes a [real inline tool call and continuation](lab/CLOUD_HANDOFF_PROOF.md). The [authenticated local scout](results/scout/authenticated-local-001/report.md) returned three suitable issues. [Two controlled inventory findings](lab/CONTROLLED_RISKS.md) have original provider-call evidence.
 
-Still pending: evaluator acceptance of AgentCore instead of the named Bedrock Agents option; native cloud telemetry and the full Codex-to-cloud three-credential correctness oracle; final cost reconciliation, live demo recording and human rehearsal. The requested account-level tracing changes await approval. Builds and tests do not close those gates. PRD.md and TODO.md remain ignored local planning files; reviewer-facing instructions are tracked here.
+The [native correctness oracle](results/checks/native-scout-oracle.json) now verifies the complete research workflow, three credential fingerprints, 102 provider reads and explicit source links. AWS ingress-parent gaps and the corrected optional memory-read failures remain disclosed. Tracing is approved and active. Still pending: evaluator acceptance of AgentCore instead of the named Bedrock Agents option, the human recording/rehearsal, final delayed billing and post-recording resource cleanup. PRD.md and TODO.md remain ignored local planning files; reviewer-facing instructions are tracked here.
 
 Codex generated and revised the implementation, configuration, docs and tests, and ran the recorded automated checks. No claim is made that Ishita has manually reviewed all code or completed the explanation/demo. Manual review should focus on the real original evidence and the goroutine/shutdown explanation above.

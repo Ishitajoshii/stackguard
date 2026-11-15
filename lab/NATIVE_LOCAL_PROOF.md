@@ -22,4 +22,4 @@ python scripts/native-codex-check.py --codex C:/path/to/codex.exe --repo D:/path
 
 The harness uses a read-only sandbox, ignores user MCP configuration, enables only the file tool on its test server, and scopes explicit approval to that tool. It makes no persistent Codex configuration changes or credential copies. The operator must already have authorized this local read-only test. Other installed plugins can still appear in Codex's catalog; the harness verifies the completed MCP call used the intended server. Configuration references: [MCP tool approval](https://learn.chatgpt.com/docs/extend/mcp) and [native telemetry](https://learn.chatgpt.com/docs/config-file/config-advanced).
 
-Cloud telemetry, the real research workflow, three owned lab credentials, credential-bearing native lineage and controlled misconfiguration reproductions remain pending.
+This historical file-only experiment is now complemented by the [15 November native research proof](NATIVE_SCOUT_PROOF.md), including cloud telemetry and three credential fingerprints, plus [two controlled inventory findings](CONTROLLED_RISKS.md).
