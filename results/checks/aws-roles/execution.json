@@ -1,0 +1,82 @@
+{
+  "checked_at": "2026-11-15T12:26:48.140129+00:00",
+  "scope": "execution",
+  "region": "ap-south-1",
+  "passed": true,
+  "caller_sts_verified": false,
+  "checks": [
+    {
+      "name": "bedrock:InvokeModel_profile_allowed",
+      "expected": "allowed",
+      "decision": "allowed",
+      "passed": true
+    },
+    {
+      "name": "bedrock:InvokeModel_model_via_profile_allowed",
+      "expected": "allowed",
+      "decision": "allowed",
+      "passed": true
+    },
+    {
+      "name": "bedrock:InvokeModelWithResponseStream_profile_allowed",
+      "expected": "allowed",
+      "decision": "allowed",
+      "passed": true
+    },
+    {
+      "name": "bedrock:InvokeModelWithResponseStream_model_via_profile_allowed",
+      "expected": "allowed",
+      "decision": "allowed",
+      "passed": true
+    },
+    {
+      "name": "direct_model_without_profile_denied",
+      "expected": "denied",
+      "decision": "implicitDeny",
+      "passed": true
+    },
+    {
+      "name": "other_model_denied",
+      "expected": "denied",
+      "decision": "implicitDeny",
+      "passed": true
+    },
+    {
+      "name": "execution_role_chaining_denied",
+      "expected": "denied",
+      "decision": "implicitDeny",
+      "passed": true
+    },
+    {
+      "name": "execution_s3_denied",
+      "expected": "denied",
+      "decision": "implicitDeny",
+      "passed": true
+    },
+    {
+      "name": "execution_iam_admin_denied",
+      "expected": "denied",
+      "decision": "implicitDeny",
+      "passed": true
+    },
+    {
+      "name": "public_image_token_allowed",
+      "expected": "allowed",
+      "decision": "allowed",
+      "passed": true
+    },
+    {
+      "name": "ecr_bearer_token_allowed",
+      "expected": "allowed",
+      "decision": "allowed",
+      "passed": true
+    },
+    {
+      "name": "other_bearer_service_denied",
+      "expected": "denied",
+      "decision": "implicitDeny",
+      "passed": true
+    }
+  ],
+  "limits": "IAM simulation and STS only; no live Harness/model invocation or service-role assumption."
+}

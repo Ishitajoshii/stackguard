@@ -45,3 +45,49 @@ The source user needs
 [`SignInLocalDevelopmentAccess`](https://docs.aws.amazon.com/aws-managed-policy/latest/reference/SignInLocalDevelopmentAccess.html)
 and permission to assume only the caller role. The assumed role does not inherit
 the source user's unrelated permissions. No long-lived access keys are needed.
+
+## Execution role
+
+`StackGuardHarnessExecution` trusts the AgentCore service only for this account's
+harness/runtime resources in the selected region. The bootstrap trust is broader
+than a single harness because the service-generated IDs do not yet exist. Narrow
+both trust ARN patterns and log resources after deployment. Users cannot assume
+this service role directly.
+
+Also replace `${InferenceProfileId}` and `${ModelId}` in `execution-policy.json`.
+The model permission requires the selected inference-profile ARN; direct model
+calls without that profile are denied. The model's region wildcard supports its
+cross-region routing, while the condition confines it to the selected profile.
+The initial lab choice is `apac.amazon.nova-micro-v1:0` from Mumbai. This profile
+can route within APAC; it is not Mumbai-only inference. Listing the profile does
+not prove billing eligibility or successful inference.
+
+The remaining permissions support the public managed container, scoped runtime
+logs, regional tracing/metrics, and the named harness workload identity. Token
+and telemetry APIs that do not support resource-level permissions use `*`, with
+service, namespace or region conditions where applicable. There are no S3,
+Secrets Manager, IAM-administration, browser, code-interpreter, or role-chaining
+grants. Logging resource-policy administration is intentionally not delegated to
+the execution role; any required observability setup belongs to provisioning.
+
+Sources checked 2026-11-15:
+
+- [Harness execution role](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/harness-security.html#harness-execution-role-policy)
+- [Runtime confused-deputy protection](https://docs.aws.amazon.com/bedrock-agentcore/latest/devguide/runtime-security-best-practices.html)
+- [Inference-profile conditions](https://docs.aws.amazon.com/bedrock/latest/userguide/inference-profiles-prereq.html)
+
+## Read-only verification
+
+Run using a provisioning profile with IAM simulation permissions. This script
+uses the AWS CLI and prints no credential values. Output must be a fresh path.
+
+```powershell
+python scripts/verify-aws-roles.py --account ACCOUNT_ID --region REGION --scope all --out private/aws-role-checks.json
+```
+
+The [caller checks](../../results/checks/aws-roles/caller.json) verify actual STS
+assumption plus nine policy cases. The
+[execution checks](../../results/checks/aws-roles/execution.json) cover twelve
+allowed/denied permission cases. These checks do not create a harness, invoke a
+model, test actual service-role assumption, or establish native cloud evidence.
+Keep the runbook's pricing/budget check before the first paid run.

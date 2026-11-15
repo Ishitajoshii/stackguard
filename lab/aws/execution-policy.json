@@ -1,0 +1,75 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "SelectedInferenceProfile",
+      "Effect": "Allow",
+      "Action": ["bedrock:InvokeModel", "bedrock:InvokeModelWithResponseStream", "bedrock:GetInferenceProfile"],
+      "Resource": "arn:aws:bedrock:${Region}:${AccountId}:inference-profile/${InferenceProfileId}"
+    },
+    {
+      "Sid": "SelectedModelThroughProfileOnly",
+      "Effect": "Allow",
+      "Action": ["bedrock:InvokeModel", "bedrock:InvokeModelWithResponseStream"],
+      "Resource": "arn:aws:bedrock:*::foundation-model/${ModelId}",
+      "Condition": {"StringEquals": {
+        "bedrock:InferenceProfileArn": "arn:aws:bedrock:${Region}:${AccountId}:inference-profile/${InferenceProfileId}"
+      }}
+    },
+    {
+      "Sid": "ManagedPublicImageToken",
+      "Effect": "Allow",
+      "Action": "ecr-public:GetAuthorizationToken",
+      "Resource": "*"
+    },
+    {
+      "Sid": "PublicEcrBearerTokenOnly",
+      "Effect": "Allow",
+      "Action": "sts:GetServiceBearerToken",
+      "Resource": "*",
+      "Condition": {"StringEquals": {"sts:AWSServiceName": "ecr-public.amazonaws.com"}}
+    },
+    {
+      "Sid": "RuntimeLogGroups",
+      "Effect": "Allow",
+      "Action": ["logs:CreateLogGroup", "logs:TagLogGroup", "logs:TagResource", "logs:DescribeLogStreams"],
+      "Resource": "arn:aws:logs:${Region}:${AccountId}:log-group:/aws/bedrock-agentcore/runtimes/*"
+    },
+    {
+      "Sid": "DiscoverLogGroups",
+      "Effect": "Allow",
+      "Action": "logs:DescribeLogGroups",
+      "Resource": "*",
+      "Condition": {"StringEquals": {"aws:RequestedRegion": "${Region}"}}
+    },
+    {
+      "Sid": "RuntimeLogStreams",
+      "Effect": "Allow",
+      "Action": ["logs:CreateLogStream", "logs:PutLogEvents"],
+      "Resource": "arn:aws:logs:${Region}:${AccountId}:log-group:/aws/bedrock-agentcore/runtimes/*:log-stream:*"
+    },
+    {
+      "Sid": "RuntimeTracing",
+      "Effect": "Allow",
+      "Action": ["xray:PutTraceSegments", "xray:PutTelemetryRecords", "xray:GetSamplingRules", "xray:GetSamplingTargets"],
+      "Resource": "*",
+      "Condition": {"StringEquals": {"aws:RequestedRegion": "${Region}"}}
+    },
+    {
+      "Sid": "RuntimeMetrics",
+      "Effect": "Allow",
+      "Action": "cloudwatch:PutMetricData",
+      "Resource": "*",
+      "Condition": {"StringEquals": {"cloudwatch:namespace": "bedrock-agentcore", "aws:RequestedRegion": "${Region}"}}
+    },
+    {
+      "Sid": "NamedHarnessIdentity",
+      "Effect": "Allow",
+      "Action": "bedrock-agentcore:GetWorkloadAccessToken",
+      "Resource": [
+        "arn:aws:bedrock-agentcore:${Region}:${AccountId}:workload-identity-directory/default",
+        "arn:aws:bedrock-agentcore:${Region}:${AccountId}:workload-identity-directory/default/workload-identity/harness_${HarnessName}-*"
+      ]
+    }
+  ]
+}
