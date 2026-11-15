@@ -30,8 +30,12 @@ assumption with STS. Simulation does not prove live Harness/model execution.
 After browser login, configure the application's separate assumed-role profile:
 
 ```powershell
+# Confirm aws.exe resolves to your trusted AWS CLI installation on PATH.
+Get-Command aws.exe -CommandType Application
+aws configure set credential_process 'aws.exe configure export-credentials --profile stackguard-login --format process' --profile stackguard-source
+aws configure set region REGION --profile stackguard-source
 aws configure set role_arn arn:aws:iam::ACCOUNT_ID:role/StackGuardCaller --profile stackguard
-aws configure set source_profile stackguard-login --profile stackguard
+aws configure set source_profile stackguard-source --profile stackguard
 aws configure set role_session_name stackguard-local --profile stackguard
 aws configure set region REGION --profile stackguard
 aws sts get-caller-identity --profile stackguard
@@ -40,6 +44,18 @@ aws sts get-caller-identity --profile stackguard
 Keep the source profile's `login_session` setting from `aws login`. When its
 session expires, repeat `aws login --profile stackguard-login --remote`. The code
 belongs in the interactive terminal, never in a tracked file or chat.
+
+The pinned Go config module v1.33.18 recognizes `login_session` but omits it from
+its source-profile `hasCredentials` check. Directly chaining the role to the login
+profile failed locally even though AWS CLI STS succeeded. The separate
+`stackguard-source` profile uses AWS's documented
+[credential-process compatibility path](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sign-in.html#cli-configure-sign-in-process-credentials).
+Only the SDK/CLI consumes that process's credential output; do not run the export
+command manually or redirect its output into evidence. The same `stackguard`
+profile works for the CLI and the Go app without changing pinned dependencies.
+The [Go SDK STS check](../../results/checks/aws-roles/sdk-login.json) passed after
+this workaround. On Windows, use the trusted `aws.exe` on PATH: the pinned Go
+process provider failed to execute a quoted executable path containing spaces.
 
 The source user needs
 [`SignInLocalDevelopmentAccess`](https://docs.aws.amazon.com/aws-managed-policy/latest/reference/SignInLocalDevelopmentAccess.html)
