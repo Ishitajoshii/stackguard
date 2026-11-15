@@ -1,0 +1,7 @@
+{
+  "source": "captures/native-scout-20261115/cloudwatch.json",
+  "source_sha256": "70c3b19e6e9ae7b6d7fd282bc35f41eedeb3a2c78caaab3dbc2c3cf9015a02fd",
+  "event_index": 34,
+  "event_id": "40024445998170220422485097030120544870495646218386210819",
+  "transformation": "Exact message bytes from the published metadata-only native export; raw private-source checksum and attribute removals disclosed in capture publication."
+}

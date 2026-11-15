@@ -101,6 +101,9 @@ func (CloudWatch) Decode(b []byte) ([]model.Event, error) {
 			events, e = (OTLPSpans{}).Decode([]byte(r.Message))
 		}
 		if e != nil {
+			events, e = (AgentCoreSpan{}).Decode([]byte(r.Message))
+		}
+		if e != nil {
 			return nil, errors.New("CloudWatch message needs a native schema adapter or normalized event")
 		}
 		for _, e := range events {
