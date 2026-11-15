@@ -1,0 +1,17 @@
+{
+  "checked_at": "2026-11-15T16:19:35.580436+00:00",
+  "checks": [
+    {
+      "scope": "owned memory",
+      "decision": "allowed",
+      "passed": true
+    },
+    {
+      "scope": "other memory",
+      "decision": "implicitDeny",
+      "passed": true
+    }
+  ],
+  "basis": "Two native RetrieveMemoryRecords 403 spans in the successful research run; AWS documented Harness memory permission, exact existing resource scope.",
+  "live_retrieval_rechecked": false
+}

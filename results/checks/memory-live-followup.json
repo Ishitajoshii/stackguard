@@ -1,0 +1,10 @@
+{
+  "checked_at": "2026-11-15T16:23:36.967657+00:00",
+  "passed": true,
+  "public_repository_tool_roundtrip": true,
+  "native_spans": 28,
+  "memory_retrieval_spans": 2,
+  "native_error_spans": 0,
+  "original_export_sha256": "7ba48cce18c6d5ad5191a5076a1b8fbef6fc8eafb01fc8caa6b0ffe75a920813",
+  "scope": "Fresh public golang/go metadata session after adding RetrieveMemoryRecords on the exact existing lab memory; no private profile data sent."
+}

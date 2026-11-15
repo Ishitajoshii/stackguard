@@ -3,7 +3,7 @@
   "Statement": [{
     "Sid": "ManagedHarnessSessionMemory",
     "Effect": "Allow",
-    "Action": ["bedrock-agentcore:ListEvents", "bedrock-agentcore:GetEvent", "bedrock-agentcore:CreateEvent"],
+    "Action": ["bedrock-agentcore:ListEvents", "bedrock-agentcore:GetEvent", "bedrock-agentcore:CreateEvent", "bedrock-agentcore:RetrieveMemoryRecords"],
     "Resource": "${MemoryArn}"
   }]
 }
