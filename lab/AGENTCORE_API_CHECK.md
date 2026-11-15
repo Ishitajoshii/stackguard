@@ -9,4 +9,4 @@ Checked 13 November 2026. This is an API-shape check, not a successful cloud inv
 
 The [InvokeHarness API](https://docs.aws.amazon.com/bedrock-agentcore/latest/APIReference/API_InvokeHarness.html) requires a harness ARN, messages and runtime session ID. The bridge must consume stream events and preserve explicit correlation. Do not substitute a one-shot model call for the planned cloud agent.
 
-Completed: released SDK pin, streaming union-type compilation and continuation contract tests. Remaining live proof: authenticate, select an available regional model, create and await a harness, complete an inline function continuation and retrieve native cloud evidence. Do not mark the cloud feasibility gate complete from these source checks.
+Completed at the original checkpoint: released SDK pin, streaming union-type compilation and continuation contract tests. On 15 November, the [live public handoff](CLOUD_HANDOFF_PROOF.md) also verified authentication, model access, READY deployment and inline continuation. Native cloud telemetry and the complete credential-bearing delegation remain separate open gates.
