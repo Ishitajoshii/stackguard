@@ -1,0 +1,35 @@
+{
+  "checked_at": "2026-11-15T12:44:08.740845+00:00",
+  "region": "ap-south-1",
+  "model": "apac.amazon.nova-micro-v1:0",
+  "usd_per_1000_tokens": {
+    "Input tokens": "0.0000410000",
+    "Output tokens": "0.0001640000"
+  },
+  "sources": [
+    "AWS Price List API: AmazonBedrock, regionCode=ap-south-1",
+    "https://aws.amazon.com/bedrock/agentcore/pricing/"
+  ],
+  "runtime_estimate_rates": {
+    "cpu_usd_per_vcpu_hour": "0.1276",
+    "memory_usd_per_gb_hour": "0.0169",
+    "basis": "Published v2 consumption rates; conservatively higher than v1"
+  },
+  "conservative_session_scenario": {
+    "model_input_tokens": 6144000,
+    "model_output_tokens": 98304,
+    "vcpu": 4,
+    "memory_gb": 16,
+    "seconds": 300,
+    "model_usd": "0.2680258560000",
+    "runtime_usd": "0.06506666666666666666666666667",
+    "total_usd": "0.3330925226666666666666666667"
+  },
+  "initial_session_limit": 8,
+  "reserve_logs_storage_tracing_usd": "1.00",
+  "scenario_total_with_reserve_usd": "3.664740181333333333333333334",
+  "budget_usd": "5.00",
+  "stop_before_estimated_usd": "4.00",
+  "actual_paid_sessions": 0,
+  "limits": "Planning estimate, not a billing cap. Stop/reconcile on missing usage; count failed attempts. No persistent compute/storage requested. Reconcile actual runtime shape and telemetry before further sessions."
+}

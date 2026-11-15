@@ -17,4 +17,8 @@ func TestCloudPlanRequiresExplicitRoleModel(t *testing.T) {
 			t.Fatal("unexpected access")
 		}
 	}
+	lifecycle := p["environment"].(map[string]any)["agentCoreRuntimeEnvironment"].(map[string]any)["lifecycleConfiguration"].(map[string]int)
+	if lifecycle["idleRuntimeSessionTimeout"] != 60 || lifecycle["maxLifetime"] != 300 {
+		t.Fatal("runtime must not retain the service's 15-minute idle or eight-hour lifetime defaults")
+	}
 }
