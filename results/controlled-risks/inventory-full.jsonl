@@ -1,0 +1,2 @@
+{"schema_version": 1, "id": "1395ce75e03c535c8f5929c1c74d8d79285b6efe49f1fd3fb01daa419c02982c", "provider": "notion", "identity_kind": "secret", "bindings": [{"agent": "github-tool", "server": "", "location": "controlled-input/full.env:byte:143"}]}
+{"schema_version": 1, "id": "a23f7d325cd1f5cc3403524ab58fcb2c26bd1b69f546babc1e582c5d681bb67d", "provider": "github", "identity_kind": "secret", "bindings": [{"agent": "github-tool", "server": "", "location": "controlled-input/full.env:byte:24"}]}

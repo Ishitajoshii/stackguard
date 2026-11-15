@@ -1,0 +1,11 @@
+{
+  "passed": true,
+  "real_provider_requests": 1,
+  "provider_response_success": true,
+  "source_sha256": "fe9ad3b400f69beaf4daa6532166b51db95a7f48320e845264e0892fbcc6d6db",
+  "scenarios": [
+    "Owned Notion token present in the inventory but not used during the GitHub-only window",
+    "Owned GitHub token actually used but deliberately omitted from a separate binding snapshot"
+  ],
+  "limits": "Two inventory scenarios over the same original read; no agent delegation claim. Service stopped with Ctrl-C, so its manifest is incomplete; exact request/response pair is independently checked."
+}

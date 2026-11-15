@@ -1,0 +1,8 @@
+NHI a23f7d325cd1f5cc3403524ab58fcb2c26bd1b69f546babc1e582c5d681bb67d
+`-- "github-tool"
+    `-- "github:read"
+        agent="github-tool" calls=1 attribution=direct first=2026-11-15T12:56:54.9826449Z last=2026-11-15T12:56:54.9826449Z
+        unresolved="missing parent"
+        evidence="authorization-header-at-provider-boundary"
+        evidence="sha256:fe9ad3b400f69beaf4daa6532166b51db95a7f48320e845264e0892fbcc6d6db:line:1"
+

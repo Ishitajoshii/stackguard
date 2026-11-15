@@ -1,0 +1,1 @@
+{"schema_version": 1, "id": "1395ce75e03c535c8f5929c1c74d8d79285b6efe49f1fd3fb01daa419c02982c", "provider": "notion", "identity_kind": "secret", "bindings": [{"agent": "github-tool", "server": "", "location": "controlled-input/missing-github.env:byte:24"}]}

@@ -1,0 +1,23 @@
+{
+  "inventories": [
+    {
+      "file": "inventory-full.jsonl",
+      "source_sha256": "ab66f788cb02c76cd477c85bf93c88d11e52e8c93db64b32c4196b82695976e1",
+      "changes": [
+        "Removed token prefix/suffix mask",
+        "Replaced machine path with controlled-input relative location"
+      ],
+      "id_and_binding_agent_preserved": true
+    },
+    {
+      "file": "inventory-missing-github.jsonl",
+      "source_sha256": "d9f330586f5d45a84876faf28d515b8413233f19fcef89226149797640825955",
+      "changes": [
+        "Removed token prefix/suffix mask",
+        "Replaced machine path with controlled-input relative location"
+      ],
+      "id_and_binding_agent_preserved": true
+    }
+  ],
+  "original_events_unchanged": true
+}
