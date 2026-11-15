@@ -49,7 +49,7 @@ The pinned Go config module v1.33.18 recognizes `login_session` but omits it fro
 its source-profile `hasCredentials` check. Directly chaining the role to the login
 profile failed locally even though AWS CLI STS succeeded. The separate
 `stackguard-source` profile uses AWS's documented
-[credential-process compatibility path](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sign-in.html#cli-configure-sign-in-process-credentials).
+[credential-process compatibility path](https://docs.aws.amazon.com/cli/latest/userguide/cli-configure-sign-in.html).
 Only the SDK/CLI consumes that process's credential output; do not run the export
 command manually or redirect its output into evidence. The same `stackguard`
 profile works for the CLI and the Go app without changing pinned dependencies.

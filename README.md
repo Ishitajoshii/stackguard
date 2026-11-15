@@ -42,6 +42,11 @@ A report contains scored projects with open, unassigned, unlocked issues, licens
 
 ## Capture the cloud lab after credentials are ready
 
+Browser CLI login and both restricted AWS roles are configured for the local lab.
+The assumed profile is `stackguard` in `ap-south-1`; [role templates and checks](lab/aws/README.md)
+include 21 passing IAM permission cases. This establishes identity/policy readiness;
+Harness deployment, model access and native cloud evidence remain unverified.
+
 Read [the runbook](lab/RUNBOOK.md) before a paid run. Choose an available region/model, an assumed caller role and a separate execution role. Set `aws_profile`, `aws_region`, and `harness_arn` in the personal YAML; no account, model or role is hard-coded. Root and long-term IAM-user callers are rejected by the bridge. Deployment input can be prepared offline:
 
 ```powershell

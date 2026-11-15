@@ -1,0 +1,37 @@
+{
+  "checked_at": "2026-11-15T12:33:44.094868+00:00",
+  "cli_profile": "stackguard",
+  "source_chain": [
+    "stackguard",
+    "stackguard-source",
+    "stackguard-login"
+  ],
+  "region": "ap-south-1",
+  "roles_created": [
+    "StackGuardCaller",
+    "StackGuardHarnessExecution"
+  ],
+  "installed_policies_and_trusts_match_validated_files": true,
+  "access_analyzer_findings": 0,
+  "iam_permission_cases_passed": 21,
+  "go_sdk_sts_verified": true,
+  "harness_api_list_succeeded": true,
+  "selected_inference_profile": "apac.amazon.nova-micro-v1:0",
+  "plan": {
+    "prepared_locally": true,
+    "max_iterations": 6,
+    "max_tokens": 2048,
+    "timeout_seconds": 60,
+    "allowed_inline_tools": 7
+  },
+  "harness_deployed": false,
+  "model_invoked": false,
+  "remaining": [
+    "Pricing/budget review and model eligibility validation",
+    "Deploy Harness and tighten bootstrap role/log scopes to observed resource ARNs",
+    "Confirm backing-runtime Project tag",
+    "Actual execution-role assumption and inline continuation",
+    "Native cloud captures and credential lineage",
+    "Evaluator acceptance and human demo"
+  ]
+}
