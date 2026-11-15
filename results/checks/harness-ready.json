@@ -1,0 +1,19 @@
+{
+  "status": "READY",
+  "region": "ap-south-1",
+  "model": "apac.amazon.nova-micro-v1:0",
+  "limits": {
+    "maxIterations": 6,
+    "maxTokens": 2048,
+    "timeoutSeconds": 60
+  },
+  "lifecycle": {
+    "idleRuntimeSessionTimeout": 60,
+    "maxLifetime": 300
+  },
+  "backing_runtime_project_tag_verified": true,
+  "roles_narrowed_to_observed_resource_arns": true,
+  "permission_cases_passed": 21,
+  "first_invocation_completed": false,
+  "native_tracing_setup": "Awaiting explicit approval after automatic review rejected account-level changes"
+}

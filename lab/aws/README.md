@@ -107,3 +107,11 @@ assumption plus nine policy cases. The
 allowed/denied permission cases. These checks do not create a harness, invoke a
 model, test actual service-role assumption, or establish native cloud evidence.
 Keep the runbook's pricing/budget check before the first paid run.
+
+The live lab is now [READY](../../results/checks/harness-ready.json). Its caller,
+execution trust, workload identity and log permissions were narrowed to the actual
+resource ARNs returned by AWS; these private IDs are not embedded in templates.
+All [21 checks passed again](../../results/checks/aws-roles/exact-resources.json).
+When verifying these tightened policies, also pass `--harness-arn` and
+`--runtime-arn` with the observed deployed ARNs. Without those arguments, the
+verifier exercises the earlier bootstrap name/tag scope instead.

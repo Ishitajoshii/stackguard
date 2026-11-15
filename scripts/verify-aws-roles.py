@@ -13,6 +13,8 @@ def main():
     parser.add_argument('--account', required=True)
     parser.add_argument('--region', required=True)
     parser.add_argument('--harness-name', default='StackGuardResearcher')
+    parser.add_argument('--harness-arn', help='Exact deployed Harness ARN; otherwise test bootstrap name scope')
+    parser.add_argument('--runtime-arn', help='Exact backing runtime ARN; otherwise test bootstrap tag scope')
     parser.add_argument('--model', default='amazon.nova-micro-v1:0')
     parser.add_argument('--inference-profile', default='apac.amazon.nova-micro-v1:0')
     parser.add_argument('--provisioning-profile', default='default')
@@ -47,9 +49,9 @@ def main():
         identity = aws('sts', 'get-caller-identity', profile=args.caller_profile)
         if not identity['Arn'].startswith(f'arn:aws:sts::{args.account}:assumed-role/{caller}/'):
             raise RuntimeError('Caller profile did not assume the expected role')
-        case('named_harness_allowed', caller, 'bedrock-agentcore:InvokeHarness', f'{base}:harness/{args.harness_name}-validation', True)
+        case('named_harness_allowed', caller, 'bedrock-agentcore:InvokeHarness', args.harness_arn or f'{base}:harness/{args.harness_name}-validation', True)
         case('other_harness_denied', caller, 'bedrock-agentcore:InvokeHarness', f'{base}:harness/OtherProject-validation', False)
-        runtime = f'{base}:runtime/test-validation'
+        runtime = args.runtime_arn or f'{base}:runtime/test-validation'
         case('tagged_runtime_allowed', caller, 'bedrock-agentcore:InvokeAgentRuntime', runtime, True, {'aws:ResourceTag/Project': 'StackGuard'})
         case('untagged_runtime_denied', caller, 'bedrock-agentcore:InvokeAgentRuntime', runtime, False)
         case('other_project_runtime_denied', caller, 'bedrock-agentcore:InvokeAgentRuntime', runtime, False, {'aws:ResourceTag/Project': 'OtherProject'})
